@@ -1,0 +1,37 @@
+\documentclass[UTF8, 12pt, a4paper]{article}
+	\usepackage{ctex}
+	\author{王东岳}
+	\title{ST!文档}
+\begin{document}
+	\maketitle
+	\newpage
+	\section{内存模型}
+		\subsection{基本数据结构}
+			\paragraph{}
+				基本数据结构包括obect和builtinFunc.
+		\subsubsection{object}
+			\paragraph{}
+				object是所有对象的基础，在ST!语言中，object拥有以下属性：
+				\subparagraph {} size
+				\subparagraph {} dict
+		\subsubsection{builtinFunc}
+			\paragraph{}
+				builtinFunc是所有内建函数的统一表示，继承自object，在其上添加了属性：
+				\subparagraph {} exec
+		\subsection{内建数据类型}
+			\paragraph{}
+				内建数据类型是用其他语言编写的用于实现扩展功能的数据类型，
+				通过对object的继承来实现各种功能，
+				同时通过builtinFunc来定义方法
+		\subsection{垃圾收集机制}
+			\paragraph{}
+				垃圾收集机制是固化在object的dict中的，使用引用计数垃圾收集来完成任务
+		\subsection{object的基础方法}
+			\paragraph{}
+				object的dict内存有一个\_\_state\_\_存储其状态（默认为object），
+				object需要的dict存储其各类基础函数
+			\subparagraph{} \_\_getAttribute\_\_
+			\subparagraph{} \_\_setAttribute\_\_
+
+
+\end{document}
