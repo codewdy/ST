@@ -1,4 +1,5 @@
 \documentclass[UTF8, 12pt, a4paper]{article}
+\usepackage[T1]{fontenc}
 	\usepackage{ctex}
 	\author{王东岳}
 	\title{ST!文档}
@@ -12,12 +13,12 @@
 		\subsubsection{object}
 			\paragraph{}
 				object是所有对象的基础，在ST!语言中，object拥有以下属性：
-				\subparagraph {} size
-				\subparagraph {} dict
+				\\ size
+				\\ dict
 		\subsubsection{builtinFunc}
 			\paragraph{}
 				builtinFunc是所有内建函数的统一表示，继承自object，在其上添加了属性：
-				\subparagraph {} exec
+				\\ exec
 		\subsection{内建数据类型}
 			\paragraph{}
 				内建数据类型是用其他语言编写的用于实现扩展功能的数据类型，
@@ -30,12 +31,50 @@
 			\paragraph{}
 				object的dict内存有一个\_\_state\_\_存储其状态（默认为object），
 				object需要的dict存储其各类基础函数
-			\subparagraph{} \_\_getAttribute\_\_
-			\subparagraph{} \_\_setAttribute\_\_
-			\subparagraph{} \_\_toStr\_\_
-			\subparagraph{} \_\_hash\_\_
-			\subparagraph{} \_\_equal\_\_
-			\subparagraph{} \_\_namespace\_\_
+			\\ \_\_getAttribute\_\_
+			\\ \_\_setAttribute\_\_
+			\\ \_\_toStr\_\_
+			\\ \_\_hash\_\_
+			\\ \_\_equal\_\_
+			\\ \_\_namespace\_\_
+	\section{基本内建类型}
+		\subsection{基本内建类型介绍}
+			\paragraph{}
+				基本内建类型包括int, double, bool,
+				builtinFunc, progFunc, classFunc, state, namespace
+		\subsection{int, double}
+			\paragraph{}
+				整数类型与浮点数类型，实现以下操作：
+				\\parse
+				\\ + - * / **
+				\\ == != > < >= <=
+				对于整数，还有一个\%
+				具体意义与python相同
+		\subsection{string}
+			\paragraph{}
+				字符串类型，实现以下操作：
+				\\substr
+				\\ + * =
+				\\ == != > < >= <=
+		\subsection{bool}
+			\paragraph{}
+				是非类型，用于判断，实现以下操作：
+				\\ \&\& || ! \^
+				\\ = == !=
+		\subsection{builtinFunc, progFunc, classFunc}
+			\paragraph{}
+				继承自func，实现其exec，用于各种地方的函数表示
+		\subsection{state, namespace}
+			\paragraph{}
+				重载其中的\_\_getAttribute\_\_和\_\_setAttribute\_\_
+		\section{运行模型}
+			\paragraph{}
+				程序：语句*
+				\\语句：简单语句|语句块
+				\\简单语句：for/while/if/skip/表达式
+				\\语句块：{语句*}
+
+
 
 
 \end{document}
