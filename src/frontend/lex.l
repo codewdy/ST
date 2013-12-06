@@ -9,7 +9,8 @@ NEWLINE				(\r|\n|\r\n)
 DIGIT				([0-9])
 HEX_DIGIT			([0-9A-Fa-f])
 HEX_INTEGER			(0[Xx]{HEX_DIGIT}+)
-DEC_INTEGER			({DIGIT}+)
+DEC_INTEGER			([1-9]{DIGIT}*)
+OCT_INTEGER			(0[0-7]*)
 INTEGER				({HEX_INTEGER}|{DEC_INTEGER})
 DOUBLE				((([0-9]+"."[0-9]*|[0-9]*"."[0-9]+)([eE][0-9]+)?)|([0-9]+[eE][0-9]+))
 IDENTIFIER			([_A-Za-z][_0-9A-Za-z]*)
@@ -35,7 +36,7 @@ WHITESPACE			([ \t]+)
 "!="							{yylval = new AST::Oper(yylloc, yytext); return NE;}
 
 {INTEGER}						{yylval = AST::Literal::BuildInteger(yylloc, yytext); return LITERAL;}
-{DOUBLE}						{yylval = AST::Literal::BuildDOUBLE(yylloc, yytext); return LITERAL;}
+{DOUBLE}						{yylval = AST::Literal::BuildDouble(yylloc, yytext); return LITERAL;}
 
 <INITIAL>\"					{ sloc = getLocation(); yybegin(S); buffer = new StringBuilder();}
 <S>{NEWLINE}		{ issueError(new NewlineInStrError(sloc, MiscUtils.quote(buffer.toString())));}
