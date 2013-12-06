@@ -28,4 +28,27 @@ WHITESPACE			([ \t]+)
 
 	Operator
 {OPERATOR}						{yylval = new AST::Oper(yylloc, gOper(yytext)); return gOper(yytext);}
+
+	Literal
+{INTEGER}						{yylval = AST::Literal::BuildInteger(yylloc, yytext); return LITERAL;}
+{DOUBLE}						{yylval = AST::Literal::BuildDOUBLE(yylloc, yytext); return LITERAL;}
+
+<YYINITIAL>\"		{ sloc = getLocation(); yybegin(S); buffer = new StringBuilder();}
+<S>{NEWLINE}		{ issueError(new NewlineInStrError(sloc, MiscUtils.quote(buffer.toString())));}
+<S><<EOF>>			{ issueError(new UntermStrError(sloc, MiscUtils.quote(buffer.toString()))); yybegin(YYINITIAL);}
+<S>\"				{ yybegin(YYINITIAL); return StringConst(buffer.toString(), sloc);}
+<S>"\\n"			{ buffer.append('\n');}
+<S>"\\t"			{ buffer.append('\t');}
+<S>"\\\""			{ buffer.append('"');}
+<S>"\\\\"			{ buffer.append('\\');}
+<S>.				{ buffer.append(yytext());}
+
+	Identifier
+"if"							{yylval = new AST::Keyword(IF); return IF;}
+"func"							{yylval = new AST::Keyword(FUNC); return FUNC;}
+"state"							{yylval = new AST::Keyword(STATE); return STATE;}
+"else"							{yylval = new AST::Keyword(ELSE); return ELSE;}
+"while"							{yylval = new AST::Keyword(WHILE); return WHILE;}
+"break"							{yylval = new AST::Keyword(BREAK); return BREAK;}
+IDENTIFIER						{yylval = new AST::Identifier(yytext); }
 %%
