@@ -1,6 +1,6 @@
 %{
-	typedef AST::AST::Node YYSTYPE;
-	typedef AST::AST::Location YYLTYPE;
+	typedef AST::Node YYSTYPE;
+	typedef AST::Location YYLTYPE;
 	int yywrap() {return 1;}
 %}
 

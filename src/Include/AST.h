@@ -2,22 +2,23 @@
 #define ST_AST
 #include <memory>
 
-class AST
+namespace AST
 {
-public:
-	typedef std::shared_ptr<AST> Node;
+	class Visitor;
 	struct Location
 	{
 	  int first_line;  
 	  int first_column;  
 	  int last_line;  
 	  int last_column;  
-	} loc;
-	class Visitor;
-	virtual void visit(Visitor* v) = 0; 
-};
-
-class AST::Visitor
-{
-};
+	};
+	class AST;
+	typedef std::shared_ptr<AST> Node;
+	class AST
+	{
+	public:
+		Location loc;
+		virtual void visit(Visitor* v) = 0; 
+	};
+}
 #endif
