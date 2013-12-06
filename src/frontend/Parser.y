@@ -1,18 +1,20 @@
 %{
 #define YYSTYPE AST::Node
 %}
-%token IF ELSE WHILE BREAK FUNC STATE IDENTIFIER
+%token IF ELSE FOR WHILE BREAK FUNC STATE IDENTIFIER LITERAL
 
-%left GOPER(||)
-%left GOPER(&&) 
-%left GOPER(==) GOPER(!=)
-%left GOPER(<=) GOPER(>=) "<" ">"
-%left "+" "-"
-%left "*" "/" "%"
-%nonassoc UMINUS "!" 
-%left "[" "." 
-%nonassoc ")"
+%left OR
+%left AND 
+%left EQ NE
+%left LE GE '<' '>'
+%left '+' '-'
+%left '*' '/' '%'
+%nonassoc UMINUS '!' 
+%left '[' '.' 
+%nonassoc ')'
 %nonassoc ELSE
+
+%start Program
 
 %%
 Program		:	StmtList
@@ -26,16 +28,16 @@ Stmt		:	SimpleStmt
 			|	StmtBlock
 		;
 
-SimpleStmt	:	Expr ";"
+SimpleStmt	:	Expr ';'
 		;
 
-ForStmt		:	FOR "(" IDENTIFIER ":" Expr ")" Stmt
+ForStmt		:	FOR '(' IDENTIFIER ':' Expr ')' Stmt
 		;
 
-WhileStmt	:	WHILE "(" Expr ")" Stmt
+WhileStmt	:	WHILE '(' Expr ')' Stmt
 		;
 
-StmtBlock	:	"{" StmtList "}"
+StmtBlock	:	'{' StmtList '}'
 		;
 
 Expr		:	LITERAL
@@ -44,12 +46,14 @@ Expr		:	LITERAL
 			|	FuncDef
 			|	CallExpr
 			|	SimpleExpr
+			|	LVALUE
 		;
 
-ExprList	:	ExprList Expr
+ExprList	:	ExprList  ',' Expr
+		 	|
 		;
 
-ListLiteral	:	"[" ExprList "]"
+ListLiteral	:	'[' ExprList ']'
 		;
 
 IDs			:	IDs IDENTIFIER
@@ -59,26 +63,32 @@ IDs			:	IDs IDENTIFIER
 StateDef	:	STATE IDs StmtBlock
 		;
 
-FuncDef		:	FUNC IDs "(" IDs ")" StmtBlock
+FuncDef		:	FUNC IDs '(' IDs ')' StmtBlock
 		;
 
-CallExpr	:	IDENTIFIER "(" ExprList ")"
+CallExpr	:	Expr '(' ExprList ')'
 		;
 
-SimpleExpr	:	Expr "+" Expr
-			|	Expr "-" Expr
-			|	Expr "*" Expr
-			|	Expr "/" Expr
-			|	Expr "%" Expr
-			|	Expr GOPER(<=) Expr
-			|	Expr GOPER(>=) Expr
-			|	Expr "<" Expr
-			|	Expr ">" Expr
-			|	Expr GOPER(==) Expr
-			|	Expr GOPER(!=) Expr
-			|	Expr GOPER(&&) Expr
-			|	Expr GOPER(||) Expr
-			|	"!" Expr
-			|	"-" Expr			%prec UMINUS
+SimpleExpr	:	Expr '+' Expr
+			|	Expr '-' Expr
+			|	Expr '*' Expr
+			|	Expr '/' Expr
+			|	Expr '%' Expr
+			|	Expr LE Expr
+			|	Expr GE Expr
+			|	Expr '<' Expr
+			|	Expr '>' Expr
+			|	Expr EQ Expr
+			|	Expr NE Expr
+			|	Expr AND Expr
+			|	Expr OR Expr
+			|	LVALUE '=' Expr
+			|	'!' Expr
+			|	'-' Expr			%prec UMINUS
+		;
+
+LVALUE		:	IDENTIFIER
+			|	Expr '.' IDENTIFIER
+			|	Expr '[' Expr ']'
 		;
 %%

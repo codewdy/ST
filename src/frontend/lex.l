@@ -1,7 +1,8 @@
 %{
-	#define YYSTYPE AST::Node
-	#define YYLTYPE AST::Location
-	int yywrap() {return 1;}
+#include "Parser.tab.h"
+#define YYSTYPE AST::Node
+#define YYLTYPE AST::Location
+int yywrap() {return 1;}
 %}
 
 NEWLINE				(\r|\n|\r\n)
@@ -12,7 +13,7 @@ DEC_INTEGER			({DIGIT}+)
 INTEGER				({HEX_INTEGER}|{DEC_INTEGER})
 DOUBLE				((([0-9]+"."[0-9]*|[0-9]*"."[0-9]+)([eE][0-9]+)?)|([0-9]+[eE][0-9]+))
 IDENTIFIER			([_A-Za-z][_0-9A-Za-z]*)
-OPERATOR			("+"|"-"|"*"|"/"|"%"|"="|"<"|">"|"."|","|";"|"!"|"("|")"|"["|"]"|"{"|"}"|"&&"|"||"|"<="|">="|"=="|"!=")
+OPERATOR			("+"|"-"|"*"|"/"|"%"|"="|"<"|">"|"."|","|";"|"!"|"("|")"|"["|"]"|"{"|"}")
 S_COMMENT			("//"[^\r\n]*{NEWLINE})
 MULTILINE_COMMENT	("/*"([^/]*[^*/]"/"|"/")*[^/]*"*/")
 WHITESPACE			([ \t]+)
@@ -25,7 +26,13 @@ WHITESPACE			([ \t]+)
 {MULTILINE_COMMENT}				{}
 {NEWLINE}						{}
 
-{OPERATOR}						{yylval = new AST::Oper(yylloc, gOper(yytext)); return gOper(yytext);}
+{OPERATOR}						{yylval = new AST::Oper(yylloc, yytext); return yytext[0];}
+"&&"							{yylval = new AST::Oper(yylloc, yytext); return AND;}
+"||"							{yylval = new AST::Oper(yylloc, yytext); return OR;}
+"<="							{yylval = new AST::Oper(yylloc, yytext); return LE;}
+">="							{yylval = new AST::Oper(yylloc, yytext); return GE;}
+"=="							{yylval = new AST::Oper(yylloc, yytext); return EQ;}
+"!="							{yylval = new AST::Oper(yylloc, yytext); return NE;}
 
 {INTEGER}						{yylval = AST::Literal::BuildInteger(yylloc, yytext); return LITERAL;}
 {DOUBLE}						{yylval = AST::Literal::BuildDOUBLE(yylloc, yytext); return LITERAL;}
