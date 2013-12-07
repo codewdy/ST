@@ -1,7 +1,9 @@
 %{
 #include "Parser.tab.h"
+#include <vector>
 #define YYSTYPE AST::Node
 #define YYLTYPE AST::Location
+std::vector<char> sb;
 int yywrap() {return 1;}
 %}
 
@@ -35,18 +37,18 @@ WHITESPACE			([ \t]+)
 "=="							{yylval = new AST::Oper(yylloc, yytext); return EQ;}
 "!="							{yylval = new AST::Oper(yylloc, yytext); return NE;}
 
-{INTEGER}						{yylval = AST::Literal::BuildInteger(yylloc, yytext); return LITERAL;}
-{DOUBLE}						{yylval = AST::Literal::BuildDouble(yylloc, yytext); return LITERAL;}
+{INTEGER}						{yylval = AST::Integer(yylloc, yytext); return LITERAL;}
+{DOUBLE}						{yylval = AST::Double(yylloc, yytext); return LITERAL;}
 
-<INITIAL>\"					{ sloc = getLocation(); yybegin(S); buffer = new StringBuilder();}
-<S>{NEWLINE}		{ issueError(new NewlineInStrError(sloc, MiscUtils.quote(buffer.toString())));}
-<S><<EOF>>			{ issueError(new UntermStrError(sloc, MiscUtils.quote(buffer.toString()))); yybegin(YYINITIAL);}
-<S>\"				{ yybegin(YYINITIAL); return StringConst(buffer.toString(), sloc);}
-<S>"\\n"			{ buffer.append('\n');}
-<S>"\\t"			{ buffer.append('\t');}
-<S>"\\\""			{ buffer.append('"');}
-<S>"\\\\"			{ buffer.append('\\');}
-<S>.				{ buffer.append(yytext());}
+<INITIAL>\"					{ sloc = yylloc; yybegin(S); sb.clear()}
+<S>{NEWLINE}		{/* issueError(new NewlineInStrError(sloc, MiscUtils.quote(buffer.toString())));*/}
+<S><<EOF>>			{/* issueError(new UntermStrError(sloc, MiscUtils.quote(buffer.toString()))); yybegin(YYINITIAL);*/}
+<S>\"				{yybegin(INITIAL); yylval = AST::String(std::string(sb.begin(), sb.end())); return LITERAL;}
+<S>"\\n"			{sb.push_back('\n');}
+<S>"\\t"			{sb.push_back('\t');}
+<S>"\\\""			{sb.push_back('\"');}
+<S>"\\\\"			{sb.push_back('\\');}
+<S>.				{sb.push_back(yytext[0]);}
 
 "if"							{yylval = new AST::Keyword(IF); return IF;}
 "func"							{yylval = new AST::Keyword(FUNC); return FUNC;}
