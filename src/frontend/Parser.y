@@ -1,5 +1,5 @@
 %{
-#define YYSTYPE AST::Node
+#include "ParserDef.h"
 %}
 %token IF ELSE FOR WHILE BREAK FUNC STATE IDENTIFIER LITERAL
 

@@ -1,10 +1,11 @@
 %{
+#include "ParserDef.h"
 #include "Parser.tab.h"
 #include <vector>
+#include <string>
 #define YYSTYPE AST::Node
 #define YYLTYPE AST::Location
 std::vector<char> sb;
-int yywrap() {return 1;}
 %}
 
 NEWLINE				(\r|\n|\r\n)
@@ -56,5 +57,5 @@ WHITESPACE			([ \t]+)
 "else"							{yylval = new AST::Keyword(ELSE); return ELSE;}
 "while"							{yylval = new AST::Keyword(WHILE); return WHILE;}
 "break"							{yylval = new AST::Keyword(BREAK); return BREAK;}
-{IDENTIFIER}					{yylval = new AST::Identifier(yytext); }
+{IDENTIFIER}					{yylval = new AST::Identifier(yytext); return IDENTIFIER;}
 %%
