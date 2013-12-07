@@ -1,5 +1,7 @@
 %{
+#include "ParserDef.h"
 #include "Parser.tab.h"
+#include "AST.h"
 #include <vector>
 #include <string>
 std::vector<char> sb;
@@ -31,18 +33,18 @@ WHITESPACE			([ \t]+)
 {MULTILINE_COMMENT}				{}
 {NEWLINE}						{}
 
-{OPERATOR}						{yylval = new AST::Oper(yylloc, yytext); return yytext[0];}
-"&&"							{yylval = new AST::Oper(yylloc, yytext); return yytokentype::AND;}
-"||"							{yylval = new AST::Oper(yylloc, yytext); return yytokentype::OR;}
-"<="							{yylval = new AST::Oper(yylloc, yytext); return yytokentype::LE;}
-">="							{yylval = new AST::Oper(yylloc, yytext); return yytokentype::GE;}
-"=="							{yylval = new AST::Oper(yylloc, yytext); return yytokentype::EQ;}
-"!="							{yylval = new AST::Oper(yylloc, yytext); return yytokentype::NE;}
+{OPERATOR}						{yylval = new AST::Oper(getLoc(), yytext); return yytext[0];}
+"&&"							{yylval = new AST::Oper(getLoc(), yytext); return yytokentype::AND;}
+"||"							{yylval = new AST::Oper(getLoc(), yytext); return yytokentype::OR;}
+"<="							{yylval = new AST::Oper(getLoc(), yytext); return yytokentype::LE;}
+">="							{yylval = new AST::Oper(getLoc(), yytext); return yytokentype::GE;}
+"=="							{yylval = new AST::Oper(getLoc(), yytext); return yytokentype::EQ;}
+"!="							{yylval = new AST::Oper(getLoc(), yytext); return yytokentype::NE;}
 
-{INTEGER}						{yylval = AST::Integer(yylloc, yytext); return yytokentype::LITERAL;}
-{DOUBLE}						{yylval = AST::Double(yylloc, yytext); return yytokentype::LITERAL;}
+{INTEGER}						{yylval = AST::Integer(getLoc(), yytext); return yytokentype::LITERAL;}
+{DOUBLE}						{yylval = AST::Double(getLoc(), yytext); return yytokentype::LITERAL;}
 
-<INITIAL>\"					{ sloc = yylloc; BEGIN S; sb.clear()}
+<INITIAL>\"					{ sloc = getLoc(); BEGIN S; sb.clear();}
 <S>{NEWLINE}		{/* issueError(new NewlineInStrError(sloc, MiscUtils.quote(buffer.toString())));*/}
 <S><<EOF>>			{/* issueError(new UntermStrError(sloc, MiscUtils.quote(buffer.toString()))); yybegin(YYINITIAL);*/}
 <S>\"				{BEGIN INITIAL; yylval = AST::String(std::string(sb.begin(), sb.end())); return yytokentype::LITERAL;}
