@@ -1,14 +1,14 @@
 %{
 #include "ParserDef.h"
 #include "Parser.tab.h"
-#include "AST.h"
 #include <vector>
 #include <string>
 std::vector<char> sb;
 inline AST::Location getLoc()
 {
-	return {YY_CURRENT_BUFFER_LVALUE.yy_bs_lineno, YY_CURRENT_BUFFER_LVALUE.yy_bs_column};
+	return AST::Location(AST::currentSource, yylineno);
 }
+AST::Location sloc;
 %}
 
 NEWLINE				(\r|\n|\r\n)
@@ -25,6 +25,7 @@ S_COMMENT			("//"[^\r\n]*{NEWLINE})
 MULTILINE_COMMENT	("/*"([^/]*[^*/]"/"|"/")*[^/]*"*/")
 WHITESPACE			([ \t]+)
 
+%option noyywrap
 %x S
 
 %%
@@ -41,24 +42,26 @@ WHITESPACE			([ \t]+)
 "=="							{yylval = new AST::Oper(getLoc(), yytext); return yytokentype::EQ;}
 "!="							{yylval = new AST::Oper(getLoc(), yytext); return yytokentype::NE;}
 
-{INTEGER}						{yylval = AST::Integer(getLoc(), yytext); return yytokentype::LITERAL;}
-{DOUBLE}						{yylval = AST::Double(getLoc(), yytext); return yytokentype::LITERAL;}
+{INTEGER}						{yylval = new AST::Integer(getLoc(), yytext); return yytokentype::LITERAL;}
+{DOUBLE}						{yylval = new AST::Double(getLoc(), yytext); return yytokentype::LITERAL;}
 
 <INITIAL>\"					{ sloc = getLoc(); BEGIN S; sb.clear();}
 <S>{NEWLINE}		{/* issueError(new NewlineInStrError(sloc, MiscUtils.quote(buffer.toString())));*/}
 <S><<EOF>>			{/* issueError(new UntermStrError(sloc, MiscUtils.quote(buffer.toString()))); yybegin(YYINITIAL);*/}
-<S>\"				{BEGIN INITIAL; yylval = AST::String(std::string(sb.begin(), sb.end())); return yytokentype::LITERAL;}
+<S>\"				{BEGIN INITIAL; yylval = new AST::String(sloc, std::string(sb.begin(), sb.end())); return yytokentype::LITERAL;}
 <S>"\\n"			{sb.push_back('\n');}
 <S>"\\t"			{sb.push_back('\t');}
 <S>"\\\""			{sb.push_back('\"');}
 <S>"\\\\"			{sb.push_back('\\');}
 <S>.				{sb.push_back(yytext[0]);}
 
-"if"							{yylval = new AST::Keyword(AST::Keyword::Type::IF); return yytokentype::IF;}
-"func"							{yylval = new AST::Keyword(AST::Keyword::Type::FUNC); return yytokentype::FUNC;}
-"state"							{yylval = new AST::Keyword(AST::Keyword::Type::STATE); return yytokentype::STATE;}
-"else"							{yylval = new AST::Keyword(AST::Keyword::Type::ELSE); return yytokentype::ELSE;}
-"while"							{yylval = new AST::Keyword(AST::Keyword::Type::WHILE); return yytokentype::WHILE;}
-"break"							{yylval = new AST::Keyword(AST::Keyword::Type::BREAK); return yytokentype::BREAK;}
-{IDENTIFIER}					{yylval = new AST::Identifier(yytext); return yytokentype::IDENTIFIER;}
+"if"							{yylval = new AST::Keyword(getLoc(), AST::Keyword::Type::IF); return yytokentype::IF;}
+"else"							{yylval = new AST::Keyword(getLoc(), AST::Keyword::Type::ELSE); return yytokentype::ELSE;}
+"func"							{yylval = new AST::Keyword(getLoc(), AST::Keyword::Type::FUNC); return yytokentype::FUNC;}
+"state"							{yylval = new AST::Keyword(getLoc(), AST::Keyword::Type::STATE); return yytokentype::STATE;}
+"for"							{yylval = new AST::Keyword(getLoc(), AST::Keyword::Type::FOR); return yytokentype::FOR;}
+"while"							{yylval = new AST::Keyword(getLoc(), AST::Keyword::Type::WHILE); return yytokentype::WHILE;}
+"break"							{yylval = new AST::Keyword(getLoc(), AST::Keyword::Type::BREAK); return yytokentype::BREAK;}
+{IDENTIFIER}					{yylval = new AST::Identifier(getLoc(), yytext); return yytokentype::IDENTIFIER;}
 %%
+
