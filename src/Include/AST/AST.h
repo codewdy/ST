@@ -16,12 +16,15 @@ namespace AST
 		Location(std::string* _str = 0, std::size_t _lineno = 0) : str(_str), lineno(_lineno) {}
 	};
 	class AST;
+	typedef std::shared_ptr<AST> Tree;
 	typedef AST* Node;
 	class AST
 	{
 	public:
+		Location loc;
 		AST(Location _loc);
 		//virtual void visit(Visitor* v) = 0; 
+		virtual ~AST();
 	};
 }
 #endif
