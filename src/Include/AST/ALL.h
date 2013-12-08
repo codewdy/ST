@@ -7,5 +7,12 @@
 #include "String.h"
 #include "Keyword.h"
 #include "Identifier.h"
+#include "Program.h"
+#include "StmtList.h"
+#include "Stmt.h"
+#include "SimpleStmt.h"
+#include "ForStmt.h"
+#include "WhileStmt.h"
+#include "StmtBlock.h"
 #endif
 

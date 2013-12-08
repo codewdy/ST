@@ -42,7 +42,7 @@ ForStmt		:	FOR '(' IDENTIFIER ':' Expr ')' Stmt
 		;
 
 WhileStmt	:	WHILE '(' Expr ')' Stmt
-				{$$ = AST::ForStmt::Create((AST::Keyword*)$1, (AST::Oper*)$2, 
+				{$$ = AST::WhileStmt::Create((AST::Keyword*)$1, (AST::Oper*)$2, 
 					(AST::Expr*)$3, (AST::Oper*)$4, (AST::Stmt*)$5);}
 		;
 
@@ -50,8 +50,7 @@ StmtBlock	:	'{' StmtList '}'
 		  		{$$ = AST::StmtBlock::Create((AST::Oper*)$1, (AST::StmtList*)$2, (AST::Oper*)$3);}
 		;
 
-Expr		:	LITERAL
-	  		|	ListLiteral
+Expr		:	LiteralExpr
 			|	StateDef
 			|	FuncDef
 			|	CallExpr
@@ -69,7 +68,11 @@ ExprListHelper:	ExprListHelper ',' Expr
 		 		{$$ = AST::ExprList::Create((AST::Expr*)$1);}
 			;
 
-ListLiteral	:	'[' ExprList ']'
+LiteralExpr	:	LITERAL
+			|	ListLiteralExpr
+		;
+
+ListLiteralExpr	:	'[' ExprList ']'
 		 		{$$ = AST::ListLiteral::Create((AST::Oper*)$1, (AST::ExprList*)$2, (AST::Oper*)$3);}
 		;
 
