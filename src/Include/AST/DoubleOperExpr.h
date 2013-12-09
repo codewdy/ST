@@ -10,7 +10,7 @@ namespace AST
 		DoubleOperExpr();
 		DoubleOperExpr(const DoubleOperExpr&);
 	public:
-		static DoubleOperExpr* Create(Oper* s1, Expr* s2, Oper* s3);
+		static DoubleOperExpr* Create(Expr* s1, Oper* s2, Expr* s3);
 	};
 }
 #endif

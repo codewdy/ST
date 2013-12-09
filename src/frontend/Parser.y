@@ -123,7 +123,7 @@ SimpleExpr	:	Expr '+' Expr
 				{$$ = AST::DoubleOperExpr::Create((AST::Expr*)$1, (AST::Oper*)$2, (AST::Expr*)$3);}
 			|	Expr OR Expr
 				{$$ = AST::DoubleOperExpr::Create((AST::Expr*)$1, (AST::Oper*)$2, (AST::Expr*)$3);}
-			|	LVALUE '=' Expr
+			|	LValue '=' Expr
 				{$$ = AST::DoubleOperExpr::Create((AST::Expr*)$1, (AST::Oper*)$2, (AST::Expr*)$3);}
 			|	'!' Expr
 				{$$ = AST::SingleOperExpr::Create((AST::Oper*)$1, (AST::Expr*)$2);}

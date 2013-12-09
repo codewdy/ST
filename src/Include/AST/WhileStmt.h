@@ -12,7 +12,7 @@ namespace AST
 		WhileStmt();
 		WhileStmt(const WhileStmt&);
 	public:
-		static WhileStmt Create(Keyword* s1, Oper* s2, Expr* s3, Oper* s4);
+		static WhileStmt* Create(Keyword* s1, Oper* s2, Expr* s3, Oper* s4, Stmt* s5);
 	};
 }
 #endif

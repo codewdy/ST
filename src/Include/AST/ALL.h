@@ -21,10 +21,12 @@
 #include "StateDef.h"
 #include "FuncDef.h"
 #include "CallExpr.h"
+#include "ListExpr.h"
 #include "DoubleOperExpr.h"
 #include "SingleOperExpr.h"
 #include "LValue.h"
 #include "VarLValue.h"
 #include "ArrayAtLValue.h"
+#include "Visitor.h"
 #endif
 

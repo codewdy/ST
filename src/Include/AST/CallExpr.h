@@ -4,13 +4,14 @@
 namespace AST
 {
 	class Oper;
+	class ExprList;
 	class CallExpr : public Expr
 	{
 	protected:
 		CallExpr();
 		CallExpr(const CallExpr&);
 	public:
-		static CallExpr* Create(Expr* s1, Oper* s2, Expr* s3, Oper* s4);
+		static CallExpr* Create(Expr* s1, Oper* s2, ExprList* s3, Oper* s4);
 	};
 }
 #endif
