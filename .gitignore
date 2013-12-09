@@ -3,3 +3,7 @@
 *.aux
 *.ttc
 *.ttf
+*.yy.c
+*.yy.cc
+*.tab.c
+*.tab.h
