@@ -1,9 +1,9 @@
 #ifndef ST_7482647236_AST_DOUBLE
 #define ST_7482647236_AST_DOUBLE
-#include "AST.h"
+#include "Expr.h"
 namespace AST
 {
-	class Double : public AST
+	class Double : public Expr
 	{
 	public:
 		Double(Location _loc, const char* str);

@@ -14,5 +14,17 @@
 #include "ForStmt.h"
 #include "WhileStmt.h"
 #include "StmtBlock.h"
+#include "Expr.h"
+#include "ExprList.h"
+#include "IDs.h"
+#include "ListExpr.h"
+#include "StateDef.h"
+#include "FuncDef.h"
+#include "CallExpr.h"
+#include "DoubleOperExpr.h"
+#include "SingleOperExpr.h"
+#include "LValue.h"
+#include "VarLValue.h"
+#include "ArrayAtLValue.h"
 #endif
 

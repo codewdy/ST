@@ -50,12 +50,13 @@ StmtBlock	:	'{' StmtList '}'
 		  		{$$ = AST::StmtBlock::Create((AST::Oper*)$1, (AST::StmtList*)$2, (AST::Oper*)$3);}
 		;
 
-Expr		:	LiteralExpr
+Expr		:	LITERAL
 			|	StateDef
 			|	FuncDef
 			|	CallExpr
 			|	SimpleExpr
-			|	LVALUE
+			|	ListExpr
+			|	LValue
 		;
 
 ExprList	:	ExprListHelper
@@ -68,12 +69,8 @@ ExprListHelper:	ExprListHelper ',' Expr
 		 		{$$ = AST::ExprList::Create((AST::Expr*)$1);}
 			;
 
-LiteralExpr	:	LITERAL
-			|	ListLiteralExpr
-		;
-
-ListLiteralExpr	:	'[' ExprList ']'
-		 		{$$ = AST::ListLiteral::Create((AST::Oper*)$1, (AST::ExprList*)$2, (AST::Oper*)$3);}
+ListExpr	:	'[' ExprList ']'
+		 		{$$ = AST::ListExpr::Create((AST::Oper*)$1, (AST::ExprList*)$2, (AST::Oper*)$3);}
 		;
 
 IDs			:	IDsHelper
@@ -129,12 +126,12 @@ SimpleExpr	:	Expr '+' Expr
 			|	LVALUE '=' Expr
 				{$$ = AST::DoubleOperExpr::Create((AST::Expr*)$1, (AST::Oper*)$2, (AST::Expr*)$3);}
 			|	'!' Expr
-				{$$ = AST::SingleOperExpr::Create((AST::Expr*)$1, (AST::Expr*)$2);}
+				{$$ = AST::SingleOperExpr::Create((AST::Oper*)$1, (AST::Expr*)$2);}
 			|	'-' Expr			%prec UMINUS
-				{$$ = AST::SingleOperExpr::Create((AST::Expr*)$1, (AST::Expr*)$2);}
+				{$$ = AST::SingleOperExpr::Create((AST::Oper*)$1, (AST::Expr*)$2);}
 		;
 
-LVALUE		:	IDENTIFIER
+LValue		:	IDENTIFIER
 				{$$ = AST::VarLValue::Create((AST::Identifier*)$1);}
 			|	Expr '.' IDENTIFIER
 				{$$ = AST::VarLValue::Create((AST::Expr*)$1, (AST::Oper*)$2, (AST::Identifier*)$3);}
