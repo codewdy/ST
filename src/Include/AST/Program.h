@@ -7,10 +7,11 @@ namespace AST
 	class Program : public AST
 	{
 	protected:
-		Program();
+		Program(Location _loc);
 		Program(const Program&);
 	public:
 		static Program* Create(StmtList* s1);
+		void visit(Visitor* v);
 	};
 }
 #endif

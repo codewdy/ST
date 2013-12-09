@@ -7,7 +7,9 @@ namespace AST
 	class String : public Expr
 	{
 	public:
-		String(Location _loc, std::string str);
+		std::string str;
+		String(Location _loc, std::string _str);
+		void visit(Visitor* v);
 	};
 }
 #endif

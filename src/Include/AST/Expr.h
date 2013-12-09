@@ -5,6 +5,9 @@ namespace AST
 {
 	class Expr : public AST
 	{
+	protected:
+		Expr(Location _loc);
 	};
 }
 #endif
+

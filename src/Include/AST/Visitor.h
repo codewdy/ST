@@ -20,6 +20,7 @@ namespace AST
 	
 	class Visitor
 	{
+	public:
 		void visit(AST* that);
 		virtual void visitInteger(Integer* that);
 		virtual void visitDouble(Double* that);
