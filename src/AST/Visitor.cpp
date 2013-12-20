@@ -9,4 +9,9 @@ namespace AST
 	void Visitor::visitInteger(Integer* that)
 	{
 	}
+
+	void Visitor::visitDouble(Double* that)
+	{
+
+	}
 }
