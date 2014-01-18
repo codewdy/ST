@@ -3,10 +3,10 @@
 #include "Exception.h"
 namespace Exception
 {
-	class NotImplement : public Exception
-	{
+    class NotImplement : public Exception
+    {
 
-	};
+    };
 }
 #endif
 

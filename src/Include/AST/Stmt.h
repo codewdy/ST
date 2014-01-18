@@ -3,8 +3,8 @@
 #include "AST.h"
 namespace AST
 {
-	class Stmt : public AST
-	{
-	};
+    class Stmt : public AST
+    {
+    };
 }
 #endif

@@ -3,11 +3,11 @@
 #include "AST.h"
 namespace AST
 {
-	class Identifier : public AST
-	{
-	public:
-		Identifier(Location _loc, const char* str);
-	};
+    class Identifier : public AST
+    {
+    public:
+        Identifier(Location _loc, const char* str);
+    };
 }
 #endif
 

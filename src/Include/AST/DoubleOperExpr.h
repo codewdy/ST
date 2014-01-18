@@ -3,15 +3,14 @@
 #include "Expr.h"
 namespace AST
 {
-	class Oper;
-	class DoubleOperExpr : public Expr
-	{
-	protected:
-		DoubleOperExpr();
-		DoubleOperExpr(const DoubleOperExpr&);
-	public:
-		static DoubleOperExpr* Create(Expr* s1, Oper* s2, Expr* s3);
-	};
+    class Oper;
+    class DoubleOperExpr : public Expr {
+    protected:
+        DoubleOperExpr();
+        DoubleOperExpr(const DoubleOperExpr&);
+    public:
+        static DoubleOperExpr* Create(Expr* s1, Oper* s2, Expr* s3);
+    };
 }
 #endif
 

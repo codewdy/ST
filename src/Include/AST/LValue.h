@@ -3,9 +3,9 @@
 #include "Expr.h"
 namespace AST
 {
-	class LValue : public Expr
-	{
-	};
+    class LValue : public Expr
+    {
+    };
 }
 #endif
 

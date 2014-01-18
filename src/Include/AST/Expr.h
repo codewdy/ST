@@ -3,11 +3,11 @@
 #include "AST.h"
 namespace AST
 {
-	class Expr : public AST
-	{
-	protected:
-		Expr(Location _loc);
-	};
+    class Expr : public AST
+    {
+    protected:
+        Expr(Location _loc);
+    };
 }
 #endif
 

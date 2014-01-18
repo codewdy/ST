@@ -3,14 +3,14 @@
 #include "Expr.h"
 namespace AST
 {
-	class GlobalExpr : public Expr
-	{
-	protected:
-		GlobalExpr();
-		GlobalExpr(const GlobalExpr&);
-	public:
-		static GlobalExpr* Create();
-	};
+    class GlobalExpr : public Expr
+    {
+    protected:
+        GlobalExpr();
+        GlobalExpr(const GlobalExpr&);
+    public:
+        static GlobalExpr* Create();
+    };
 }
 #endif
 
