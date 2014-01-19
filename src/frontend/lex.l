@@ -6,7 +6,7 @@
 std::vector<char> sb;
 inline AST::Location getLoc()
 {
-	return AST::Location(AST::currentSource, yylineno);
+    return AST::Location(AST::currentSource, yylineno);
 }
 AST::Location sloc;
 %}

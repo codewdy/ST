@@ -10,6 +10,8 @@ namespace AST
     }
 
     void Visitor::visitDouble(Double* that) {
+    }
 
+    void Visitor::visitString(String* that) {
     }
 }
