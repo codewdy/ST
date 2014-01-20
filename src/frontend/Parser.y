@@ -1,4 +1,5 @@
 %include {
+#include <cassert>
 #include "ParserDef.h"
 }
 %left OR .
@@ -14,7 +15,8 @@
 
 %start_symbol program
 
-%token_type {Lex}
+%token_type {Lex*}
+%token_destructor {delete $$;}
 
 %type program {AST::Program*}
 program(A) ::= stmtList(B). {A = AST::Program::Create(B);}
@@ -31,15 +33,15 @@ stmt(A) ::= forStmt(B). {A = B;}
 stmt(A) ::= whileStmt(B). {A = B;}
 stmt(A) ::= stmtBlock(B). {A = B;}
 
-%type simpleStmt {AST::SimpleStmt}
+%type simpleStmt {AST::SimpleStmt*}
 %destructor simpleStmt {delete $$;}
-simpleStmt(A) ::= expr(B) SEM. {A = SimpleStmt::Create(B);}
+simpleStmt(A) ::= expr(B) SEM. {A = AST::SimpleStmt::Create(B);}
 
-%type expr {AST::Expr}
+%type expr {AST::Expr*}
 %destructor expr {delete $$;}
-expr(A) ::= STRING(B) . {A = AST::String::Create(B.loc, B.str);}
-expr(A) ::= INTEGER(B) . {A = AST::Integer::Create(B.loc, B.str);}
-expr(A) ::= DOUBLE(B) . {A = AST::Double::Create(B.loc, B.str);}
-expr(A) ::= expr(B) PLUS expr(C) . {A = AST::DoubleOperExpr(B, C, AST::DoubleOperExpr::PLUS);}
-expr(A) ::= MINUS expr(B) . [UMINUS] {A = AST::SingleOperExpr(B, AST::SingleOperExpr::UMINUS);}
+expr(A) ::= STRING(B) . {A = new AST::String(B->loc, B->str); delete B;}
+expr(A) ::= INTEGER(B) . {A = new AST::Integer(B->loc, B->str); delete B;}
+expr(A) ::= DOUBLE(B) . {A = new AST::Double(B->loc, B->str); delete B;}
+expr(A) ::= expr(B) PLUS expr(C) . {A = AST::DoubleOperExpr::Create(B, C, AST::DoubleOperExpr::PLUS);}
+expr(A) ::= MINUS expr(B) . [UMINUS] {A = AST::SingleOperExpr::Create(B, AST::SingleOperExpr::NEG);}
 
