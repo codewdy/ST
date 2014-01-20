@@ -3,13 +3,15 @@
 #include "Expr.h"
 namespace AST
 {
-    class Oper;
     class SingleOperExpr : public Expr {
     protected:
         SingleOperExpr();
         SingleOperExpr(const SingleOperExpr&);
     public:
-        static SingleOperExpr* Create(Oper* s1, Expr* s2);
+        enum Oper {
+            NEG, NOT
+        } op;
+        static SingleOperExpr* Create(Expr* _e, Oper _op);
     };
 }
 #endif

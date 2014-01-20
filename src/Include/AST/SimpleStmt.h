@@ -11,7 +11,9 @@ namespace AST
         SimpleStmt();
         SimpleStmt(const SimpleStmt&);
     public:
-        static SimpleStmt* Create(Expr* s1, Oper* s2);
+        Expr* expr;
+        static SimpleStmt* Create(Expr* _e);
+        void visit(Visitor* that);
     };
 }
 #endif

@@ -1,8 +1,7 @@
 #include "AST/ALL.h"
 namespace AST
 {
-    void Visitor::visit(AST* that)
-    {
+    void Visitor::visit(AST* that) {
         return that->visit(this);
     }
 
@@ -13,5 +12,14 @@ namespace AST
     }
 
     void Visitor::visitString(String* that) {
+    }
+
+    void Visitor::visitProgram(Program* that) {
+        for (auto stmt : that->stmts)
+            stmt->visit(this);
+    }
+
+    void Visitor::visitSimpleStmt(SimpleStmt* that) {
+        that->expr->visit(this);
     }
 }
