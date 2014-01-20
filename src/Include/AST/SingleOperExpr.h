@@ -8,10 +8,12 @@ namespace AST
         SingleOperExpr();
         SingleOperExpr(const SingleOperExpr&);
     public:
+        Expr *expr1;
         enum Oper {
             NEG, NOT
         } op;
-        static SingleOperExpr* Create(Expr* _e, Oper _op);
+        static SingleOperExpr* Create(Expr* _expr1, Oper _op);
+        void visit(Visitor* that);
     };
 }
 #endif

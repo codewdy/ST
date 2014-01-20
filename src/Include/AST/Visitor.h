@@ -2,6 +2,7 @@
 #define ST_9348212392_AST_VISITOR
 namespace AST {
     class AST;
+    class Identifier;
     class Integer;
     class Double;
     class String;
@@ -10,7 +11,6 @@ namespace AST {
     class ForStmt;
     class WhileStmt;
     class StmtBlock;
-    class ExprList;
     class ListExpr;
     class DoubleOperExpr;
     class SingleOperExpr;
@@ -20,6 +20,7 @@ namespace AST {
     class Visitor {
     public:
         void visit(AST* that);
+        virtual void visitIdentifier(Identifier* that);
         virtual void visitInteger(Integer* that);
         virtual void visitDouble(Double* that);
         virtual void visitString(String* that);
@@ -27,8 +28,7 @@ namespace AST {
         virtual void visitSimpleStmt(SimpleStmt* that);
         virtual void visitForStmt(ForStmt* that);
         virtual void visitWhileStmt(WhileStmt* that);
-        virtual void viditStmtBlock(StmtBlock* that);
-        virtual void visitExprList(ExprList* that);
+        virtual void visitStmtBlock(StmtBlock* that);
         virtual void visitListExpr(ListExpr* that);
         virtual void visitDoubleOperExpr(DoubleOperExpr* that);
         virtual void visitSingleOperExpr(SingleOperExpr* that);

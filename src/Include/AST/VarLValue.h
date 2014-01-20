@@ -11,8 +11,11 @@ namespace AST
         VarLValue();
         VarLValue(const VarLValue&);
     public:
+        Expr *obj;
+        Identifier *attr;
         static VarLValue* Create(Identifier* s1);
-        static VarLValue* Create(Expr* s1, Oper* s2, Identifier* s3);
+        static VarLValue* Create(Expr* _obj, Identifier* _attr);
+        void visit(Visitor* that);
     };
 }
 #endif

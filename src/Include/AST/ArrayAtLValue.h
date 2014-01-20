@@ -11,7 +11,9 @@ namespace AST
         ArrayAtLValue();
         ArrayAtLValue(const ArrayAtLValue&);
     public:
-        static ArrayAtLValue* Create(Expr* s1, Oper* s2, Expr* s3, Oper* s4);
+        Expr *array, *index;
+        static ArrayAtLValue* Create(Expr* _array, Expr* _index);
+        void visit(Visitor* that);
     };
 }
 #endif

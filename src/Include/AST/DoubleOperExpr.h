@@ -8,10 +8,12 @@ namespace AST
         DoubleOperExpr();
         DoubleOperExpr(const DoubleOperExpr&);
     public:
+        Expr *expr1, *expr2;
         enum Oper {
             PLUS, MINUS, MUL, DIV, MOD, GT, LT, GE, LE, EQ, NE, AND, OR
-        } op;
-        static DoubleOperExpr* Create(Expr* _e1, Expr* _e2, Oper _op);
+        } oper;
+        static DoubleOperExpr* Create(Expr* _expr1, Expr* _expr2, Oper _op);
+        void visit(Visitor* that);
     };
 }
 #endif

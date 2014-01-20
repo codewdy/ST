@@ -6,7 +6,7 @@ namespace AST {
     class Integer : public Expr {
     public:
         std::string str;
-        Integer(Location _loc, const char* _str);
+        Integer(Location _loc, std::string _str);
         void visit(Visitor* v);
     };
 }
