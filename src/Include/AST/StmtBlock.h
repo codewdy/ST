@@ -4,7 +4,6 @@
 #include <vector>
 namespace AST
 {
-    class Oper;
     class StmtList;
     class StmtBlock : public Stmt
     {
@@ -13,7 +12,7 @@ namespace AST
         StmtBlock(const StmtBlock&);
     public:
         std::vector<Stmt*> stmts;
-        static StmtBlock* Create(Oper* s1, StmtList* s2, Oper* s3);
+        static StmtBlock* Create(StmtList* _stmts);
         void visit(Visitor* that);
     };
 }

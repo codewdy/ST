@@ -5,9 +5,6 @@ namespace AST
         return that->visit(this);
     }
 
-    void Visitor::visitIdentifier(Identifier* that) {
-    }
-
     void Visitor::visitInteger(Integer* that) {
     }
 
@@ -37,6 +34,12 @@ namespace AST
         that->loop->visit(this);
     }
 
+    void Visitor::visitIfStmt(IfStmt* that) {
+        that->condition->visit(this);
+        that->yes->visit(this);
+        that->no->visit(this);
+    }
+
     void Visitor::visitStmtBlock(StmtBlock* that) {
         for (auto stmt : that->stmts)
             stmt->visit(this);
@@ -45,6 +48,12 @@ namespace AST
     void Visitor::visitListExpr(ListExpr* that) {
         for (auto expr : that->exprs)
             expr->visit(this);
+    }
+
+    void Visitor::visitCallExpr(CallExpr* that) {
+        that->func->visit(this);
+        for (auto parm : that->parms)
+            parm->visit(this);
     }
 
     void Visitor::visitDoubleOperExpr(DoubleOperExpr* that) {

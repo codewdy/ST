@@ -7,7 +7,7 @@ namespace AST {
     class Stmt;
     class Program : public AST {
     protected:
-        Program(Location _loc);
+        Program();
         Program(const Program&);
     public:
         std::vector<Stmt*> stmts;

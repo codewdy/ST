@@ -1,19 +1,23 @@
 #ifndef ST_8291827482_AST_FUNCDEF
 #define ST_8291827482_AST_FUNCDEF
 #include "Expr.h"
+#include <vector>
+#include <string>
 namespace AST
 {
-    class Keyword;
-    class IDs;
-    class Oper;
+    class LValueList;
+    class IDList;
     class StmtBlock;
+    class LValue;
     class FuncDef : public Expr
     {
     protected:
         FuncDef();
-        FuncDef(const FuncDef&);
     public:
-        static FuncDef* Create(Keyword* s1, IDs* s2, Oper* s3, IDs* s4, Oper* s5, StmtBlock* s6);
+        std::vector<LValue*> funcs;
+        std::vector<std::string> args;
+        StmtBlock* stmts;
+        static FuncDef* Create(LValueList* _funcs, IDList* _args, StmtBlock* _stmts);
     };
 }
 #endif

@@ -4,7 +4,6 @@
 namespace AST
 {
     class Expr;
-    class Oper;
     class SimpleStmt : public Stmt
     {
     protected:

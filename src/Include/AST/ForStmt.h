@@ -3,9 +3,7 @@
 #include "Stmt.h"
 namespace AST
 {
-    class Keyword;
-    class Oper;
-    class Identifier;
+    class LValue;
     class Expr;
     class Stmt;
     class ForStmt : public Stmt {
@@ -13,10 +11,10 @@ namespace AST
         ForStmt();
         ForStmt(const ForStmt&);
     public:
-        Identifier* var;
+        LValue* var;
         Expr* set;
         Stmt* loop;
-        static ForStmt* Create(Keyword* s1, Oper* s2, Identifier* s3, Oper* s4, Expr* s5, Oper* s6, Stmt* s7);
+        static ForStmt* Create(LValue* _var, Expr* _set, Stmt* _loop);
         void visit(Visitor* that);
     };
 }

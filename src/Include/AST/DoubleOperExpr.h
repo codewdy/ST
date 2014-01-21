@@ -6,7 +6,6 @@ namespace AST
     class DoubleOperExpr : public Expr {
     protected:
         DoubleOperExpr();
-        DoubleOperExpr(const DoubleOperExpr&);
     public:
         Expr *expr1, *expr2;
         enum Oper {

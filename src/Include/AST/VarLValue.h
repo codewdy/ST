@@ -1,20 +1,19 @@
 #ifndef ST_8271892302_AST_VARLVALUE
 #define ST_8271892302_AST_VARLVALUE
 #include "LValue.h"
+#include <string>
 namespace AST
 {
-    class Identifier;
     class Expr;
-    class Oper;
     class VarLValue : public LValue {
     protected:
         VarLValue();
         VarLValue(const VarLValue&);
     public:
         Expr *obj;
-        Identifier *attr;
-        static VarLValue* Create(Identifier* s1);
-        static VarLValue* Create(Expr* _obj, Identifier* _attr);
+        std::string *attr;
+        static VarLValue* Create(std::string _attr);
+        static VarLValue* Create(Expr* _obj, std::string _attr);
         void visit(Visitor* that);
     };
 }

@@ -4,12 +4,10 @@
 namespace AST
 {
     class Expr;
-    class Oper;
     class ArrayAtLValue : public LValue
     {
     protected:
         ArrayAtLValue();
-        ArrayAtLValue(const ArrayAtLValue&);
     public:
         Expr *array, *index;
         static ArrayAtLValue* Create(Expr* _array, Expr* _index);

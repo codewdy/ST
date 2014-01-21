@@ -5,15 +5,14 @@
 namespace AST
 {
     class ExprList;
-    class Oper;
-    class ListExpr : public AST
+    class ListExpr : public Expr
     {
     protected:
         ListExpr();
         ListExpr(const ListExpr&);
     public:
         std::vector<Expr*> exprs;
-        static ListExpr* Create(Oper* s1, ExprList* s2, Oper* s3);
+        static ListExpr* Create(ExprList* _exprs);
         void visit(Visitor* that);
     };
 }

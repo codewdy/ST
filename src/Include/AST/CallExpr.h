@@ -3,15 +3,16 @@
 #include "Expr.h"
 namespace AST
 {
-    class Oper;
     class ExprList;
     class CallExpr : public Expr
     {
     protected:
         CallExpr();
-        CallExpr(const CallExpr&);
     public:
-        static CallExpr* Create(Expr* s1, Oper* s2, ExprList* s3, Oper* s4);
+        Expr* func;
+        std::vector<Expr*> parms;
+        static CallExpr* Create(Expr* _func, ExprList* _parms);
+        void visit (Visitor* that);
     };
 }
 #endif

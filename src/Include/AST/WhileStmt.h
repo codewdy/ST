@@ -2,8 +2,6 @@
 #define ST_0901238293_AST_WHILESTMT
 #include "Stmt.h"
 namespace AST {
-    class Keyword;
-    class Oper;
     class Expr;
     class WhileStmt : public Stmt {
     protected:

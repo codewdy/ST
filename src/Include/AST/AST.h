@@ -10,15 +10,19 @@ namespace AST {
     class Visitor;
     struct Location {
         std::string* str;
-        std::size_t lineno;
+        int lineno;
+        Location(std::string* _str, int _lineno) : str(_str), lineno(_lineno) {}
     };
     class AST;
     typedef std::shared_ptr<AST> Tree;
     typedef AST* Node;
     class AST {
+        AST(const AST&);
+        AST& operator= (const AST&);
+    protected:
+        AST();
     public:
         Location loc;
-        AST(Location _loc);
         virtual void visit(Visitor* that); 
         virtual ~AST();
     };
