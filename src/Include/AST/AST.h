@@ -23,7 +23,7 @@ namespace AST {
         AST(Location _loc) : loc(_loc) {}
     public:
         Location loc;
-        virtual void visit(Visitor* that);
+        virtual void visit(Visitor* that) = 0;
         virtual ~AST();
     };
 }

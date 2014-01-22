@@ -2,9 +2,6 @@
 #include "Exception/NotImplement.h"
 
 namespace AST {
-    void AST::visit(Visitor* that) {
-        Raise(NotImplement);
-    }
 #define DefClassVisit(CLASS) void CLASS::visit(Visitor* that) {that->visit##CLASS(this);}
     DefClassVisit(Integer)
     DefClassVisit(Double)

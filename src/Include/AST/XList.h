@@ -9,17 +9,32 @@ namespace AST
     class LValue;
     class Stmt;
     template <class T>
-    class XList : public AST {
+    class XList {
     public:
         std::vector<T> list;
         static void FillVector(XList* src, std::vector<T>& dst) {src->list.swap(dst); delete src;}
-        XList() : AST(Location()) {}
-        XList(T s1) : AST(Location()), list(1, s1) {}
-        XList(XList* left, T right) : AST(Location()) {FillVector(left, list); list.push_back(right);}
+        XList() {}
+        XList(T s1) : list(1, s1) {}
+        XList(XList* left, T right) {FillVector(left, list); list.push_back(right);}
     };
+
+    template <class T>
+    class PXList {
+    public:
+        std::vector<T*> list;
+        static void FillVector(PXList* src, std::vector<T*>& dst) {src->list.swap(dst); delete src;}
+        PXList() {}
+        PXList(T* s1) : list(1, s1) {}
+        PXList(PXList* left, T* right) {FillVector(left, list); list.push_back(right);}
+        ~PXList() {
+            for (auto item : list)
+                delete item;
+        }
+    };
+
     typedef XList<std::string> IDList;
-    typedef XList<Expr*> ExprList;
-    typedef XList<LValue*> LValueList;
-    typedef XList<Stmt*> StmtList;
+    typedef PXList<Expr> ExprList;
+    typedef PXList<LValue> LValueList;
+    typedef PXList<Stmt> StmtList;
 }
 #endif
