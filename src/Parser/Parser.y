@@ -15,7 +15,7 @@ extern std::unordered_map<int, Lex*> lexMap;
 #include <fstream>
 #include "Exception/Exception.h"
 #include "Lexer.h"
-AST::Program* GetProgram(std::string filename) {
+AST::Program* CreateAST(std::string filename) {
     std::string* fn = new std::string(filename);
     void *parser = ParseAlloc(malloc);
     std::ifstream stream(filename.c_str());

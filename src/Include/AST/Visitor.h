@@ -1,5 +1,7 @@
 #ifndef ST_9348212392_AST_VISITOR
 #define ST_9348212392_AST_VISITOR
+#define DefVisitClass(CLASS) virtual void visit##CLASS(CLASS* that);
+#define DefVisitASTClass(CLASS) virtual void visit##CLASS(AST::CLASS* that);
 namespace AST {
     class AST;
     class Integer;
@@ -21,21 +23,21 @@ namespace AST {
     class Visitor {
     public:
         void visit(AST* that);
-        virtual void visitInteger(Integer* that);
-        virtual void visitDouble(Double* that);
-        virtual void visitString(String* that);
-        virtual void visitProgram(Program* that);
-        virtual void visitSimpleStmt(SimpleStmt* that);
-        virtual void visitForStmt(ForStmt* that);
-        virtual void visitWhileStmt(WhileStmt* that);
-        virtual void visitIfStmt(IfStmt* stmt);
-        virtual void visitStmtBlock(StmtBlock* that);
-        virtual void visitListExpr(ListExpr* that);
-        virtual void visitCallExpr(CallExpr* that);
-        virtual void visitDoubleOperExpr(DoubleOperExpr* that);
-        virtual void visitSingleOperExpr(SingleOperExpr* that);
-        virtual void visitVarLValue(VarLValue* that);
-        virtual void visitArrayAtLValue(ArrayAtLValue* that);
+        DefVisitClass(Integer)
+        DefVisitClass(Double)
+        DefVisitClass(String)
+        DefVisitClass(Program)
+        DefVisitClass(SimpleStmt)
+        DefVisitClass(ForStmt)
+        DefVisitClass(WhileStmt)
+        DefVisitClass(IfStmt)
+        DefVisitClass(StmtBlock)
+        DefVisitClass(ListExpr)
+        DefVisitClass(CallExpr)
+        DefVisitClass(DoubleOperExpr)
+        DefVisitClass(SingleOperExpr)
+        DefVisitClass(VarLValue)
+        DefVisitClass(ArrayAtLValue)
     };
 }
 #endif
