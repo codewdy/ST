@@ -6,11 +6,9 @@ namespace AST
     class Expr;
     class ArrayAtLValue : public LValue
     {
-    protected:
-        ArrayAtLValue();
     public:
         Expr *array, *index;
-        static ArrayAtLValue* Create(Expr* _array, Expr* _index);
+        ArrayAtLValue(Location _loc, Expr* _array, Expr* _index) : LValue(_loc), array(_array), index(_index) {}
         void visit(Visitor* that);
     };
 }

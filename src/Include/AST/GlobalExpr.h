@@ -6,10 +6,9 @@ namespace AST
     class GlobalExpr : public Expr
     {
     protected:
-        GlobalExpr();
         GlobalExpr(const GlobalExpr&);
     public:
-        static GlobalExpr* Create();
+        GlobalExpr(Location _loc) : Expr(_loc) {}
     };
 }
 #endif

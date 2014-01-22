@@ -2,17 +2,14 @@
 #define ST_9023842910_AST_LISTEXPR
 #include "Expr.h"
 #include <vector>
+#include "XList.h"
 namespace AST
 {
-    class ExprList;
     class ListExpr : public Expr
     {
-    protected:
-        ListExpr();
-        ListExpr(const ListExpr&);
     public:
         std::vector<Expr*> exprs;
-        static ListExpr* Create(ExprList* _exprs);
+        ListExpr(Location _loc, ExprList* _exprs) : Expr(_loc) {ExprList::FillVector(_exprs, exprs);}
         void visit(Visitor* that);
     };
 }

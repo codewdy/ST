@@ -2,9 +2,9 @@
 #define ST_8394839210_AST_STATEDEF
 #include "Expr.h"
 #include <vector>
+#include "XList.h"
 namespace AST
 {
-    class LValueList;
     class StmtBlock;
     class LValue;
     class StateDef : public Expr {
@@ -14,7 +14,7 @@ namespace AST
     public:
         std::vector<LValue*> states;
         StmtBlock* stmts;
-        static StateDef* Create(LValueList* _states, StmtBlock* stmts);
+        StateDef(Location _loc, LValueList* _states, StmtBlock* _stmts) : Expr(_loc), stmts(_stmts) {LValueList::FillVector(_states, states);}
     };
 }
 #endif

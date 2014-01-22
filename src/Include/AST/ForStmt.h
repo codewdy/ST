@@ -8,13 +8,12 @@ namespace AST
     class Stmt;
     class ForStmt : public Stmt {
     protected:
-        ForStmt();
         ForStmt(const ForStmt&);
     public:
         LValue* var;
         Expr* set;
         Stmt* loop;
-        static ForStmt* Create(LValue* _var, Expr* _set, Stmt* _loop);
+        ForStmt(Location _loc, LValue* _var, Expr* _set, Stmt* _loop) : Stmt(_loc), var(_var), set(_set), loop(_loop) {}
         void visit(Visitor* that);
     };
 }

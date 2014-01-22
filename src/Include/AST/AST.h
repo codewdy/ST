@@ -11,7 +11,7 @@ namespace AST {
     struct Location {
         std::string* str;
         int lineno;
-        Location(std::string* _str, int _lineno) : str(_str), lineno(_lineno) {}
+        Location(std::string* _str = 0, int _lineno = 0) : str(_str), lineno(_lineno) {}
     };
     class AST;
     typedef std::shared_ptr<AST> Tree;
@@ -20,7 +20,7 @@ namespace AST {
         AST(const AST&);
         AST& operator= (const AST&);
     protected:
-        AST();
+        AST(Location _loc) : loc(_loc) {}
     public:
         Location loc;
         virtual void visit(Visitor* that); 

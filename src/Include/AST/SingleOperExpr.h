@@ -11,8 +11,8 @@ namespace AST
         Expr *expr1;
         enum Oper {
             NEG, NOT
-        } op;
-        static SingleOperExpr* Create(Expr* _expr1, Oper _op);
+        } oper;
+        SingleOperExpr(Location _loc, Expr* _expr1, Oper _oper) : Expr(_loc), expr1(_expr1), oper(_oper) {}
         void visit(Visitor* that);
     };
 }

@@ -11,11 +11,11 @@ namespace AST
         ExprList();
         ExprList(const ExprList&);
     public:
+        static void FillVector(ExprList* src, std::vector<Expr*>& dst) {src->exprs.swap(dst); delete src;}
         std::vector<Expr*> exprs;
-        static ExprList* Create();
-        static ExprList* Create(Expr* s1);
-        static ExprList* Create(ExprList* left, Expr* right);
-        static void FillVector(ExprList* src, std::vector<Expr*>& dst);
+        ExprList(Location _loc) : AST(_loc) {}
+        ExprList(Location _loc, Expr* s1) : AST(_loc), exprs(1, s1) {}
+        ExprList(Location _loc, ExprList* left, Expr* right) : AST(_loc) {FillVector(left, exprs); exprs.push_back(right);}
     };
 }
 #endif

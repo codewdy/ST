@@ -30,6 +30,7 @@ AST::Program* CreateAST(std::string filename) {
         }
         AST::Program* ret;
         Parse(parser, 0, 0, &ret);
+        ret->loc.str = fn;
         return ret;
     } catch (Exception::Exception e) {
         delete fn;
@@ -59,25 +60,25 @@ AST::Program* CreateAST(std::string filename) {
 %token_destructor {delete $$;}
 
 %type program {AST::Program*}
-program(A) ::= stmtList(B). {*ret = A = AST::Program::Create(B);}
+program(A) ::= stmtList(B). {*ret = A = new AST::Program(AST::Location(), B);}
 
 %type stmtList {AST::StmtList*}
 %destructor stmtList {delete $$;}
-stmtList(A) ::= . {A = AST::StmtList::Create();}
-stmtList(A) ::= stmtList(B) stmt(C). {A = AST::StmtList::Create(B, C);}
+stmtList(A) ::= . {A = new AST::StmtList;}
+stmtList(A) ::= stmtList(B) stmt(C). {A = new AST::StmtList(B, C);}
 
 %type stmt {AST::Stmt*}
 %destructor stmt {delete $$;}
-stmt(A) ::= expr(B) SEM. {A = AST::SimpleStmt::Create(B);}
-stmt(A) ::= FOR LLC lValue(B) COL expr(C) RLC stmt(D). {A = AST::ForStmt::Create(B, C, D);}
-stmt(A) ::= WHILE LLC expr(B) RLC stmt(C) . {A = AST::WhileStmt::Create(B, C);}
-stmt(A) ::= IF LLC expr(B) RLC stmt(C) . {A = AST::IfStmt::Create(B, C);}
-stmt(A) ::= IF LLC expr(B) RLC stmt(C) ELSE stmt(D) . {A = AST::IfStmt::Create(B, C, D);}
+stmt(A) ::= expr(B) SEM. {A = new AST::SimpleStmt(B->loc, B);}
+stmt(A) ::= FOR(LOC) LLC lValue(B) COL expr(C) RLC stmt(D). {A = new AST::ForStmt(LOC->loc, B, C, D); delete LOC;}
+stmt(A) ::= WHILE(LOC) LLC expr(B) RLC stmt(C) . {A = new AST::WhileStmt(LOC->loc, B, C); delete LOC;}
+stmt(A) ::= IF(LOC) LLC expr(B) RLC stmt(C) . {A = new AST::IfStmt(LOC->loc, B, C); delete LOC;}
+stmt(A) ::= IF(LOC) LLC expr(B) RLC stmt(C) ELSE stmt(D) . {A = new AST::IfStmt(LOC->loc, B, C, D); delete LOC;}
 stmt(A) ::= stmtBlock(B) . {A = B;}
 
 %type stmtBlock {AST::StmtBlock*}
 %destructor stmtBlock {delete $$;}
-stmtBlock(A) ::= LGC stmtList(B) RGC . {A = AST::StmtBlock::Create(B);}
+stmtBlock(A) ::= LGC(LOC) stmtList(B) RGC . {A = new AST::StmtBlock(LOC->loc, B); delete LOC;}
 
 %type expr {AST::Expr*}
 %destructor expr {delete $$;}
@@ -88,59 +89,59 @@ expr(A) ::= DOUBLE(B) . {A = new AST::Double(B->loc, B->str); delete B;}
 //LValue Expr
 expr(A) ::= lValue(B) . {A = B;}
 //Call Expr
-expr(A) ::= expr(B) LLC exprList(C) RLC . {A = AST::CallExpr::Create(B, C);}
+expr(A) ::= expr(B) LLC(LOC) exprList(C) RLC . {A = new AST::CallExpr(LOC->loc, B, C); delete LOC;}
 //Func Def Expr
-expr(A) ::= FUNC lValueList(B) LLC iDList(C) RLC stmtBlock(D) . {A = AST::FuncDef::Create(B, C, D);}
+expr(A) ::= FUNC(LOC) lValueList(B) LLC iDList(C) RLC stmtBlock(D) . {A = new AST::FuncDef(LOC->loc, B, C, D); delete LOC;}
 //State Def Expr
-expr(A) ::= STATE lValueList(B) stmtBlock(C) . {A = AST::StateDef::Create(B, C);}
+expr(A) ::= STATE(LOC) lValueList(B) stmtBlock(C) . {A = new AST::StateDef(LOC->loc, B, C); delete LOC;}
 //List Expr
-expr(A) ::= LMC exprList(B) RLC . {A = AST::ListExpr::Create(B);}
+expr(A) ::= LMC(LOC) exprList(B) RLC . {A = new AST::ListExpr(LOC->loc, B); delete LOC;}
 //Simple Expr
 expr(A) ::= LLC expr(B) RLC . {A = B;}
-expr(A) ::= expr(B) PLUS expr(C) . {A = AST::DoubleOperExpr::Create(B, C, AST::DoubleOperExpr::PLUS);}
-expr(A) ::= expr(B) MINUS expr(C) . {A = AST::DoubleOperExpr::Create(B, C, AST::DoubleOperExpr::MINUS);}
-expr(A) ::= expr(B) MUL expr(C) . {A = AST::DoubleOperExpr::Create(B, C, AST::DoubleOperExpr::MUL);}
-expr(A) ::= expr(B) DIV expr(C) . {A = AST::DoubleOperExpr::Create(B, C, AST::DoubleOperExpr::DIV);}
-expr(A) ::= expr(B) MOD expr(C) . {A = AST::DoubleOperExpr::Create(B, C, AST::DoubleOperExpr::MOD);}
-expr(A) ::= expr(B) LT expr(C) . {A = AST::DoubleOperExpr::Create(B, C, AST::DoubleOperExpr::LT);}
-expr(A) ::= expr(B) GT expr(C) . {A = AST::DoubleOperExpr::Create(B, C, AST::DoubleOperExpr::GT);}
-expr(A) ::= expr(B) LE expr(C) . {A = AST::DoubleOperExpr::Create(B, C, AST::DoubleOperExpr::LE);}
-expr(A) ::= expr(B) GE expr(C) . {A = AST::DoubleOperExpr::Create(B, C, AST::DoubleOperExpr::GE);}
-expr(A) ::= expr(B) EQ expr(C) . {A = AST::DoubleOperExpr::Create(B, C, AST::DoubleOperExpr::EQ);}
-expr(A) ::= expr(B) NE expr(C) . {A = AST::DoubleOperExpr::Create(B, C, AST::DoubleOperExpr::NE);}
-expr(A) ::= expr(B) AND expr(C) . {A = AST::DoubleOperExpr::Create(B, C, AST::DoubleOperExpr::AND);}
-expr(A) ::= expr(B) OR expr(C) . {A = AST::DoubleOperExpr::Create(B, C, AST::DoubleOperExpr::OR);}
-expr(A) ::= MINUS expr(B) . [NEG] {A = AST::SingleOperExpr::Create(B, AST::SingleOperExpr::NEG);}
-expr(A) ::= NOT expr(B) . [NEG] {A = AST::SingleOperExpr::Create(B, AST::SingleOperExpr::NOT);}
+expr(A) ::= expr(B) PLUS(LOC) expr(C) . {A = new AST::DoubleOperExpr(LOC->loc, B, C, AST::DoubleOperExpr::PLUS); delete LOC;}
+expr(A) ::= expr(B) MINUS(LOC) expr(C) . {A = new AST::DoubleOperExpr(LOC->loc, B, C, AST::DoubleOperExpr::MINUS); delete LOC;}
+expr(A) ::= expr(B) MUL(LOC) expr(C) . {A = new AST::DoubleOperExpr(LOC->loc, B, C, AST::DoubleOperExpr::MUL); delete LOC;}
+expr(A) ::= expr(B) DIV(LOC) expr(C) . {A = new AST::DoubleOperExpr(LOC->loc, B, C, AST::DoubleOperExpr::DIV); delete LOC;}
+expr(A) ::= expr(B) MOD(LOC) expr(C) . {A = new AST::DoubleOperExpr(LOC->loc, B, C, AST::DoubleOperExpr::MOD); delete LOC;}
+expr(A) ::= expr(B) LT(LOC) expr(C) . {A = new AST::DoubleOperExpr(LOC->loc, B, C, AST::DoubleOperExpr::LT); delete LOC;}
+expr(A) ::= expr(B) GT(LOC) expr(C) . {A = new AST::DoubleOperExpr(LOC->loc, B, C, AST::DoubleOperExpr::GT); delete LOC;}
+expr(A) ::= expr(B) LE(LOC) expr(C) . {A = new AST::DoubleOperExpr(LOC->loc, B, C, AST::DoubleOperExpr::LE); delete LOC;}
+expr(A) ::= expr(B) GE(LOC) expr(C) . {A = new AST::DoubleOperExpr(LOC->loc, B, C, AST::DoubleOperExpr::GE); delete LOC;}
+expr(A) ::= expr(B) EQ(LOC) expr(C) . {A = new AST::DoubleOperExpr(LOC->loc, B, C, AST::DoubleOperExpr::EQ); delete LOC;}
+expr(A) ::= expr(B) NE(LOC) expr(C) . {A = new AST::DoubleOperExpr(LOC->loc, B, C, AST::DoubleOperExpr::NE); delete LOC;}
+expr(A) ::= expr(B) AND(LOC) expr(C) . {A = new AST::DoubleOperExpr(LOC->loc, B, C, AST::DoubleOperExpr::AND); delete LOC;}
+expr(A) ::= expr(B) OR(LOC) expr(C) . {A = new AST::DoubleOperExpr(LOC->loc, B, C, AST::DoubleOperExpr::OR); delete LOC;}
+expr(A) ::= MINUS(LOC) expr(B) . [NEG] {A = new AST::SingleOperExpr(LOC->loc, B, AST::SingleOperExpr::NEG); delete LOC;}
+expr(A) ::= NOT(LOC) expr(B) . {A = new AST::SingleOperExpr(LOC->loc, B, AST::SingleOperExpr::NOT); delete LOC;}
 
 %type lValue {AST::LValue*}
 %destructor lValue {delete $$;}
-lValue(A) ::= IDENTIFIER(B) . {A = AST::VarLValue::Create(B->str);}
-lValue(A) ::= expr(B) DOT IDENTIFIER(C) . {A = AST::VarLValue::Create(B, C->str);}
+lValue(A) ::= IDENTIFIER(B) . {A = new AST::VarLValue(B->loc, B->str); delete B;}
+lValue(A) ::= expr(B) DOT(LOC) IDENTIFIER(C) . {A = new AST::VarLValue(LOC->loc, B, C->str); delete LOC;}
 
 %type exprList {AST::ExprList*}
 %destructor exprList {delete $$;}
-exprList(A) ::= . {A = AST::ExprList::Create();}
+exprList(A) ::= . {A = new AST::ExprList();}
 exprList(A) ::= exprListH(B) . {A = B;}
 %type exprListH {AST::ExprList*}
 %destructor exprListH {delete $$;}
-exprListH(A) ::= expr(B) . {A = AST::ExprList::Create(B);}
-exprListH(A) ::= exprListH(B) CMA expr(C) . {A = AST::ExprList::Create(B, C);}
+exprListH(A) ::= expr(B) . {A = new AST::ExprList(B);}
+exprListH(A) ::= exprListH(B) CMA expr(C) . {A = new AST::ExprList(B, C);}
 
 %type lValueList {AST::LValueList*}
 %destructor lValueList {delete $$;}
-lValueList(A) ::= . {A = AST::LValueList::Create();}
+lValueList(A) ::= . {A = new AST::LValueList();}
 lValueList(A) ::= lValueListH(B) . {A = B;}
 %type lValueListH {AST::LValueList*}
 %destructor lValueListH {delete $$;}
-lValueListH(A) ::= lValue(B) . {A = AST::LValueList::Create(B);}
-lValueListH(A) ::= lValueListH(B) CMA lValue(C) . {A = AST::LValueList::Create(B, C);}
+lValueListH(A) ::= lValue(B) . {A = new AST::LValueList(B);}
+lValueListH(A) ::= lValueListH(B) CMA lValue(C) . {A = new AST::LValueList(B, C);}
 
 %type iDList {AST::IDList*}
 %destructor iDList {delete $$;}
-iDList(A) ::= . {A = AST::IDList::Create();}
+iDList(A) ::= . {A = new AST::IDList();}
 iDList(A) ::= iDListH(B) . {A = B;}
 %type iDListH {AST::IDList*}
 %destructor iDListH {delete $$;}
-iDListH(A) ::= IDENTIFIER(B) . {A = AST::IDList::Create(B->str);}
-iDListH(A) ::= iDListH(B) CMA IDENTIFIER(C) . {A = AST::IDList::Create(B, C->str);}
+iDListH(A) ::= IDENTIFIER(B) . {A = new AST::IDList(B->str);}
+iDListH(A) ::= iDListH(B) CMA IDENTIFIER(C) . {A = new AST::IDList(B, C->str);}

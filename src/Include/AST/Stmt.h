@@ -5,6 +5,8 @@ namespace AST
 {
     class Stmt : public AST
     {
+    public:
+        Stmt(Location _loc) : AST(_loc) {}
     };
 }
 #endif

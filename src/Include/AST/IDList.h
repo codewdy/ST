@@ -8,12 +8,11 @@ namespace AST
     class IDList : public AST
     {
     protected:
-        IDList();
         IDList(const IDList&);
     public:
         std::vector<std::string> exprs;
-        static IDList* Create();
-        static IDList* Create(std::string s1);
+        IDList(Location _loc) : AST(_loc) {}
+        IDList(Location _loc, std::string s1) : AST(_loc), exprs()
         static IDList* Create(IDList* left, std::string right);
         static void FillVector(IDList* src, std::vector<std::string>& dst);
     };

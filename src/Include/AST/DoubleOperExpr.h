@@ -11,7 +11,7 @@ namespace AST
         enum Oper {
             PLUS, MINUS, MUL, DIV, MOD, GT, LT, GE, LE, EQ, NE, AND, OR
         } oper;
-        static DoubleOperExpr* Create(Expr* _expr1, Expr* _expr2, Oper _op);
+        DoubleOperExpr(Location _loc, Expr* _expr1, Expr* _expr2, Oper _oper) : Expr(_loc), expr1(_expr1), expr2(_expr2), oper(_oper) {}
         void visit(Visitor* that);
     };
 }

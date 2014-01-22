@@ -4,4 +4,7 @@ namespace AST {
     void AST::visit(Visitor* that) {
         Raise(NotImplement);
     }
+    
+    AST::~AST() {
+    }
 }

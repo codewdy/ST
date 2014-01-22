@@ -6,7 +6,7 @@ namespace AST {
     class Double : public Expr {
     public:
         std::string str;
-        Double(Location _loc, std::string _str);
+        Double(Location _loc, std::string _str) : Expr(_loc), str(_str) {}
         void visit(Visitor* v);
     };
 }

@@ -6,12 +6,9 @@ namespace AST
     class Expr;
     class SimpleStmt : public Stmt
     {
-    protected:
-        SimpleStmt();
-        SimpleStmt(const SimpleStmt&);
     public:
         Expr* expr;
-        static SimpleStmt* Create(Expr* _e);
+        SimpleStmt(Location _loc, Expr* _expr) : Stmt(_loc), expr(_expr) {}
         void visit(Visitor* that);
     };
 }

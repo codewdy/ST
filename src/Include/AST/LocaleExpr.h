@@ -5,11 +5,8 @@ namespace AST
 {
     class LocaleExpr : public Expr
     {
-    protected:
-        LocaleExpr();
-        LocaleExpr(const LocaleExpr&);
     public:
-        static LocaleExpr* Create();
+        LocaleExpr(Location _loc) : Expr(_loc) {}
     };
 }
 #endif

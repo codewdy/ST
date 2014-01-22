@@ -32,7 +32,6 @@ MULTILINE_COMMENT	("/*"([^/]*[^*/]"/"|"/")*[^/]*"*/")
 WHITESPACE			([ \t]+)
 
 %option outfile="Lexer.cpp" HEADER-FILE="Lexer.h"
-%option noyywrap
 %option c++
 %x S
 
@@ -93,3 +92,4 @@ WHITESPACE			([ \t]+)
 .                               {/*Error*/}
 %%
 
+int yyFlexLexer::yywrap() { return 1; }

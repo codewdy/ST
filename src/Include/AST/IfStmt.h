@@ -4,14 +4,10 @@
 namespace AST {
     class Expr;
     class IfStmt : public Stmt {
-    protected:
-        IfStmt();
-        IfStmt(const IfStmt&);
     public:
         Expr* condition;
         Stmt *yes, *no;
-        static IfStmt* Create(Expr* _condition, Stmt* _yes);
-        static IfStmt* Create(Expr* _condition, Stmt* _yes, Stmt* _no);
+        IfStmt(Location _loc, Expr* _condition, Stmt* _yes, Stmt* _no = 0) : Stmt(_loc), condition(_condition), yes(_yes), no(_no) {}
         void visit(Visitor* that);
     };
 }

@@ -5,6 +5,8 @@ namespace AST
 {
     class LValue : public Expr
     {
+    public:
+        LValue(Location _loc) : Expr(_loc) {}
     };
 }
 #endif

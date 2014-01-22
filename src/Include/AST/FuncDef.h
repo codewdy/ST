@@ -3,21 +3,21 @@
 #include "Expr.h"
 #include <vector>
 #include <string>
+#include "XList.h"
 namespace AST
 {
-    class LValueList;
-    class IDList;
     class StmtBlock;
     class LValue;
     class FuncDef : public Expr
     {
-    protected:
-        FuncDef();
     public:
         std::vector<LValue*> funcs;
         std::vector<std::string> args;
         StmtBlock* stmts;
-        static FuncDef* Create(LValueList* _funcs, IDList* _args, StmtBlock* _stmts);
+        FuncDef(Location _loc, LValueList* _funcs, IDList* _args, StmtBlock* _stmts) : Expr(_loc), stmts(_stmts) {
+            LValueList::FillVector(_funcs, funcs);
+            IDList::FillVector(_args, args);
+        }
     };
 }
 #endif
