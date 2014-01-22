@@ -11,6 +11,7 @@ namespace AST
         std::vector<Stmt*> stmts;
         StmtBlock(Location _loc, StmtList* _stmts) : Stmt(_loc) {StmtList::FillVector(_stmts, stmts);}
         void visit(Visitor* that);
+        ~StmtBlock();
     };
 }
 #endif

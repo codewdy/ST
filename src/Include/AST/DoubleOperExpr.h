@@ -13,6 +13,7 @@ namespace AST
         } oper;
         DoubleOperExpr(Location _loc, Expr* _expr1, Expr* _expr2, Oper _oper) : Expr(_loc), expr1(_expr1), expr2(_expr2), oper(_oper) {}
         void visit(Visitor* that);
+        ~DoubleOperExpr();
     };
 }
 #endif

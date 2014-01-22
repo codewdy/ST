@@ -10,6 +10,7 @@ namespace AST {
         std::vector<Stmt*> stmts;
         Program(Location _loc, StmtList* _stmts) : AST(_loc) {StmtList::FillVector(_stmts, stmts);}
         void visit(Visitor* v);
+        ~Program();
     };
 }
 #endif

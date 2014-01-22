@@ -13,6 +13,7 @@ namespace AST
         VarLValue(Location _loc, std::string _attr) : LValue(_loc), obj(new LocaleExpr(_loc)), attr(_attr) {}
         VarLValue(Location _loc, Expr* _obj, std::string _attr) : LValue(_loc), obj(_obj), attr(_attr) {}
         void visit(Visitor* that);
+        ~VarLValue();
     };
 }
 #endif

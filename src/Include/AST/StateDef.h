@@ -16,6 +16,7 @@ namespace AST
         StmtBlock* stmts;
         StateDef(Location _loc, LValueList* _states, StmtBlock* _stmts) : Expr(_loc), stmts(_stmts) {LValueList::FillVector(_states, states);}
         void visit(Visitor* that);
+        ~StateDef();
     };
 }
 #endif

@@ -9,6 +9,7 @@ namespace AST {
         Stmt *yes, *no;
         IfStmt(Location _loc, Expr* _condition, Stmt* _yes, Stmt* _no = 0) : Stmt(_loc), condition(_condition), yes(_yes), no(_no) {}
         void visit(Visitor* that);
+        ~IfStmt();
     };
 }
 #endif

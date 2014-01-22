@@ -11,6 +11,7 @@ namespace AST
         std::vector<Expr*> exprs;
         ListExpr(Location _loc, ExprList* _exprs) : Expr(_loc) {ExprList::FillVector(_exprs, exprs);}
         void visit(Visitor* that);
+        ~ListExpr();
     };
 }
 #endif

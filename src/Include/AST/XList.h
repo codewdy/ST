@@ -1,13 +1,12 @@
 #ifndef ST_7834298472_AST_XLIST
 #define ST_7834298472_AST_XLIST
-#include "AST.h"
+#include "Expr.h"
+#include "LValue.h"
+#include "Stmt.h"
 #include <vector>
 #include <string>
 namespace AST
 {
-    class Expr;
-    class LValue;
-    class Stmt;
     template <class T>
     class XList {
     public:

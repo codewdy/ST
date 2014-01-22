@@ -10,6 +10,7 @@ namespace AST
         Expr *array, *index;
         ArrayAtLValue(Location _loc, Expr* _array, Expr* _index) : LValue(_loc), array(_array), index(_index) {}
         void visit(Visitor* that);
+        virtual ~ArrayAtLValue();
     };
 }
 #endif
