@@ -18,6 +18,7 @@ namespace AST
             LValueList::FillVector(_funcs, funcs);
             IDList::FillVector(_args, args);
         }
+        void visit(Visitor* that);
     };
 }
 #endif

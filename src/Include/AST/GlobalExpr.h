@@ -9,6 +9,7 @@ namespace AST
         GlobalExpr(const GlobalExpr&);
     public:
         GlobalExpr(Location _loc) : Expr(_loc) {}
+        void visit(Visitor* that);
     };
 }
 #endif

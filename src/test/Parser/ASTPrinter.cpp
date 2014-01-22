@@ -10,9 +10,22 @@ void ASTPrinter::visit##CLASS(AST::CLASS* that) {\
     prefix = save;\
 }
 
-DefPrintFunc(Program, "Program:")
-DefPrintFunc(SimpleStmt, "SimpleStmt:")
+#define SimpleDefPrintFunc(CLASS) DefPrintFunc(CLASS, #CLASS << ":")
+
+SimpleDefPrintFunc(Program)
+SimpleDefPrintFunc(SimpleStmt)
+SimpleDefPrintFunc(ForStmt)
+SimpleDefPrintFunc(WhileStmt)
+SimpleDefPrintFunc(IfStmt)
+SimpleDefPrintFunc(StmtBlock)
+SimpleDefPrintFunc(ListExpr)
+SimpleDefPrintFunc(CallExpr)
+SimpleDefPrintFunc(FuncDef)
+SimpleDefPrintFunc(StateDef)
+SimpleDefPrintFunc(GlobalExpr)
+SimpleDefPrintFunc(LocaleExpr)
 DefPrintFunc(DoubleOperExpr, "DoubleOperStmt[" << that->oper << "]:")
+DefPrintFunc(SingleOperExpr, "SimpleOperStmt[" << that->oper << "]:")
 DefPrintFunc(VarLValue, "VarLValue[" << that->attr << "]:")
 DefPrintFunc(Double, "Double[" << that->str << "]:")
 DefPrintFunc(Integer, "Integer[" << that->str << "]:")

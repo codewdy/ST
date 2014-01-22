@@ -37,7 +37,8 @@ namespace AST
     void Visitor::visitIfStmt(IfStmt* that) {
         that->condition->visit(this);
         that->yes->visit(this);
-        that->no->visit(this);
+        if (that->no)
+            that->no->visit(this);
     }
 
     void Visitor::visitStmtBlock(StmtBlock* that) {
@@ -54,6 +55,24 @@ namespace AST
         that->func->visit(this);
         for (auto parm : that->parms)
             parm->visit(this);
+    }
+
+    void Visitor::visitFuncDef(FuncDef* that) {
+        for (auto func : that->funcs)
+            func->visit(this);
+        that->stmts->visit(this);
+    }
+
+    void Visitor::visitStateDef(StateDef* that) {
+        for (auto state : that->states)
+            state->visit(this);
+        that->stmts->visit(this);
+    }
+
+    void Visitor::visitGlobalExpr(GlobalExpr* that) {
+    }
+
+    void Visitor::visitLocaleExpr(LocaleExpr* that) {
     }
 
     void Visitor::visitDoubleOperExpr(DoubleOperExpr* that) {

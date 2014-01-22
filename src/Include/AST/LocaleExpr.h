@@ -7,6 +7,7 @@ namespace AST
     {
     public:
         LocaleExpr(Location _loc) : Expr(_loc) {}
+        void visit(Visitor* that);
     };
 }
 #endif

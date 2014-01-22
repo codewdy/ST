@@ -19,6 +19,10 @@ namespace AST {
     class SingleOperExpr;
     class VarLValue;
     class ArrayAtLValue;
+    class FuncDef;
+    class StateDef;
+    class GlobalExpr;
+    class LocaleExpr;
     
     class Visitor {
     public:
@@ -34,6 +38,10 @@ namespace AST {
         DefVisitClass(StmtBlock)
         DefVisitClass(ListExpr)
         DefVisitClass(CallExpr)
+        DefVisitClass(FuncDef)
+        DefVisitClass(StateDef)
+        DefVisitClass(GlobalExpr)
+        DefVisitClass(LocaleExpr)
         DefVisitClass(DoubleOperExpr)
         DefVisitClass(SingleOperExpr)
         DefVisitClass(VarLValue)

@@ -20,6 +20,8 @@
 #include "ListExpr.h"
 #include "DoubleOperExpr.h"
 #include "SingleOperExpr.h"
+#include "GlobalExpr.h"
+#include "LocaleExpr.h"
 #include "LValue.h"
 #include "VarLValue.h"
 #include "ArrayAtLValue.h"
