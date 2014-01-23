@@ -3,9 +3,10 @@
 #include "Expr.h"
 #include <string>
 namespace AST {
+    /**AST for String Literal.*/
     class String : public Expr {
     public:
-        std::string str;
+        std::string str;///<Inner String.
         String(Location _loc, std::string _str) : Expr(_loc), str(_str) {}
         void visit(Visitor* v);
     };

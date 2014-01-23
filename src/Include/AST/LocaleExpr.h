@@ -3,6 +3,7 @@
 #include "Expr.h"
 namespace AST
 {
+    /**AST for the Locale.*/
     class LocaleExpr : public Expr
     {
     public:

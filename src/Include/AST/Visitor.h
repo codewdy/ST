@@ -1,6 +1,8 @@
 #ifndef ST_9348212392_AST_VISITOR
 #define ST_9348212392_AST_VISITOR
+/**Define visitClass In Namespace AST.*/
 #define DefVisitClass(CLASS) virtual void visit##CLASS(CLASS* that);
+/**Define visitClass Out Of Namespace AST.*/
 #define DefVisitASTClass(CLASS) virtual void visit##CLASS(AST::CLASS* that);
 namespace AST {
     class AST;
@@ -24,6 +26,7 @@ namespace AST {
     class GlobalExpr;
     class LocaleExpr;
     
+    /**Base Object For Visitor Pattern.*/
     class Visitor {
     public:
         void visit(AST* that);
@@ -46,6 +49,7 @@ namespace AST {
         DefVisitClass(SingleOperExpr)
         DefVisitClass(VarLValue)
         DefVisitClass(ArrayAtLValue)
+        virtual ~Visitor();
     };
 }
 #endif

@@ -5,24 +5,23 @@
 #include <vector>
 
 namespace AST {
-    extern std::vector<std::string> source;
-    extern std::string* currentSource;
     class Visitor;
+    /**Location Of Source.*/
     struct Location {
-        std::string* str;
-        int lineno;
+        std::string* str;///<Source File Name.
+        int lineno;///<Source Line Number.
         Location(std::string* _str = 0, int _lineno = 0) : str(_str), lineno(_lineno) {}
     };
-    class AST;
-    typedef std::shared_ptr<AST> Tree;
-    typedef AST* Node;
+    /**Base class for AST.*/
     class AST {
-        AST(const AST&);
-        AST& operator= (const AST&);
+        AST(const AST&);///<Just Disable Copy.
+        AST& operator= (const AST&);///<Just Disable Copy.
     protected:
         AST(Location _loc) : loc(_loc) {}
     public:
-        Location loc;
+        Location loc;///<Location Reported When Raise Error.
+        /**Visitor Pattern Interface.
+         * Visitor would call this method to decide which the visitor should do.*/
         virtual void visit(Visitor* that) = 0;
         virtual ~AST();
     };

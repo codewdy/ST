@@ -7,20 +7,24 @@
 #include <string>
 namespace AST
 {
+    /**List For Something.*/ 
     template <class T>
     class XList {
     public:
         std::vector<T> list;
+        /**Fill dst with src, then delete src.\warning src will be delete!*/
         static void FillVector(XList* src, std::vector<T>& dst) {src->list.swap(dst); delete src;}
         XList() {}
         XList(T s1) : list(1, s1) {}
         XList(XList* left, T right) {FillVector(left, list); list.push_back(right);}
     };
 
+    /**List For Some Pointer(with GC).*/ 
     template <class T>
     class PXList {
     public:
         std::vector<T*> list;
+        /**Fill dst with src, then delete src.\warning src will be delete!*/
         static void FillVector(PXList* src, std::vector<T*>& dst) {src->list.swap(dst); delete src;}
         PXList() {}
         PXList(T* s1) : list(1, s1) {}

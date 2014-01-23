@@ -92,4 +92,7 @@ namespace AST
         that->array->visit(this);
         that->index->visit(this);
     }
+
+    Visitor::~Visitor() {
+    }
 }

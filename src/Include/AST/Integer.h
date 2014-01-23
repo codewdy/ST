@@ -3,6 +3,7 @@
 #include "Expr.h"
 #include <string>
 namespace AST {
+    /**AST for Integer Literal.*/
     class Integer : public Expr {
     public:
         std::string str;

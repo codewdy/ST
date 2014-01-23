@@ -3,6 +3,7 @@
 #include "AST.h"
 namespace AST
 {
+    /**AST for virtual Statement*/
     class Stmt : public AST
     {
     public:
