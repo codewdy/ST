@@ -17,27 +17,17 @@ namespace AST
         XList() {}
         XList(T s1) : list(1, s1) {}
         XList(XList* left, T right) {FillVector(left, list); list.push_back(right);}
-    };
-
-    /**List For Some Pointer(with GC).*/ 
-    template <class T>
-    class PXList {
-    public:
-        std::vector<T*> list;
-        /**Fill dst with src, then delete src.\warning src will be delete!*/
-        static void FillVector(PXList* src, std::vector<T*>& dst) {src->list.swap(dst); delete src;}
-        PXList() {}
-        PXList(T* s1) : list(1, s1) {}
-        PXList(PXList* left, T* right) {FillVector(left, list); list.push_back(right);}
-        ~PXList() {
+        template <class T1> class Dest {public: static void destory(T1 x){}};
+        template <class T1> class Dest<T1*> {public: static void destory(T1* x){delete x;}};
+        ~XList() {
             for (auto item : list)
-                delete item;
+                Dest<T>::destory(item);
         }
     };
 
     typedef XList<std::string> IDList;
-    typedef PXList<Expr> ExprList;
-    typedef PXList<LValue> LValueList;
-    typedef PXList<Stmt> StmtList;
+    typedef XList<Expr*> ExprList;
+    typedef XList<LValue*> LValueList;
+    typedef XList<Stmt*> StmtList;
 }
 #endif
