@@ -5,6 +5,7 @@
 #include "AST/Program.h"
 
 namespace STC {
+    /**Generate STC From AST.*/
     class Generator : public AST::Visitor {
         /**the ret of every visit call. every visit method should change this to return.*/
         STCList _ret;
