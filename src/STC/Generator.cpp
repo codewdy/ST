@@ -29,13 +29,15 @@ namespace STC {
 
     void Generator::visitForStmt(AST::ForStmt* that) {
         STCList ret;
+        STC* end = new Pop();
+        STC* o_break = _break;
+        _break = end;
         //top=set.__iter__
         ret.Append(visitX(that->set));
         ret.Append(new GetAttr("__iter__"));
         ret.Append(new Call(0));
         //TestNotEND
         STC* loopBeg = new CopyTop();
-        STC* end = new Pop();
         ret.Append(loopBeg);
         ret.Append(new GetAttr("__isEnd__"));
         ret.Append(new TrueGoto(end));
@@ -50,17 +52,21 @@ namespace STC {
         ret.Append(new Call(0));
         ret.Append(new Goto(loopBeg));
         ret.Append(end);
+        _break = o_break;
         RETURN(ret);
     }
 
     void Generator::visitWhileStmt(AST::WhileStmt* that) {
         STCList ret;
         STC* end = new Nop;
+        STC* o_break = _break;
+        _break = end;
         ret.Append(visitX(that->condition));
         ret.Append(new FalseGoto(end));
         ret.Append(visitX(that->loop));
         ret.Append(new Goto(ret.beg));
         ret.Append(end);
+        _break = o_break;
         RETURN(ret);
     }
 
@@ -90,6 +96,13 @@ namespace STC {
             ret.Append(visitX(stmt));
         RETURN(ret);
     }
+     void Generator::visitBreakStmt(AST::BreakStmt* that) {
+        if (_break == 0) {
+            //TODO: ADD A Exception For Noncotrolled break.
+        } else {
+            RETURN(new Goto(_break));
+        }
+     }
 
     void Generator::visitListExpr(AST::ListExpr* that) {
         STCList ret;
@@ -109,7 +122,10 @@ namespace STC {
 
     void Generator::visitFuncDef(AST::FuncDef* that) {
         STCList ret;
+        STC* o_break = _break;
+        _break = 0;
         ret.Append(new DefFunc(visitX(that->stmts).beg));
+        _break = o_break;
         for (int i = that->funcs.size() - 1; i >= 0; i--) {
             ret.Append(new CopyTop);
             ret.Append(visitX(that->funcs[i], LValue));
@@ -119,7 +135,10 @@ namespace STC {
 
     void Generator::visitStateDef(AST::StateDef* that) {
         STCList ret;
-        ret.Append(new DefFunc(visitX(that->stmts).beg));
+        STC* o_break = _break;
+        _break = 0;
+        ret.Append(new DefState(visitX(that->stmts).beg));
+        _break = o_break;
         for (int i = that->states.size() - 1; i >= 0; i--) {
             ret.Append(new CopyTop);
             ret.Append(visitX(that->states[i], LValue));
@@ -154,9 +173,14 @@ namespace STC {
     void Generator::visitDoubleOperExpr(AST::DoubleOperExpr* that) {
         STCList ret;
         ret.Append(visitX(that->expr2));
-        ret.Append(visitX(that->expr1));
-        ret.Append(new GetAttr("__" + DBOperTrans[that->oper] + "__"));
-        ret.Append(new Call(1));
+        if (that->oper == AST::DoubleOperExpr::ASG) {
+            ret.Append(new CopyTop);
+            ret.Append(visitX(that->expr1, LValue));
+        } else {
+            ret.Append(visitX(that->expr1));
+            ret.Append(new GetAttr("__" + DBOperTrans[that->oper] + "__"));
+            ret.Append(new Call(1));
+        }
         RETURN(ret);
     }
 

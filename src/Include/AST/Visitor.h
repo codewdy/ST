@@ -15,6 +15,7 @@ namespace AST {
     class WhileStmt;
     class IfStmt;
     class StmtBlock;
+    class BreakStmt;
     class ListExpr;
     class CallExpr;
     class DoubleOperExpr;
@@ -39,6 +40,7 @@ namespace AST {
         DefVisitClass(WhileStmt)
         DefVisitClass(IfStmt)
         DefVisitClass(StmtBlock)
+        DefVisitClass(BreakStmt)
         DefVisitClass(ListExpr)
         DefVisitClass(CallExpr)
         DefVisitClass(FuncDef)

@@ -13,6 +13,8 @@ namespace STC {
         enum Mode {
             LValue, RValue
         } _mode;
+        /**The break will jump to this STC.*/
+        STC* _break;
     public:
         /**the interface of the visit.*/
         STCList visitX(AST::AST* that, Mode mode = RValue) {
@@ -23,6 +25,7 @@ namespace STC {
 
         /**Generate A Program.*/
         STCList Gen(AST::Program* that) {
+            _break = 0;
             return visitX(that);
         }
 
@@ -44,6 +47,8 @@ namespace STC {
         DefVisitASTClass(IfStmt)
         /**sp = sp.*/
         DefVisitASTClass(StmtBlock)
+        /**sp = sp.*/
+        DefVisitASTClass(BreakStmt)
         /**sp = sp + 1.*/
         DefVisitASTClass(ListExpr)
         /**sp = sp + 1.*/

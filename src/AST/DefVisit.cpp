@@ -12,6 +12,7 @@ namespace AST {
     DefClassVisit(WhileStmt)
     DefClassVisit(IfStmt)
     DefClassVisit(StmtBlock)
+    DefClassVisit(BreakStmt)
     DefClassVisit(ListExpr)
     DefClassVisit(CallExpr)
     DefClassVisit(FuncDef)

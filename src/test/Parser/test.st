@@ -2,4 +2,5 @@
 /*adhjkaksjhdjkhashkjd*/
 10;
 10 * -203 *36562;
-for (a : XXX) {}
+for (a : XXX) {break;}
+break;

@@ -69,12 +69,13 @@ stmtList(A) ::= stmtList(B) stmt(C). {A = new AST::StmtList(B, C);}
 
 %type stmt {AST::Stmt*}
 %destructor stmt {delete $$;}
-stmt(A) ::= expr(B) SEM. {A = new AST::SimpleStmt(B->loc, B);}
+stmt(A) ::= expr(B) SEM . {A = new AST::SimpleStmt(B->loc, B);}
 stmt(A) ::= FOR(LOC) LLC lValue(B) COL expr(C) RLC stmt(D). {A = new AST::ForStmt(LOC->loc, B, C, D); delete LOC;}
 stmt(A) ::= WHILE(LOC) LLC expr(B) RLC stmt(C) . {A = new AST::WhileStmt(LOC->loc, B, C); delete LOC;}
 stmt(A) ::= IF(LOC) LLC expr(B) RLC stmt(C) . {A = new AST::IfStmt(LOC->loc, B, C); delete LOC;}
 stmt(A) ::= IF(LOC) LLC expr(B) RLC stmt(C) ELSE stmt(D) . {A = new AST::IfStmt(LOC->loc, B, C, D); delete LOC;}
 stmt(A) ::= stmtBlock(B) . {A = B;}
+stmt(A) ::= BREAK(LOC) SEM . {A = new AST::BreakStmt(LOC->loc); delete LOC;}
 
 %type stmtBlock {AST::StmtBlock*}
 %destructor stmtBlock {delete $$;}
@@ -111,6 +112,7 @@ expr(A) ::= expr(B) EQ(LOC) expr(C) . {A = new AST::DoubleOperExpr(LOC->loc, B, 
 expr(A) ::= expr(B) NE(LOC) expr(C) . {A = new AST::DoubleOperExpr(LOC->loc, B, C, AST::DoubleOperExpr::NE); delete LOC;}
 expr(A) ::= expr(B) AND(LOC) expr(C) . {A = new AST::DoubleOperExpr(LOC->loc, B, C, AST::DoubleOperExpr::AND); delete LOC;}
 expr(A) ::= expr(B) OR(LOC) expr(C) . {A = new AST::DoubleOperExpr(LOC->loc, B, C, AST::DoubleOperExpr::OR); delete LOC;}
+expr(A) ::= expr(B) ASG(LOC) expr(C) . {A = new AST::DoubleOperExpr(LOC->loc, B, C, AST::DoubleOperExpr::ASG); delete LOC;}
 expr(A) ::= MINUS(LOC) expr(B) . [NEG] {A = new AST::SingleOperExpr(LOC->loc, B, AST::SingleOperExpr::NEG); delete LOC;}
 expr(A) ::= NOT(LOC) expr(B) . {A = new AST::SingleOperExpr(LOC->loc, B, AST::SingleOperExpr::NOT); delete LOC;}
 

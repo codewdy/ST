@@ -13,6 +13,7 @@ public:
     DefVisitASTClass(WhileStmt)
     DefVisitASTClass(IfStmt)
     DefVisitASTClass(StmtBlock)
+    DefVisitASTClass(BreakStmt)
     DefVisitASTClass(ListExpr)
     DefVisitASTClass(CallExpr)
     DefVisitASTClass(FuncDef)

@@ -46,6 +46,9 @@ namespace AST
             stmt->visit(this);
     }
 
+    void Visitor::visitBreakStmt(BreakStmt* that) {
+    }
+
     void Visitor::visitListExpr(ListExpr* that) {
         for (auto expr : that->exprs)
             expr->visit(this);
