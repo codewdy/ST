@@ -1,3 +1,5 @@
+#ifndef ST_9732812389_TEST_PARSER_ASTPRINTER
+#define ST_9732812389_TEST_PARSER_ASTPRINTER
 #include "AST/ALL.h"
 #include <string>
 #include <iostream>
@@ -14,6 +16,7 @@ public:
     DefVisitASTClass(IfStmt)
     DefVisitASTClass(StmtBlock)
     DefVisitASTClass(BreakStmt)
+    DefVisitASTClass(ReturnStmt)
     DefVisitASTClass(ListExpr)
     DefVisitASTClass(CallExpr)
     DefVisitASTClass(FuncDef)
@@ -27,4 +30,5 @@ public:
     DefVisitASTClass(Integer)
     DefVisitASTClass(String)
 };
+#endif
 

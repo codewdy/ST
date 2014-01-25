@@ -34,6 +34,10 @@ namespace AST {
         for (auto stmt : stmts)
             delete stmt;
     }
+    
+    ReturnStmt::~ReturnStmt() {
+        delete expr;
+    }
 
     ListExpr::~ListExpr() {
         for (auto expr : exprs)

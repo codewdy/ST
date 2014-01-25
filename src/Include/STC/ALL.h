@@ -11,6 +11,7 @@
 #include "TrueGoto.h"
 #include "FalseGoto.h"
 #include "Call.h"
+#include "Return.h"
 #include "MakeList.h"
 #include "DefFunc.h"
 #include "DefState.h"

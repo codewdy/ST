@@ -19,7 +19,8 @@ namespace STC {
         /**A Link List Of STC.*/
         STC* next;
         enum Type {
-            CopyTop, PushLocale, PushGlobal, PushString, PushInteger, PushDouble, GetAttr, SetAttr, Goto, TrueGoto, FalseGoto, Call, MakeList, DefFunc, DefState, Pop, Nop
+            CopyTop, PushLocale, PushGlobal, PushString, PushInteger, PushDouble, GetAttr, SetAttr, 
+            Goto, TrueGoto, FalseGoto, Call, Return, MakeList, DefFunc, DefState, Pop, Nop
         } type; ///<The Type Of the STC.
         STC(Type _type) : next(0), type(_type) {}
     };

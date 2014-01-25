@@ -1,5 +1,4 @@
 #include "AST/ALL.h"
-#include "Exception/NotImplement.h"
 
 namespace AST {
 #define DefClassVisit(CLASS) void CLASS::visit(Visitor* that) {that->visit##CLASS(this);}
@@ -13,6 +12,7 @@ namespace AST {
     DefClassVisit(IfStmt)
     DefClassVisit(StmtBlock)
     DefClassVisit(BreakStmt)
+    DefClassVisit(ReturnStmt)
     DefClassVisit(ListExpr)
     DefClassVisit(CallExpr)
     DefClassVisit(FuncDef)

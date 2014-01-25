@@ -16,6 +16,7 @@ namespace AST {
     class IfStmt;
     class StmtBlock;
     class BreakStmt;
+    class ReturnStmt;
     class ListExpr;
     class CallExpr;
     class DoubleOperExpr;
@@ -41,6 +42,7 @@ namespace AST {
         DefVisitClass(IfStmt)
         DefVisitClass(StmtBlock)
         DefVisitClass(BreakStmt)
+        DefVisitClass(ReturnStmt)
         DefVisitClass(ListExpr)
         DefVisitClass(CallExpr)
         DefVisitClass(FuncDef)

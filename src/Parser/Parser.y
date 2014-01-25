@@ -40,6 +40,11 @@ AST::Program* CreateAST(std::string filename) {
 }
 }
 
+%syntax_error {
+//TODO: Add Error Control.
+throw "Error";
+}
+
 %right ASG .
 %left OR .
 %left AND .
@@ -76,6 +81,8 @@ stmt(A) ::= IF(LOC) LLC expr(B) RLC stmt(C) . {A = new AST::IfStmt(LOC->loc, B, 
 stmt(A) ::= IF(LOC) LLC expr(B) RLC stmt(C) ELSE stmt(D) . {A = new AST::IfStmt(LOC->loc, B, C, D); delete LOC;}
 stmt(A) ::= stmtBlock(B) . {A = B;}
 stmt(A) ::= BREAK(LOC) SEM . {A = new AST::BreakStmt(LOC->loc); delete LOC;}
+stmt(A) ::= RETURN(LOC) expr(B) SEM . {A = new AST::ReturnStmt(LOC->loc, B); delete LOC;}
+stmt(A) ::= RETURN(LOC) SEM . {A = new AST::ReturnStmt(LOC->loc); delete LOC;}
 
 %type stmtBlock {AST::StmtBlock*}
 %destructor stmtBlock {delete $$;}
@@ -112,7 +119,7 @@ expr(A) ::= expr(B) EQ(LOC) expr(C) . {A = new AST::DoubleOperExpr(LOC->loc, B, 
 expr(A) ::= expr(B) NE(LOC) expr(C) . {A = new AST::DoubleOperExpr(LOC->loc, B, C, AST::DoubleOperExpr::NE); delete LOC;}
 expr(A) ::= expr(B) AND(LOC) expr(C) . {A = new AST::DoubleOperExpr(LOC->loc, B, C, AST::DoubleOperExpr::AND); delete LOC;}
 expr(A) ::= expr(B) OR(LOC) expr(C) . {A = new AST::DoubleOperExpr(LOC->loc, B, C, AST::DoubleOperExpr::OR); delete LOC;}
-expr(A) ::= expr(B) ASG(LOC) expr(C) . {A = new AST::DoubleOperExpr(LOC->loc, B, C, AST::DoubleOperExpr::ASG); delete LOC;}
+expr(A) ::= lValue(B) ASG(LOC) expr(C) . {A = new AST::DoubleOperExpr(LOC->loc, B, C, AST::DoubleOperExpr::ASG); delete LOC;}
 expr(A) ::= MINUS(LOC) expr(B) . [NEG] {A = new AST::SingleOperExpr(LOC->loc, B, AST::SingleOperExpr::NEG); delete LOC;}
 expr(A) ::= NOT(LOC) expr(B) . {A = new AST::SingleOperExpr(LOC->loc, B, AST::SingleOperExpr::NOT); delete LOC;}
 

@@ -40,6 +40,7 @@ namespace STC {
         STC* loopBeg = new CopyTop();
         ret.Append(loopBeg);
         ret.Append(new GetAttr("__isEnd__"));
+        ret.Append(new Call(0));
         ret.Append(new TrueGoto(end));
         //Assign to loop
         ret.Append(new CopyTop);
@@ -96,13 +97,25 @@ namespace STC {
             ret.Append(visitX(stmt));
         RETURN(ret);
     }
-     void Generator::visitBreakStmt(AST::BreakStmt* that) {
+    void Generator::visitBreakStmt(AST::BreakStmt* that) {
         if (_break == 0) {
             //TODO: ADD A Exception For Noncotrolled break.
         } else {
             RETURN(new Goto(_break));
         }
-     }
+    }
+
+    void Generator::visitReturnStmt(AST::ReturnStmt* that) {
+        STCList ret;
+        if (that->expr) {
+            ret.Append(visitX(that->expr));
+        } else {
+            //TODO: Push A null.
+            ret.Append(new PushInteger("0"));
+        }
+        ret.Append(new Return());
+        RETURN(ret);
+    }
 
     void Generator::visitListExpr(AST::ListExpr* that) {
         STCList ret;
@@ -206,6 +219,7 @@ namespace STC {
             ret.Append(visitX(that->obj));
             ret.Append(new GetAttr(that->attr));
         }
+        RETURN(ret);
     }
 
     void Generator::visitArrayAtLValue(AST::ArrayAtLValue* that) {

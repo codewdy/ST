@@ -24,9 +24,9 @@ namespace STC {
         }
 
         /**Generate A Program.*/
-        STCList Gen(AST::Program* that) {
+        STC* Gen(AST::Program* that) {
             _break = 0;
-            return visitX(that);
+            return visitX(that).beg;
         }
 
         /**sp = sp + 1.*/
@@ -49,6 +49,8 @@ namespace STC {
         DefVisitASTClass(StmtBlock)
         /**sp = sp.*/
         DefVisitASTClass(BreakStmt)
+        /**sp = sp.*/
+        DefVisitASTClass(ReturnStmt)
         /**sp = sp + 1.*/
         DefVisitASTClass(ListExpr)
         /**sp = sp + 1.*/

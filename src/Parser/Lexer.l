@@ -87,9 +87,10 @@ WHITESPACE			([ \t]+)
 "for"                           {MakeLex(FOR);}
 "while"                         {MakeLex(WHILE);}
 "break"                         {MakeLex(BREAK);}
+"return"                        {MakeLex(RETURN);}
 {IDENTIFIER}					{MakeLex(IDENTIFIER);}
 <<EOF>>                         {return 0;}
-.                               {/*Error*/}
+.                               {/*TODO: Add Error Control.*/throw "Error";}
 %%
 
 int yyFlexLexer::yywrap() { return 1; }

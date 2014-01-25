@@ -13,6 +13,7 @@
 #include "IfStmt.h"
 #include "StmtBlock.h"
 #include "BreakStmt.h"
+#include "ReturnStmt.h"
 #include "Expr.h"
 #include "ListExpr.h"
 #include "StateDef.h"

@@ -6,8 +6,7 @@ namespace STC {
     /**Just Pop.*/
     class Pop : public STC {
     public:
-        int num;///<Pop num elements at once.
-        Pop(int _num = 1) : STC(STC::Pop), num(_num) {}
+        Pop() : STC(STC::Pop) {}
     };
 }
 #endif

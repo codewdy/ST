@@ -48,6 +48,11 @@ namespace AST
 
     void Visitor::visitBreakStmt(BreakStmt* that) {
     }
+    
+    void Visitor::visitReturnStmt(ReturnStmt* that) {
+        if (that->expr)
+            that->expr->visit(this);
+    }
 
     void Visitor::visitListExpr(ListExpr* that) {
         for (auto expr : that->exprs)
