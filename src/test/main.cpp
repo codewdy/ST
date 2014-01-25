@@ -17,5 +17,6 @@ int main() {
     of.close();
     std::ifstream iif("test.stc");
     STC::STC* stc2 = STC::Reader(iif);
+    std::cout << std::endl;
     STCPrinter(stc2);
 }

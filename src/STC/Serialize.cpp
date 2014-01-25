@@ -23,13 +23,13 @@ namespace STC {
         void Encode(STC* lst) {
             EncodeCore(lst);
             for (auto code : codes)
-                if (code->arg == STC::GotoArg)
+                if (code && code->arg == STC::GotoArg)
                     gotos.push_back(index[code->code]);
         }
 
         STC* DecodeCore(int& i, int& j) {
             i++;
-            STC* ret = codes[i++];
+            STC* ret = codes[i];
             for (; i < codes.size(); i++) {
                 STC* cur = codes[i];
                 if (cur == 0)
