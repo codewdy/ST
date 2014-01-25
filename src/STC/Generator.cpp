@@ -18,8 +18,11 @@ namespace STC {
 
     void Generator::visitProgram(AST::Program* that) {
         STCList ret;
-        for (auto stmt : that->stmts)
-            ret.Append(visitX(stmt));
+        if (that->stmts.size() == 0)
+            ret = STC::CreateNop();
+        else
+            for (auto stmt : that->stmts)
+                ret.Append(visitX(stmt));
         RETURN(ret);
     }
 
@@ -93,8 +96,11 @@ namespace STC {
 
     void Generator::visitStmtBlock(AST::StmtBlock* that) {
         STCList ret;
-        for (auto stmt : that->stmts)
-            ret.Append(visitX(stmt));
+        if (that->stmts.size() == 0)
+            ret = STC::CreateNop();
+        else
+            for (auto stmt : that->stmts)
+                ret.Append(visitX(stmt));
         RETURN(ret);
     }
     void Generator::visitBreakStmt(AST::BreakStmt* that) {
@@ -137,7 +143,11 @@ namespace STC {
         STCList ret;
         STC* o_break = _break;
         _break = 0;
-        ret.Append(STC::CreateDefFunc(visitX(that->stmts).beg));
+        STCList func = visitX(that->stmts);
+        //TODO: Push A Null instead of zero.
+        func.Append(STC::CreatePushInteger("0"));
+        func.Append(STC::CreateReturn());
+        ret.Append(STC::CreateDefFunc(func.beg));
         _break = o_break;
         for (int i = that->funcs.size() - 1; i >= 0; i--) {
             ret.Append(STC::CreateCopyTop());
