@@ -15,27 +15,29 @@ extern std::unordered_map<int, Lex*> lexMap;
 #include <fstream>
 #include "Exception/Exception.h"
 #include "Lexer.h"
-AST::Program* CreateAST(std::string filename) {
-    std::string* fn = new std::string(filename);
-    void *parser = ParseAlloc(malloc);
-    std::ifstream stream(filename.c_str());
-    try {
-        yyFlexLexer lexer(&stream);
-        int tokenT;
-        while (tokenT = lexer.yylex()) {
-            Lex* token = lexMap[tokenT];
-            lexMap.erase(tokenT);
-            token->loc.str = fn;
-            Parse(parser, token->type, token, 0);
+namespace Parser {
+    AST::Program* CreateAST(std::string filename) {
+        std::string* fn = new std::string(filename);
+        void *parser = ParseAlloc(malloc);
+        std::ifstream stream(filename.c_str());
+        try {
+            yyFlexLexer lexer(&stream);
+            int tokenT;
+            while (tokenT = lexer.yylex()) {
+                Lex* token = lexMap[tokenT];
+                lexMap.erase(tokenT);
+                token->loc.str = fn;
+                Parse(parser, token->type, token, 0);
+            }
+            AST::Program* ret;
+            Parse(parser, 0, 0, &ret);
+            ret->loc.str = fn;
+            return ret;
+        } catch (Exception::Exception e) {
+            delete fn;
+            ParseFree(parser, free);
+            throw e;
         }
-        AST::Program* ret;
-        Parse(parser, 0, 0, &ret);
-        ret->loc.str = fn;
-        return ret;
-    } catch (Exception::Exception e) {
-        delete fn;
-        ParseFree(parser, free);
-        throw e;
     }
 }
 }

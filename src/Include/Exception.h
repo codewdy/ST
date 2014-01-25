@@ -2,22 +2,30 @@
 #define ST_8932849283_Exception_Exception
 #include <string>
 #include <iostream>
+#include "AST/AST.h"
 namespace Exception {
     extern std::ostream* LogFile;
-    class Exception
-    {
+    class Exception {};
+#define DEFEXCPTION(CLASS) class CLASS##Exception : public Exception {};
+    class LocException : public Exception {
     public:
-        virtual std::string message() {
-            return "";
-        }
+        std::string filename;
+        int lineno;
+        LocException(AST::Location _loc) : filename(*_loc.str), lineno(_loc.lineno) {}
     };
+#define DEFLOCEXCPTION(CLASS) class CLASS##Exception : public LocException {public: CLASS##Exception(AST::Location _loc) : LocException(_loc) {}};
+
+    DEFEXCPTION(NotImplement)
+    DEFLOCEXCPTION(Break)
+
+#undef DEFEXCPTION
+#undef DEFLOCEXCPTION
 }
 
 #ifdef DEBUG
 #define Raise(TYPE, ...) do{\
     Exception::TYPE ex = Exception::TYPE(__VA_ARGS__);\
-    *(Exception::LogFile) << "Exception[" << #TYPE << "] Raise At " << __FILE__ << "." << __LINE__ \
-        << ":" << ex.message() << std::endl;\
+    *(Exception::LogFile) << "Exception[" << #TYPE << "] Raise At " << __FILE__ << "." << __LINE__ << std::endl;\
     throw ex;\
 }while(0)
 #else
