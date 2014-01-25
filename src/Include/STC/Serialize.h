@@ -3,7 +3,7 @@
 #include "STC.h"
 #include <iostream>
 namespace STC {
-    void Writer(std::ostream& out, STCList codes);
-    STCList Reader(std::istream& out);
+    void Writer(std::ostream& out, STC* codes);
+    STC* Reader(std::istream& out);
 }
 #endif

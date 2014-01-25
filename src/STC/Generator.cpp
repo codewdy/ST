@@ -5,15 +5,15 @@
 
 namespace STC {
     void Generator::visitInteger(AST::Integer* that) {
-        RETURN(new PushInteger(that->str));
+        RETURN(STC::CreatePushInteger(that->str));
     }
 
     void Generator::visitDouble(AST::Double* that) {
-        RETURN(new PushDouble(that->str));
+        RETURN(STC::CreatePushDouble(that->str));
     }
 
     void Generator::visitString(AST::String* that) {
-        RETURN(new PushString(that->str));
+        RETURN(STC::CreatePushString(that->str));
     }
 
     void Generator::visitProgram(AST::Program* that) {
@@ -24,34 +24,34 @@ namespace STC {
     }
 
     void Generator::visitSimpleStmt(AST::SimpleStmt* that) {
-        RETURN(visitX(that->expr).Append(new Pop()));
+        RETURN(visitX(that->expr).Append(STC::CreatePop()));
     }
 
     void Generator::visitForStmt(AST::ForStmt* that) {
         STCList ret;
-        STC* end = new Pop();
+        STC* end = STC::CreatePop();
         STC* o_break = _break;
         _break = end;
         //top=set.__iter__
         ret.Append(visitX(that->set));
-        ret.Append(new GetAttr("__iter__"));
-        ret.Append(new Call(0));
+        ret.Append(STC::CreateGetAttr("__iter__"));
+        ret.Append(STC::CreateCall(0));
         //TestNotEND
-        STC* loopBeg = new CopyTop();
+        STC* loopBeg = STC::CreateCopyTop();
         ret.Append(loopBeg);
-        ret.Append(new GetAttr("__isEnd__"));
-        ret.Append(new Call(0));
-        ret.Append(new TrueGoto(end));
+        ret.Append(STC::CreateGetAttr("__isEnd__"));
+        ret.Append(STC::CreateCall(0));
+        ret.Append(STC::CreateTrueGoto(end));
         //Assign to loop
-        ret.Append(new CopyTop);
-        ret.Append(new GetAttr("__getElement__"));
-        ret.Append(new Call(0));
+        ret.Append(STC::CreateCopyTop());
+        ret.Append(STC::CreateGetAttr("__getElement__"));
+        ret.Append(STC::CreateCall(0));
         ret.Append(visitX(that->var, LValue));
         ret.Append(visitX(that->loop));
         //Get Next
-        ret.Append(new GetAttr("__next__"));
-        ret.Append(new Call(0));
-        ret.Append(new Goto(loopBeg));
+        ret.Append(STC::CreateGetAttr("__next__"));
+        ret.Append(STC::CreateCall(0));
+        ret.Append(STC::CreateGoto(loopBeg));
         ret.Append(end);
         _break = o_break;
         RETURN(ret);
@@ -59,13 +59,13 @@ namespace STC {
 
     void Generator::visitWhileStmt(AST::WhileStmt* that) {
         STCList ret;
-        STC* end = new Nop;
+        STC* end = STC::CreateNop();
         STC* o_break = _break;
         _break = end;
         ret.Append(visitX(that->condition));
-        ret.Append(new FalseGoto(end));
+        ret.Append(STC::CreateFalseGoto(end));
         ret.Append(visitX(that->loop));
-        ret.Append(new Goto(ret.beg));
+        ret.Append(STC::CreateGoto(ret.beg));
         ret.Append(end);
         _break = o_break;
         RETURN(ret);
@@ -74,17 +74,17 @@ namespace STC {
     void Generator::visitIfStmt(AST::IfStmt* that) {
         STCList ret;
         ret.Append(visitX(that->condition));
-        STC* end = new Nop;
+        STC* end = STC::CreateNop();
         if (that->no) {
             STCList yes = visitX(that->yes);
             STCList no = visitX(that->no);
-            ret.Append(new FalseGoto(no.beg));
+            ret.Append(STC::CreateFalseGoto(no.beg));
             ret.Append(yes);
-            ret.Append(new Goto(end));
+            ret.Append(STC::CreateGoto(end));
             ret.Append(no);
             ret.Append(end);
         } else {
-            ret.Append(new FalseGoto(end));
+            ret.Append(STC::CreateFalseGoto(end));
             ret.Append(visitX(that->yes));
             ret.Append(end);
         }
@@ -101,7 +101,7 @@ namespace STC {
         if (_break == 0) {
             //TODO: ADD A Exception For Noncotrolled break.
         } else {
-            RETURN(new Goto(_break));
+            RETURN(STC::CreateGoto(_break));
         }
     }
 
@@ -111,9 +111,9 @@ namespace STC {
             ret.Append(visitX(that->expr));
         } else {
             //TODO: Push A null.
-            ret.Append(new PushInteger("0"));
+            ret.Append(STC::CreatePushInteger("0"));
         }
-        ret.Append(new Return());
+        ret.Append(STC::CreateReturn());
         RETURN(ret);
     }
 
@@ -121,7 +121,7 @@ namespace STC {
         STCList ret;
         for (int i = that->exprs.size() - 1; i >= 0; i--)
             ret.Append(visitX(that->exprs[i]));
-        ret.Append(new MakeList(that->exprs.size()));
+        ret.Append(STC::CreateMakeList(that->exprs.size()));
         RETURN(ret);
     }
 
@@ -137,10 +137,10 @@ namespace STC {
         STCList ret;
         STC* o_break = _break;
         _break = 0;
-        ret.Append(new DefFunc(visitX(that->stmts).beg));
+        ret.Append(STC::CreateDefFunc(visitX(that->stmts).beg));
         _break = o_break;
         for (int i = that->funcs.size() - 1; i >= 0; i--) {
-            ret.Append(new CopyTop);
+            ret.Append(STC::CreateCopyTop());
             ret.Append(visitX(that->funcs[i], LValue));
         }
         RETURN(ret);
@@ -150,21 +150,21 @@ namespace STC {
         STCList ret;
         STC* o_break = _break;
         _break = 0;
-        ret.Append(new DefState(visitX(that->stmts).beg));
+        ret.Append(STC::CreateDefState(visitX(that->stmts).beg));
         _break = o_break;
         for (int i = that->states.size() - 1; i >= 0; i--) {
-            ret.Append(new CopyTop);
+            ret.Append(STC::CreateCopyTop());
             ret.Append(visitX(that->states[i], LValue));
         }
         RETURN(ret);
     }
 
     void Generator::visitGlobalExpr(AST::GlobalExpr* that) {
-        RETURN(new PushGlobal());
+        RETURN(STC::CreatePushGlobal());
     }
 
     void Generator::visitLocaleExpr(AST::LocaleExpr* that) {
-        RETURN(new PushLocale());
+        RETURN(STC::CreatePushLocale());
     }
 
     static std::unordered_map<int, std::string> DBOperTrans = {
@@ -187,12 +187,12 @@ namespace STC {
         STCList ret;
         ret.Append(visitX(that->expr2));
         if (that->oper == AST::DoubleOperExpr::ASG) {
-            ret.Append(new CopyTop);
+            ret.Append(STC::CreateCopyTop());
             ret.Append(visitX(that->expr1, LValue));
         } else {
             ret.Append(visitX(that->expr1));
-            ret.Append(new GetAttr("__" + DBOperTrans[that->oper] + "__"));
-            ret.Append(new Call(1));
+            ret.Append(STC::CreateGetAttr("__" + DBOperTrans[that->oper] + "__"));
+            ret.Append(STC::CreateCall(1));
         }
         RETURN(ret);
     }
@@ -205,8 +205,8 @@ namespace STC {
     void Generator::visitSingleOperExpr(AST::SingleOperExpr* that) {
         STCList ret;
         ret.Append(visitX(that->expr1));
-        ret.Append(new GetAttr("__" + SGOperTrans[that->oper] + "__"));
-        ret.Append(new Call(0));
+        ret.Append(STC::CreateGetAttr("__" + SGOperTrans[that->oper] + "__"));
+        ret.Append(STC::CreateCall(0));
         RETURN(ret);
     }
 
@@ -214,10 +214,10 @@ namespace STC {
         STCList ret;
         if (_mode == LValue) {
             ret.Append(visitX(that->obj));
-            ret.Append(new SetAttr(that->attr));
+            ret.Append(STC::CreateSetAttr(that->attr));
         } else {
             ret.Append(visitX(that->obj));
-            ret.Append(new GetAttr(that->attr));
+            ret.Append(STC::CreateGetAttr(that->attr));
         }
         RETURN(ret);
     }
@@ -227,13 +227,13 @@ namespace STC {
         if (_mode == LValue) {
             ret.Append(visitX(that->index));
             ret.Append(visitX(that->array));
-            ret.Append(new GetAttr("__set_element__"));
-            ret.Append(new Call(2));
+            ret.Append(STC::CreateGetAttr("__set_element__"));
+            ret.Append(STC::CreateCall(2));
         } else {
             ret.Append(visitX(that->index));
             ret.Append(visitX(that->array));
-            ret.Append(new GetAttr("__get_element__"));
-            ret.Append(new Call(1));
+            ret.Append(STC::CreateGetAttr("__get_element__"));
+            ret.Append(STC::CreateCall(1));
         }
     }
 }

@@ -3,32 +3,49 @@
 
 void STCPrinter(STC::STC* lst, std::ostream& out, std::string prefix) {
     for (; lst; lst = lst->next) {
-        out << prefix;
+        out << '[' << lst << ']' << prefix;
         switch (lst->type) {
-#define SimpleOutput(CLASS) case STC::STC::CLASS: out << lst << "\t" << #CLASS; break;
-            SimpleOutput(CopyTop)
-            SimpleOutput(PushLocale)
-            SimpleOutput(PushGlobal)
-            SimpleOutput(Return)
-            SimpleOutput(Nop)
-            SimpleOutput(Pop)
-#define AttrOutput(CLASS,ATTR) case STC::STC::CLASS: out << lst << "\t" << #CLASS <<"[" << ((STC::CLASS*)lst)->ATTR << "]"; break;
-            AttrOutput(PushString, str)
-            AttrOutput(PushInteger, str)
-            AttrOutput(PushDouble, str)
-            AttrOutput(GetAttr, str)
-            AttrOutput(SetAttr, str)
-            AttrOutput(Goto, code)
-            AttrOutput(TrueGoto, code)
-            AttrOutput(FalseGoto, code)
-            AttrOutput(Call, parmCount)
-            AttrOutput(MakeList, num)
-#define RecurOutput(CLASS,ATTR) case STC::STC::CLASS: out << lst << "\t" << #CLASS <<"[" << ((STC::CLASS*)lst)->ATTR << "]:";\
-    STCPrinter(((STC::CLASS*)lst)->ATTR, out, "    " + prefix); break;
-            RecurOutput(DefFunc, code)
-            RecurOutput(DefState, code)
+#define PRINTTYPE(CLASS) case STC::STC::CLASS: out << #CLASS;break;
+            PRINTTYPE(CopyTop)
+            PRINTTYPE(PushLocale)
+            PRINTTYPE(PushGlobal)
+            PRINTTYPE(PushString)
+            PRINTTYPE(PushInteger)
+            PRINTTYPE(PushDouble)
+            PRINTTYPE(GetAttr)
+            PRINTTYPE(SetAttr)
+            PRINTTYPE(Goto)
+            PRINTTYPE(TrueGoto)
+            PRINTTYPE(FalseGoto)
+            PRINTTYPE(Call)
+            PRINTTYPE(Return)
+            PRINTTYPE(MakeList)
+            PRINTTYPE(DefFunc)
+            PRINTTYPE(DefState)
+            PRINTTYPE(Pop)
+            PRINTTYPE(Nop)
+            default:
+                break;
+        }
+        switch (lst->arg) {
+            case STC::STC::NoneArg:
+                break;
+            case STC::STC::StringArg:
+                out << "[" << lst->str << "]";
+                break;
+            case STC::STC::IntArg:
+                out << "[" << lst->num << "]";
+                break;
+            case STC::STC::GotoArg:
+                out << "[" << lst->code << "]";
+                break;
+            case STC::STC::BlockArg:
+                out << "[" << lst->code << "]";
+                break;
         }
         out << std::endl;
+        if (lst->arg == STC::STC::BlockArg)
+            STCPrinter(lst->code, out, prefix + "    ");
     }
 }
 
