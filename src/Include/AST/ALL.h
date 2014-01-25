@@ -24,6 +24,7 @@
 #include "SingleOperExpr.h"
 #include "GlobalExpr.h"
 #include "LocaleExpr.h"
+#include "NullExpr.h"
 #include "LValue.h"
 #include "VarLValue.h"
 #include "ArrayAtLValue.h"

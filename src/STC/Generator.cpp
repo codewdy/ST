@@ -116,8 +116,7 @@ namespace STC {
         if (that->expr) {
             ret.Append(visitX(that->expr));
         } else {
-            //TODO: Push A null.
-            ret.Append(STC::CreatePushInteger("0"));
+            ret.Append(STC::CreatePushNull());
         }
         ret.Append(STC::CreateReturn());
         RETURN(ret);
@@ -144,8 +143,7 @@ namespace STC {
         STC* o_break = _break;
         _break = 0;
         STCList func = visitX(that->stmts);
-        //TODO: Push A Null instead of zero.
-        func.Append(STC::CreatePushInteger("0"));
+        func.Append(STC::CreatePushNull());
         func.Append(STC::CreateReturn());
         ret.Append(STC::CreateDefFunc(func.beg));
         _break = o_break;
@@ -175,6 +173,10 @@ namespace STC {
 
     void Generator::visitLocaleExpr(AST::LocaleExpr* that) {
         RETURN(STC::CreatePushLocale());
+    }
+
+    void Generator::visitNullExpr(AST::NullExpr* that) {
+        RETURN(STC::CreatePushNull());
     }
 
     static std::unordered_map<int, std::string> DBOperTrans = {

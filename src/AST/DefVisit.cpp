@@ -19,6 +19,7 @@ namespace AST {
     DefClassVisit(StateDef)
     DefClassVisit(GlobalExpr)
     DefClassVisit(LocaleExpr)
+    DefClassVisit(NullExpr)
     DefClassVisit(DoubleOperExpr)
     DefClassVisit(SingleOperExpr)
     DefClassVisit(VarLValue)

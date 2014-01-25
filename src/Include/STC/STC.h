@@ -17,7 +17,7 @@ namespace STC {
             NoneArg, StringArg, IntArg, GotoArg, BlockArg
         } arg;
         enum Type {
-            CopyTop, PushLocale, PushGlobal, PushString, PushInteger, PushDouble, GetAttr, SetAttr, 
+            CopyTop, PushLocale, PushGlobal, PushNull, PushString, PushInteger, PushDouble, GetAttr, SetAttr, 
             Goto, TrueGoto, FalseGoto, Call, Return, MakeList, DefFunc, DefState, Pop, Nop
         } type; ///<The Type Of the STC.
         STC* code;
@@ -36,6 +36,7 @@ namespace STC {
         NONEARG(CopyTop)
         NONEARG(PushLocale)
         NONEARG(PushGlobal)
+        NONEARG(PushNull)
         STRINGARG(PushString)
         STRINGARG(PushInteger)
         STRINGARG(PushDouble)

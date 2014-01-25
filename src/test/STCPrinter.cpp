@@ -9,6 +9,7 @@ void STCPrinter(STC::STC* lst, std::ostream& out, std::string prefix) {
             PRINTTYPE(CopyTop)
             PRINTTYPE(PushLocale)
             PRINTTYPE(PushGlobal)
+            PRINTTYPE(PushNull)
             PRINTTYPE(PushString)
             PRINTTYPE(PushInteger)
             PRINTTYPE(PushDouble)

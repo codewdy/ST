@@ -64,6 +64,8 @@ namespace STC {
         /**sp = sp + 1.*/
         DefVisitASTClass(LocaleExpr)
         /**sp = sp + 1.*/
+        DefVisitASTClass(NullExpr)
+        /**sp = sp + 1.*/
         DefVisitASTClass(DoubleOperExpr)
         /**sp = sp + 1.*/
         DefVisitASTClass(SingleOperExpr)

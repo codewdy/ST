@@ -6,7 +6,7 @@
 #include <fstream>
 
 int main() {
-    AST::Program* ast = CreateAST("test.st");
+    AST::Program* ast = Parser::CreateAST("test.st");
     ASTPrinter astprinter(std::cout);
     astprinter.visitProgram(ast);
     STC::Generator gen;

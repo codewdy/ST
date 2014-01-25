@@ -27,6 +27,7 @@ namespace AST {
     class StateDef;
     class GlobalExpr;
     class LocaleExpr;
+    class NullExpr;
     
     /**Base Object For Visitor Pattern.*/
     class Visitor {
@@ -49,6 +50,7 @@ namespace AST {
         DefVisitClass(StateDef)
         DefVisitClass(GlobalExpr)
         DefVisitClass(LocaleExpr)
+        DefVisitClass(NullExpr)
         DefVisitClass(DoubleOperExpr)
         DefVisitClass(SingleOperExpr)
         DefVisitClass(VarLValue)

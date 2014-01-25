@@ -23,6 +23,7 @@ public:
     DefVisitASTClass(StateDef)
     DefVisitASTClass(GlobalExpr)
     DefVisitASTClass(LocaleExpr)
+    DefVisitASTClass(NullExpr)
     DefVisitASTClass(DoubleOperExpr)
     DefVisitASTClass(SingleOperExpr)
     DefVisitASTClass(VarLValue)

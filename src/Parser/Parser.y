@@ -13,7 +13,7 @@ extern std::unordered_map<int, Lex*> lexMap;
 #include <string>
 #include <iostream>
 #include <fstream>
-#include "Exception/Exception.h"
+#include "Exception.h"
 #include "Lexer.h"
 namespace Parser {
     AST::Program* CreateAST(std::string filename) {
@@ -58,8 +58,6 @@ throw "Error";
 %left RMC DOT .
 %nonassoc RLC .
 %nonassoc ELSE .
-//hack Lexer.l
-%nonassoc BREAK .
 
 %start_symbol program
 
@@ -96,6 +94,8 @@ stmtBlock(A) ::= LGC(LOC) stmtList(B) RGC . {A = new AST::StmtBlock(LOC->loc, B)
 expr(A) ::= STRING(B) . {A = new AST::String(B->loc, B->str); delete B;}
 expr(A) ::= INTEGER(B) . {A = new AST::Integer(B->loc, B->str); delete B;}
 expr(A) ::= DOUBLE(B) . {A = new AST::Double(B->loc, B->str); delete B;}
+expr(A) ::= GLOBAL(B) . {A = new AST::GlobalExpr(B->loc); delete B;}
+expr(A) ::= NULL_(B) . {A = new AST::NullExpr(B->loc); delete B;}
 //LValue Expr
 expr(A) ::= lValue(B) . {A = B;}
 //Call Expr

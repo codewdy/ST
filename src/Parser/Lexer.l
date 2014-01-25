@@ -88,6 +88,8 @@ WHITESPACE			([ \t]+)
 "while"                         {MakeLex(WHILE);}
 "break"                         {MakeLex(BREAK);}
 "return"                        {MakeLex(RETURN);}
+"global"                        {MakeLex(GLOBAL);}
+"null"                          {MakeLex(NULL_);}
 {IDENTIFIER}					{MakeLex(IDENTIFIER);}
 <<EOF>>                         {return 0;}
 .                               {/*TODO: Add Error Control.*/throw "Error";}

@@ -5,6 +5,7 @@ namespace STC {
         {STC::CopyTop, STC::NoneArg},
         {STC::PushLocale, STC::NoneArg},
         {STC::PushGlobal, STC::NoneArg},
+        {STC::PushNull, STC::NoneArg},
         {STC::PushString, STC::StringArg},
         {STC::PushInteger, STC::StringArg},
         {STC::PushDouble, STC::StringArg},

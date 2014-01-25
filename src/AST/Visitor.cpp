@@ -83,6 +83,9 @@ namespace AST
     void Visitor::visitLocaleExpr(LocaleExpr* that) {
     }
 
+    void Visitor::visitNullExpr(NullExpr* that) {
+    }
+
     void Visitor::visitDoubleOperExpr(DoubleOperExpr* that) {
         that->expr1->visit(this);
         that->expr2->visit(this);
