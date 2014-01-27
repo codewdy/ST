@@ -24,13 +24,13 @@ namespace Exception {
 
 #ifdef DEBUG
 #define Raise(TYPE, ...) do{\
-    Exception::TYPE ex = Exception::TYPE(__VA_ARGS__);\
-    *(Exception::LogFile) << "Exception[" << #TYPE << "] Raise At " << __FILE__ << "." << __LINE__ << std::endl;\
+    Exception::TYPE##Exception ex = Exception::TYPE##Excption(__VA_ARGS__);\
+    *(Exception::LogFile) << "Exception[" << #TYPE << "Exception] Raise At " << __FILE__ << "." << __LINE__ << std::endl;\
     throw ex;\
 }while(0)
 #else
 #define Raise(TYPE, ...) do{\
-    Exception::TYPE ex = Exception::TYPE(__VA_ARGS__);\
+    Exception::TYPE##Exception ex = Exception::TYPE##Excption(__VA_ARGS__);\
     throw ex;\
 }while(0)
 #endif
