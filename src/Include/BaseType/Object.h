@@ -1,22 +1,23 @@
 #ifndef ST_7832901289_BASETYPE_OBJECT
 #define ST_7832901289_BASETYPE_OBJECT
-#include <memory>
-#include <vector>
+#include <unordered_map>
+#include <string>
+#include "ObjPtr.h"
+#include "DefState.h"
 
 namespace BaseType {
-    class Dict;
-    class Object;
-
-    typedef std::shared_ptr<Object> pObject;
-
+    /**the Base state of all state.*/
     class Object {
         Object(const Object&);
         Object& operator==(const Object&);
     public:
-        Object();
-        std::shared_ptr<Dict> dict;
-        virtual pObject getAttr(std::string attr);
-        virtual void setAttr(std::string attr, pObject obj);
+        /**the dict of this object.*/
+        std::unordered_map<std::string, ObjPtr> dict;
+        Object(Object* state = StateObject);
+        /**get Attribute from dict or state, other state can override it.*/
+        virtual Object* getAttr(std::string attr);
+        /**get Attribute from dict or state, other state can override it.*/
+        virtual void setAttr(std::string attr, Object* obj);
         virtual ~Object();
     };
 }
