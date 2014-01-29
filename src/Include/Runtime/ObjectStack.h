@@ -1,5 +1,0 @@
-#ifndef ST_8797312309_RUNTIME_OBJECTSTACK
-#define ST_8797312309_RUNTIME_OBJECTSTACK
-#include "BaseType/ObjPtr.h"
-#endif
-

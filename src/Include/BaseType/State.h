@@ -6,8 +6,9 @@
 namespace BaseType {
     class State : public Object {
     public:
-        virtual pObject getAttr(std::string attr);
-        virtual void setAttr(std::string attr, pObject obj);
+        static ObjPtr STATE;
+        State(Object* base = Object::STATE) : Object(STATE) {setAttr("__base__", base);}
+        virtual Object* _getAttr(std::string attr);
     };
 }
 #endif

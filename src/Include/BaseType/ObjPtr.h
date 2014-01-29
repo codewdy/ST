@@ -36,6 +36,8 @@ namespace BaseType {
         ObjPtr& operator=(const ObjPtr& rhs);
         ObjPtr& operator=(Object* rhs);
         operator Object*();
+        Object& operator*();
+        Object* operator->();
         ~ObjPtr();
         /**A Single GC Step.*/
         static void GCStep();

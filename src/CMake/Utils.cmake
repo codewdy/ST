@@ -1,4 +1,4 @@
-MACRO (new_excutable project)
+MACRO (new_executable project)
     AUX_SOURCE_DIRECTORY(. SRC_LIST)
     ADD_EXECUTABLE(${project} ${SRC_LIST})
 ENDMACRO ()

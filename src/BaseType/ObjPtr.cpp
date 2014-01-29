@@ -8,19 +8,25 @@ namespace BaseType {
     std::list<ObjPtr::Operator> ObjPtr::Opers;
 
     void ObjPtr::Reduce() {
-        Opers.push_back(Operator(parent, child, -1));
-        GC();
+        if (child) {
+            Opers.push_back(Operator(parent, child, -1));
+            GC();
+        }
     }
 
     void ObjPtr::Register() {
-        Opers.push_back(Operator(parent, child, 1));
-        GC();
+        if (child) {
+            Opers.push_back(Operator(parent, child, 1));
+            GC();
+        }
     }
 
     void ObjPtr::ChangeChild(Object* _child) {
-        Opers.push_back(Operator(parent, child, -1));
+        if (child)
+            Opers.push_back(Operator(parent, child, -1));
         child = _child;
-        Opers.push_back(Operator(parent, child, 1));
+        if (child)
+            Opers.push_back(Operator(parent, child, 1));
         GC();
     }
 
@@ -43,6 +49,14 @@ namespace BaseType {
     }
 
     ObjPtr::operator class BaseType::Object *() {
+        return child;
+    }
+
+    Object& ObjPtr::operator*() {
+        return *child;
+    }
+
+    Object* ObjPtr::operator->() {
         return child;
     }
 
@@ -81,7 +95,7 @@ namespace BaseType {
         case PushOp:
             if (!Opers.empty()) {
                 auto tmp = Opers.begin();
-                if (tmp->delta > 0 && tmp->child)
+                if (tmp->delta > 0)
                     HandledPtr.insert(tmp->child);
                 if ((Map[tmp->parent][tmp->child] += tmp->delta) == 0)
                     Map[tmp->parent].erase(tmp->child);
