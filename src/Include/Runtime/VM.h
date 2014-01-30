@@ -16,7 +16,7 @@ namespace Runtime {
         void PushObject(BaseType::Object* obj);
         BaseType::ObjPtr PopObject();
         BaseType::ObjPtr& TopObject();
-        void PushContext(const Context& obj);
+        void PushContext(const Context& ctx);
         void PopContext();
         Context& TopContext();
         void Run();

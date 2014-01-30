@@ -5,6 +5,7 @@
 #include "BaseType/SimpleFunc.h"
 #include "BaseType/BuiltinFunc.h"
 #include "BaseType/ObjectFunc.h"
+#include "BaseType/PtrObject.h"
 #include "BaseType/Namespace.h"
 
 namespace BaseType {
@@ -21,6 +22,7 @@ namespace BaseType {
         SimpleFunc::STATE = new State(Func::STATE);
         ObjectFunc::STATE = new State(Func::STATE);
         BuiltinFunc::STATE = new State(Func::STATE);
+        PtrObjectSTATE = new State();
         Namespace::STATE = new State();
         ObjectNamespace::STATE = new State();
         State::STATE->setAttr("__exec__", new BuiltinFunc(State_exec_));
