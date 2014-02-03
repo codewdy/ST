@@ -9,10 +9,22 @@ namespace BaseType {
         while (true) {
             if (base->dict.find(attr) != base->dict.end())
                 return base->dict[attr];
-            if (base == StateObject)
+            if (base == State::STATE)
                 break;
             base = base->dict["__base__"];
         }
         return 0;
+    }
+    void State::run(Runtime::VM& vm, int num) {
+        vm.PushObject(new Object(this));
+        Object *init = this->_getAttr("__init__");
+        if (init) {
+            vm.PushObject(init);
+            vm.Call(num + 1);
+        } else {
+            if (num) {
+                //TODO: Add an Exception.
+            }
+        }
     }
 }

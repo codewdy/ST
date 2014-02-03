@@ -2,6 +2,9 @@
 #include "STCPrinter.h"
 #include "STC/ALL.h"
 #include "Parser.h"
+#include "BaseType/Init.h"
+#include "BuiltinType/Init.h"
+#include "Runtime/VM.h"
 #include <iostream>
 #include <fstream>
 
@@ -16,7 +19,11 @@ int main() {
     STC::Writer(of, stc);
     of.close();
     std::ifstream iif("test.stc");
-    STC::STC* stc2 = STC::Reader(iif);
+    //STC::STC* stc2 = STC::Reader(iif);
     std::cout << std::endl;
-    STCPrinter(stc2);
+    //STCPrinter(stc2);
+    BaseType::InitState();
+    BuiltinType::InitState();
+    Runtime::VM vm(stc);
+    vm.Run();
 }

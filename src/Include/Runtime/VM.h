@@ -13,6 +13,7 @@ namespace Runtime {
         void RunASTC();
         void HandleException();
     public:
+        VM(STC::STC* stc);
         void PushObject(BaseType::Object* obj);
         BaseType::ObjPtr PopObject();
         BaseType::ObjPtr& TopObject();
@@ -21,6 +22,7 @@ namespace Runtime {
         Context& TopContext();
         void Run();
         void Call(int num);
+        static BaseType::Object* CreateGlobal();
     };
 }
 #endif

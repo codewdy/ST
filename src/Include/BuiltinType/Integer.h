@@ -4,7 +4,7 @@
 #include "BaseType/State.h"
 #include "BaseType/BuiltinFunc.h"
 
-namespace BuiltinObject {
+namespace BuiltinType {
     namespace Integer {
         typedef int IntegerInner;
         DEF_BUILTIN_FUNC(__add__);
@@ -12,7 +12,7 @@ namespace BuiltinObject {
         DEF_BUILTIN_FUNC(__mul__);
         DEF_BUILTIN_FUNC(__div__);
         DEF_BUILTIN_FUNC(__mod__);
-        extern BaseType::State STATE;
+        extern BaseType::ObjPtr STATE;
         void InitState();
         BaseType::Object* Create(std::string str);
         BaseType::Object* Create(IntegerInner num);

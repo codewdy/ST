@@ -1,4 +1,6 @@
 #include "BaseType/Object.h"
+#include "BaseType/ObjectFunc.h"
+#include <iostream>
 
 namespace BaseType {
     Object::Object(Object* state) {
@@ -9,22 +11,25 @@ namespace BaseType {
         Object* ret = 0;
         auto tmp = dict.find(attr);
         if (tmp == dict.end()) {
-            for (Object* st = dict["__state__"]; ; st = st->dict["__dict__"]) {
+            for (Object* st = dict["__state__"]; ; st = st->dict["__base__"]) {
                 auto t = st->dict.find(attr);
                 if (t != st->dict.end()) {
                     ret = t->second;
                     break;
                 }
-                if (st == StateObject)
+                if (st == Object::STATE)
                     break;
             }
         } else
-            ret = tmp->second;
-        if (ret->_getAttr("__exec__"))
+            return tmp->second;
+        if (!ret)
             return 0;
+        if (attr == "__exec__")
+            return ret;
+        if (ret->_getAttr("__exec__"))
+            return new ObjectFunc(this, ret);
         else
             return ret;
-        return 0;
     }
 
     void Object::_setAttr(std::string attr, Object* obj) {

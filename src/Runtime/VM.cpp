@@ -2,9 +2,17 @@
 #include "BaseType/Object.h"
 #include "BaseType/Func.h"
 #include "BuiltinType/Integer.h"
+#include "BaseType/Namespace.h"
+#include "BaseType/Init.h"
+#include "BuiltinType/Init.h"
 #include <iostream>
 
 namespace Runtime {
+    VM::VM(STC::STC* stc) {
+        BaseType::Object* glb = CreateGlobal();
+        PushContext(Context(glb, glb, stc));
+    }
+
     void VM::PushObject(BaseType::Object* obj) {
         Objects.push(obj);
     }
@@ -60,6 +68,10 @@ namespace Runtime {
     void VM::RunASTC() {
         try {
             STC::STC* stc = TopContext().code;
+            if (!stc) {
+                PopContext();
+                return;
+            }
             TopContext().code = stc->next;
             switch (stc->type) {
             case STC::STC::Nop:
@@ -68,10 +80,10 @@ namespace Runtime {
                 PopObject();
                 break;
             case STC::STC::PushInteger:
-                PushObject(BuiltinObject::Integer::Create(stc->str));
+                PushObject(BuiltinType::Integer::Create(stc->str));
                 break;
             case STC::STC::Call:
-                Call(TopContext().code->num);
+                Call(stc->num);
                 break;
             case STC::STC::PushLocale:
                 PushObject(TopContext().Locale);
@@ -87,17 +99,27 @@ namespace Runtime {
                     BaseType::ObjPtr obj1 = PopObject();
                     PushObject(obj1->getAttr(stc->str));
                 }
+                break;
             case STC::STC::SetAttr:
                 {
                     BaseType::ObjPtr obj1 = PopObject();
                     BaseType::ObjPtr obj2 = PopObject();
                     obj1->setAttr(stc->str, obj2);
                 }
+                break;
             default:
                 std::cout << "Unhandled!" << std::endl;
             }
+            BaseType::ObjPtr::GC();
         } catch(int) {
             //TODO: Add handle Exception.
         }
+    }
+
+    BaseType::Object* VM::CreateGlobal() {
+        BaseType::Object* ret = new BaseType::Namespace();
+        BaseType::Init(ret);
+        BuiltinType::Init(ret);
+        return ret;
     }
 }

@@ -8,17 +8,13 @@ namespace BaseType {
     std::list<ObjPtr::Operator> ObjPtr::Opers;
 
     void ObjPtr::Reduce() {
-        if (child) {
+        if (child)
             Opers.push_back(Operator(parent, child, -1));
-            GC();
-        }
     }
 
     void ObjPtr::Register() {
-        if (child) {
+        if (child)
             Opers.push_back(Operator(parent, child, 1));
-            GC();
-        }
     }
 
     void ObjPtr::ChangeChild(Object* _child) {
@@ -27,7 +23,6 @@ namespace BaseType {
         child = _child;
         if (child)
             Opers.push_back(Operator(parent, child, 1));
-        GC();
     }
 
     ObjPtr::ObjPtr(Object* _child, Object* _parent) : child(_child), parent(_parent) {

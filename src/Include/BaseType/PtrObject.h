@@ -6,10 +6,10 @@
 namespace BaseType {
     extern ObjPtr PtrObjectSTATE;
     template<class T>
-    class PtrObject : Object {
+    class PtrObject : public Object {
     public:
         T* ptr;
-        PtrObject(T* _ptr) : Object(PtrObjectSTATE), ptr(_ptr) {}
+        PtrObject(T* _ptr, Object* st = PtrObjectSTATE) : Object(st), ptr(_ptr) {}
         virtual ~PtrObject() {delete ptr;}
     };
 }
