@@ -9,6 +9,7 @@
 #include <fstream>
 
 int main() {
+    try {
     AST::Program* ast = Parser::CreateAST("test.st");
     ASTPrinter astprinter(std::cout);
     astprinter.visitProgram(ast);
@@ -26,4 +27,7 @@ int main() {
     BuiltinType::InitState();
     Runtime::VM vm(stc);
     vm.Run();
+    } catch (const char* x) {
+        std::cerr << x << std::endl;
+    }
 }

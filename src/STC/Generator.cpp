@@ -135,6 +135,7 @@ namespace STC {
         for (int i = that->parms.size() - 1; i >= 0; i--)
             ret.Append(visitX(that->parms[i]));
         ret.Append(visitX(that->func));
+        ret.Append(STC::CreateCall(that->parms.size()));
         RETURN(ret);
     }
 

@@ -1,4 +1,4 @@
-#include "BuiltinType/Integer.h"
+#include "BuiltinType/Double.h"
 #include "BuiltinType/String.h"
 #include <sstream>
 #include <iostream>
@@ -8,7 +8,7 @@
 #include <sstream>
 
 namespace BuiltinType {
-    namespace Integer {
+    namespace Double {
         BaseType::ObjPtr STATE;
 
         BaseType::Object* Create(std::string str) {
@@ -34,7 +34,6 @@ namespace BuiltinType {
             STATE->setAttr("__minus__", new BaseType::BuiltinFunc(__minus__));
             STATE->setAttr("__mul__", new BaseType::BuiltinFunc(__mul__));
             STATE->setAttr("__div__", new BaseType::BuiltinFunc(__div__));
-            STATE->setAttr("__mod__", new BaseType::BuiltinFunc(__mod__));
             STATE->setAttr("__str__", new BaseType::BuiltinFunc(__str__));
         }
 
@@ -42,7 +41,6 @@ namespace BuiltinType {
         DEF_OPER(__minus__, -)
         DEF_OPER(__mul__, *)
         DEF_OPER(__div__, /)
-        DEF_OPER(__mod__, %)
 
         DEF_BUILTIN_FUNC(__str__) {
             CHECK_ARG_SIZE(==1);

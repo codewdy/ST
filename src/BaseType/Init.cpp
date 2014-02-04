@@ -7,6 +7,11 @@
 #include "BaseType/ObjectFunc.h"
 #include "BaseType/PtrObject.h"
 #include "BaseType/Namespace.h"
+#include "ToolKit.h"
+#include "BuiltinType/String.h"
+#include <iostream>
+#include <sstream>
+#include <string>
 
 namespace BaseType {
     ObjPtr Object::STATE;
@@ -18,6 +23,13 @@ namespace BaseType {
     ObjPtr Namespace::STATE;
     ObjPtr ObjectNamespace::STATE;
     ObjPtr PtrObjectSTATE;
+
+    DEF_BUILTIN_FUNC(obj_str) {
+        CHECK_ARG_SIZE(==1);
+        std::ostringstream ret;
+        ret << "[Object at "<< GET_ARG(0, Object) << "]";
+        return BuiltinType::String::Create(ret.str());
+    }
 
     void InitState() {
         Object::STATE = new State(0);
@@ -32,6 +44,7 @@ namespace BaseType {
         PtrObjectSTATE = new State();
         Namespace::STATE = new State();
         ObjectNamespace::STATE = new State();
+        Object::STATE->setAttr("__str__", new BuiltinFunc(obj_str));
     }
 
     void Init(Object* ret) {

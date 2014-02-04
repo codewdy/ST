@@ -2,6 +2,8 @@
 #include "BaseType/Object.h"
 #include "BaseType/Func.h"
 #include "BuiltinType/Integer.h"
+#include "BuiltinType/String.h"
+#include "BuiltinType/Double.h"
 #include "BaseType/Namespace.h"
 #include "BaseType/Init.h"
 #include "BuiltinType/Init.h"
@@ -68,6 +70,7 @@ namespace Runtime {
     void VM::RunASTC() {
         try {
             STC::STC* stc = TopContext().code;
+            std::cout << stc << std::endl;
             if (!stc) {
                 PopContext();
                 return;
@@ -81,6 +84,12 @@ namespace Runtime {
                 break;
             case STC::STC::PushInteger:
                 PushObject(BuiltinType::Integer::Create(stc->str));
+                break;
+            case STC::STC::PushDouble:
+                PushObject(BuiltinType::Double::Create(stc->str));
+                break;
+            case STC::STC::PushString:
+                PushObject(BuiltinType::String::Create(stc->str));
                 break;
             case STC::STC::Call:
                 Call(stc->num);
