@@ -105,7 +105,7 @@ expr(A) ::= FUNC(LOC) lValueList(B) LLC iDList(C) RLC stmtBlock(D) . {A = new AS
 //State Def Expr
 expr(A) ::= STATE(LOC) lValueList(B) stmtBlock(C) . {A = new AST::StateDef(LOC->loc, B, C); delete LOC;}
 //List Expr
-expr(A) ::= LMC(LOC) exprList(B) RLC . {A = new AST::ListExpr(LOC->loc, B); delete LOC;}
+expr(A) ::= LMC(LOC) exprList(B) RMC . {A = new AST::ListExpr(LOC->loc, B); delete LOC;}
 //Simple Expr
 expr(A) ::= LLC expr(B) RLC . {A = B;}
 expr(A) ::= expr(B) PLUS(LOC) expr(C) . {A = new AST::DoubleOperExpr(LOC->loc, B, C, AST::DoubleOperExpr::PLUS); delete LOC;}

@@ -12,6 +12,7 @@ namespace Runtime {
         ObjectStack Objects;
         void RunASTC();
         void HandleException();
+        VM(){}
     public:
         VM(STC::STC* stc);
         void PushObject(BaseType::Object* obj);
@@ -23,6 +24,7 @@ namespace Runtime {
         void Run();
         void Call(int num);
         static BaseType::Object* CreateGlobal();
+        static BaseType::Object* Calc(BaseType::Object* func, std::vector<BaseType::Object*> args);
     };
 }
 #endif

@@ -4,6 +4,7 @@
 #include "BuiltinType/Integer.h"
 #include "BuiltinType/String.h"
 #include "BuiltinType/Double.h"
+#include "BuiltinType/List.h"
 #include "BaseType/Namespace.h"
 #include "BaseType/Init.h"
 #include "BuiltinType/Init.h"
@@ -56,12 +57,12 @@ namespace Runtime {
     void VM::Run() {
         while (!Contexts.empty()) {
             RunASTC();
+            BaseType::ObjPtr::GC();
         }
     }
 
     void VM::Call(int num) {
-        BaseType::ObjPtr funcS = PopObject();
-        BaseType::Object *func = funcS, *tmp;
+        BaseType::Object *func = PopObject(), *tmp;
         while ((tmp = func->getAttr("__exec__")) != func)
             func = tmp;
         ((BaseType::Func*)func)->run(*this, num);
@@ -91,6 +92,14 @@ namespace Runtime {
             case STC::STC::PushString:
                 PushObject(BuiltinType::String::Create(stc->str));
                 break;
+            case STC::STC::MakeList:
+                {
+                    BuiltinType::List::Inner ret;
+                    for (int i = 0; i < stc->num; i++)
+                        ret.push_back(PopObject());
+                    PushObject(BuiltinType::List::Create(ret));
+                }
+                break;
             case STC::STC::Call:
                 Call(stc->num);
                 break;
@@ -119,7 +128,6 @@ namespace Runtime {
             default:
                 std::cout << "Unhandled!" << std::endl;
             }
-            BaseType::ObjPtr::GC();
         } catch(int) {
             //TODO: Add handle Exception.
         }
@@ -130,5 +138,16 @@ namespace Runtime {
         BaseType::Init(ret);
         BuiltinType::Init(ret);
         return ret;
+    }
+
+    BaseType::Object* VM::Calc(BaseType::Object* func, std::vector<BaseType::Object*> args) {
+        VM vm;
+        for (int i = args.size() - 1; i >= 0; i--)
+            vm.PushObject(args[i]);
+        vm.PushObject(func);
+        vm.Call(args.size());
+        while (vm.Contexts.size())
+            vm.RunASTC();
+        return vm.PopObject();
     }
 }
