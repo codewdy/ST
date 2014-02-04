@@ -113,10 +113,7 @@ namespace Runtime {
                 PushObject(TopObject());
                 break;
             case STC::STC::GetAttr:
-                {
-                    BaseType::ObjPtr obj1 = PopObject();
-                    PushObject(obj1->getAttr(stc->str));
-                }
+                PushObject(PopObject()->getAttr(stc->str));
                 break;
             case STC::STC::SetAttr:
                 {
