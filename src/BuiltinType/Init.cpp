@@ -3,6 +3,7 @@
 #include "BuiltinType/String.h"
 #include "BuiltinType/Double.h"
 #include "BuiltinType/List.h"
+#include "BuiltinType/Bool.h"
 
 namespace BuiltinType {
     void InitState() {
@@ -10,6 +11,7 @@ namespace BuiltinType {
         Double::InitState();
         String::InitState();
         List::InitState();
+        Bool::InitState();
     }
 
     void Init(BaseType::Object* obj) {
@@ -17,5 +19,8 @@ namespace BuiltinType {
         obj->setAttr("String", String::STATE);
         obj->setAttr("Double", Double::STATE);
         obj->setAttr("List", List::STATE);
+        obj->setAttr("Bool", Bool::STATE);
+        obj->setAttr("true", Bool::TRUE);
+        obj->setAttr("false", Bool::FALSE);
     }
 }
