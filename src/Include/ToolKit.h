@@ -20,11 +20,4 @@ namespace ToolKit {
 #define GET_ARG(num, type) ToolKit::SafeConvert<type>(args[num])
 #define GET_PTR_ARG(num, type) (*GET_ARG(num, BaseType::PtrObject<type>)->ptr)
 
-#define DEF_OPER(NAME, OPER) DEF_BUILTIN_FUNC(NAME) {\
-    CHECK_ARG_SIZE(==2);\
-    Inner& lhs = GET_PTR_ARG(0, Inner);\
-    Inner& rhs = GET_PTR_ARG(1, Inner);\
-    std::cout << lhs << #NAME << rhs << std::endl;\
-    return Create(lhs OPER rhs);\
-}
 #endif
