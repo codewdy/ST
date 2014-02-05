@@ -7,5 +7,5 @@
 *.yy.cc
 *.tab.c
 *.tab.h
-make
+make/*
 
