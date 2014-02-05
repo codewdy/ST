@@ -146,6 +146,8 @@ namespace STC {
         STCList func = visitX(that->stmts);
         func.Append(STC::CreatePushNull());
         func.Append(STC::CreateReturn());
+        for (int i = that->args.size() - 1; i >= 0; i--)
+            ret.Append(STC::STC::CreateFuncArg(that->args[i]));
         ret.Append(STC::CreateDefFunc(func.beg));
         _break = o_break;
         for (int i = that->funcs.size() - 1; i >= 0; i--) {

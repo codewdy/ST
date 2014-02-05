@@ -20,12 +20,12 @@ int main() {
     STC::Writer(of, stc);
     of.close();
     std::ifstream iif("test.stc");
-    //STC::STC* stc2 = STC::Reader(iif);
+    STC::STC* stc2 = STC::Reader(iif);
     std::cout << std::endl;
-    //STCPrinter(stc2);
+    STCPrinter(stc2);
     BaseType::InitState();
     BuiltinType::InitState();
-    Runtime::VM vm(stc);
+    Runtime::VM vm(stc2);
     vm.Run();
     } catch (const char* x) {
         std::cerr << x << std::endl;
