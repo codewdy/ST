@@ -58,7 +58,7 @@ namespace BuiltinType {
             CHECK_ARG_SIZE(==2);
             Inner& lhs = GET_PTR_ARG(0, Inner);
             Inner& rhs = GET_PTR_ARG(1, Inner);
-            return Create(lhs + rhs);
+            return Create(lhs % rhs);
         }
 
         DEF_BUILTIN_FUNC(__str__) {
