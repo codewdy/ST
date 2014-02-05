@@ -5,9 +5,11 @@
 #include "BuiltinType/String.h"
 #include "BuiltinType/Double.h"
 #include "BuiltinType/List.h"
+#include "BuiltinType/Bool.h"
 #include "BaseType/Namespace.h"
 #include "BaseType/Init.h"
 #include "BuiltinType/Init.h"
+#include "ToolKit.h"
 #include <iostream>
 
 namespace Runtime {
@@ -71,7 +73,6 @@ namespace Runtime {
     void VM::RunASTC() {
         try {
             STC::STC* stc = TopContext().code;
-            std::cout << stc << std::endl;
             if (!stc) {
                 PopContext();
                 return;
@@ -121,6 +122,17 @@ namespace Runtime {
                     BaseType::ObjPtr obj2 = PopObject();
                     obj1->setAttr(stc->str, obj2);
                 }
+                break;
+            case STC::STC::Goto:
+                TopContext().code = stc->code;
+                break;
+            case STC::STC::TrueGoto:
+                if (ToolKit::GetInner<BuiltinType::Bool::Inner>(PopObject()))
+                    TopContext().code = stc->code;
+                break;
+            case STC::STC::FalseGoto:
+                if (!ToolKit::GetInner<BuiltinType::Bool::Inner>(PopObject()))
+                    TopContext().code = stc->code;
                 break;
             default:
                 std::cout << "Unhandled!" << std::endl;
