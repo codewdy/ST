@@ -19,5 +19,7 @@ namespace ToolKit {
 }
 #define GET_ARG(num, type) ToolKit::SafeConvert<type>(args[num])
 #define GET_PTR_ARG(num, type) (*GET_ARG(num, BaseType::PtrObject<type>)->ptr)
+#define ARGS(...) std::vector<BaseType::Object*>({__VA_ARGS__})
+#define CALC(OBJECT, NAME, ...) Runtime::VM::Calc(OBJECT->getAttr(#NAME), ARGS(__VA_ARGS__))
 
 #endif

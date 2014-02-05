@@ -9,6 +9,7 @@
 #include "BaseType/Namespace.h"
 #include "ToolKit.h"
 #include "BuiltinType/String.h"
+#include "BuiltinType/Bool.h"
 #include <iostream>
 #include <sstream>
 #include <string>
@@ -27,8 +28,36 @@ namespace BaseType {
     DEF_BUILTIN_FUNC(obj_str) {
         CHECK_ARG_SIZE(==1);
         std::ostringstream ret;
-        ret << "[Object at "<< GET_ARG(0, Object) << "]";
+        ret << "[Object at "<< args[0] << "]";
         return BuiltinType::String::Create(ret.str());
+    }
+
+    DEF_BUILTIN_FUNC(obj_eq) {
+        CHECK_ARG_SIZE(==2);
+        return BuiltinType::Bool::Create(args[0] == args[1]);
+    }
+
+    DEF_BUILTIN_FUNC(obj_ne) {
+        CHECK_ARG_SIZE(==2);
+        Object* eq = CALC(args[0], __equal__, args[1]);
+        return CALC(eq, __not__);
+    }
+
+    DEF_BUILTIN_FUNC(obj_gt) {
+        CHECK_ARG_SIZE(==2);
+        return CALC(args[1], __less_than__, args[0]);
+    }
+
+    DEF_BUILTIN_FUNC(obj_nl) {
+        CHECK_ARG_SIZE(==2);
+        Object* eq = CALC(args[0], __less_than__, args[1]);
+        return CALC(eq, __not__);
+    }
+
+    DEF_BUILTIN_FUNC(obj_ng) {
+        CHECK_ARG_SIZE(==2);
+        Object* eq = CALC(args[0], __greater_than__, args[1]);
+        return CALC(eq, __not__);
     }
 
     void InitState() {
@@ -45,6 +74,11 @@ namespace BaseType {
         Namespace::STATE = new State();
         ObjectNamespace::STATE = new State();
         Object::STATE->setAttr("__str__", new BuiltinFunc(obj_str));
+        Object::STATE->setAttr("__equal__", new BuiltinFunc(obj_eq));
+        Object::STATE->setAttr("__not_equal__", new BuiltinFunc(obj_ne));
+        Object::STATE->setAttr("__greater_than__", new BuiltinFunc(obj_gt));
+        Object::STATE->setAttr("__not_less__", new BuiltinFunc(obj_nl));
+        Object::STATE->setAttr("__not_greater__", new BuiltinFunc(obj_ng));
     }
 
     void Init(Object* ret) {

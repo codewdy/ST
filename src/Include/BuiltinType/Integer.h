@@ -13,6 +13,8 @@ namespace BuiltinType {
         DEF_BUILTIN_FUNC(__div__);
         DEF_BUILTIN_FUNC(__mod__);
         DEF_BUILTIN_FUNC(__str__);
+        DEF_BUILTIN_FUNC(__equal__);
+        DEF_BUILTIN_FUNC(__less_than__);
         extern BaseType::ObjPtr STATE;
         void InitState();
         BaseType::Object* Create(std::string str);

@@ -11,6 +11,8 @@ namespace BuiltinType {
         DEF_BUILTIN_FUNC(__add__);
         DEF_BUILTIN_FUNC(__mul__);
         DEF_BUILTIN_FUNC(__str__);
+        DEF_BUILTIN_FUNC(__equal__);
+        DEF_BUILTIN_FUNC(__less_than__);
         extern BaseType::ObjPtr STATE;
         void InitState();
         BaseType::Object* Create(Inner str);

@@ -192,8 +192,8 @@ namespace STC {
         {AST::DoubleOperExpr::GT, "greater_than"},
         {AST::DoubleOperExpr::LE, "not_greater"},
         {AST::DoubleOperExpr::GE, "not_less"},
-        {AST::DoubleOperExpr::GE, "equal"},
-        {AST::DoubleOperExpr::GE, "not_equal"},
+        {AST::DoubleOperExpr::EQ, "equal"},
+        {AST::DoubleOperExpr::NE, "not_equal"},
     };
     
     void Generator::visitDoubleOperExpr(AST::DoubleOperExpr* that) {

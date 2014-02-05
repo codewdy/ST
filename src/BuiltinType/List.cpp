@@ -47,9 +47,8 @@ namespace BuiltinType {
             CHECK_ARG_SIZE(==1);
             Inner arg = GET_PTR_ARG(0, Inner);
             String::Inner ret = "[";
-            std::vector<BaseType::Object*> argstr;
             for (int i = 0; i < arg.size(); i++){
-                BaseType::Object* str = Runtime::VM::Calc(arg[i]->getAttr("__str__"), argstr);
+                BaseType::Object* str = CALC(arg[i], __str__);
                 ret += ToolKit::GetInner<String::Inner>(str);
                 if (i != arg.size() - 1)
                     ret += ", ";

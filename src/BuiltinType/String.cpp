@@ -1,5 +1,6 @@
 #include "BuiltinType/String.h"
 #include "BuiltinType/Integer.h"
+#include "BuiltinType/Bool.h"
 #include <sstream>
 #include <iostream>
 #include "BaseType/PtrObject.h"
@@ -22,15 +23,25 @@ namespace BuiltinType {
             STATE->setAttr("__add__", new BaseType::BuiltinFunc(__add__));
             STATE->setAttr("__mul__", new BaseType::BuiltinFunc(__mul__));
             STATE->setAttr("__str__", new BaseType::BuiltinFunc(__str__));
+            STATE->setAttr("__equal__", new BaseType::BuiltinFunc(__equal__));
+            STATE->setAttr("__less_than__", new BaseType::BuiltinFunc(__less_than__));
         }
 
         DEF_BUILTIN_FUNC(__add__) {
             CHECK_ARG_SIZE(==2);
-            std::vector<BaseType::Object*> argstr;
             Inner& lhs = GET_PTR_ARG(0, Inner);
-            Inner& rhs = ToolKit::GetInner<Inner>(Runtime::VM::Calc(args[1]->getAttr("__str__"), argstr));
+            Inner& rhs = ToolKit::GetInner<Inner>(CALC(args[1], __str__));
             return Create(lhs + rhs);
         }
+
+#define DEF_COMP_OPER(NAME, OPER) DEF_BUILTIN_FUNC(NAME) {\
+            CHECK_ARG_SIZE(==2);\
+            Inner& lhs = GET_PTR_ARG(0, Inner);\
+            Inner& rhs = ToolKit::GetInner<Inner>(CALC(args[1], __str__));\
+            return Bool::Create(lhs OPER rhs);\
+        }
+        DEF_COMP_OPER(__equal__, ==)
+        DEF_COMP_OPER(__less_than__, <)
 
         DEF_BUILTIN_FUNC(__mul__) {
             CHECK_ARG_SIZE(==2);
