@@ -66,14 +66,10 @@ namespace AST
     }
 
     void Visitor::visitFuncDef(FuncDef* that) {
-        for (auto func : that->funcs)
-            func->visit(this);
         that->stmts->visit(this);
     }
 
     void Visitor::visitStateDef(StateDef* that) {
-        for (auto state : that->states)
-            state->visit(this);
         that->stmts->visit(this);
     }
 

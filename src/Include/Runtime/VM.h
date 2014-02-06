@@ -10,6 +10,7 @@ namespace Runtime {
         typedef std::stack<BaseType::ObjPtr> ObjectStack;
         ContextStack Contexts;
         ObjectStack Objects;
+        std::vector<std::string> FuncArgs;
         void RunASTC();
         void HandleException();
         VM(){}

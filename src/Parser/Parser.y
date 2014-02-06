@@ -101,9 +101,9 @@ expr(A) ::= lValue(B) . {A = B;}
 //Call Expr
 expr(A) ::= expr(B) LLC(LOC) exprList(C) RLC . {A = new AST::CallExpr(LOC->loc, B, C); delete LOC;}
 //Func Def Expr
-expr(A) ::= FUNC(LOC) lValueList(B) LLC iDList(C) RLC stmtBlock(D) . {A = new AST::FuncDef(LOC->loc, B, C, D); delete LOC;}
+expr(A) ::= FUNC(LOC) LLC iDList(B) RLC stmtBlock(C) . {A = new AST::FuncDef(LOC->loc, B, C); delete LOC;}
 //State Def Expr
-expr(A) ::= STATE(LOC) lValueList(B) stmtBlock(C) . {A = new AST::StateDef(LOC->loc, B, C); delete LOC;}
+expr(A) ::= STATE(LOC) stmtBlock(B) . {A = new AST::StateDef(LOC->loc, B); delete LOC;}
 //List Expr
 expr(A) ::= LMC(LOC) exprList(B) RMC . {A = new AST::ListExpr(LOC->loc, B); delete LOC;}
 //Simple Expr
@@ -138,15 +138,6 @@ exprList(A) ::= exprListH(B) . {A = B;}
 %destructor exprListH {delete $$;}
 exprListH(A) ::= expr(B) . {A = new AST::ExprList(B);}
 exprListH(A) ::= exprListH(B) CMA expr(C) . {A = new AST::ExprList(B, C);}
-
-%type lValueList {AST::LValueList*}
-%destructor lValueList {delete $$;}
-lValueList(A) ::= . {A = new AST::LValueList();}
-lValueList(A) ::= lValueListH(B) . {A = B;}
-%type lValueListH {AST::LValueList*}
-%destructor lValueListH {delete $$;}
-lValueListH(A) ::= lValue(B) . {A = new AST::LValueList(B);}
-lValueListH(A) ::= lValueListH(B) CMA lValue(C) . {A = new AST::LValueList(B, C);}
 
 %type iDList {AST::IDList*}
 %destructor iDList {delete $$;}

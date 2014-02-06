@@ -150,10 +150,6 @@ namespace STC {
             ret.Append(STC::STC::CreateFuncArg(that->args[i]));
         ret.Append(STC::CreateDefFunc(func.beg));
         _break = o_break;
-        for (int i = that->funcs.size() - 1; i >= 0; i--) {
-            ret.Append(STC::CreateCopyTop());
-            ret.Append(visitX(that->funcs[i], LValue));
-        }
         RETURN(ret);
     }
 
@@ -163,10 +159,6 @@ namespace STC {
         _break = 0;
         ret.Append(STC::CreateDefState(visitX(that->stmts).beg));
         _break = o_break;
-        for (int i = that->states.size() - 1; i >= 0; i--) {
-            ret.Append(STC::CreateCopyTop());
-            ret.Append(visitX(that->states[i], LValue));
-        }
         RETURN(ret);
     }
 

@@ -51,14 +51,10 @@ namespace AST {
     }
 
     FuncDef::~FuncDef() {
-        for (auto func : funcs)
-            delete func;
         delete stmts;
     }
 
     StateDef::~StateDef() {
-        for (auto state : states)
-            delete state;
         delete stmts;
     }
 

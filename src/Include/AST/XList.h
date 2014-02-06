@@ -27,7 +27,6 @@ namespace AST
 
     typedef XList<std::string> IDList;
     typedef XList<Expr*> ExprList;
-    typedef XList<LValue*> LValueList;
     typedef XList<Stmt*> StmtList;
 }
 #endif

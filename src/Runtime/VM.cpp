@@ -1,6 +1,7 @@
 #include "Runtime/VM.h"
 #include "BaseType/Object.h"
 #include "BaseType/Func.h"
+#include "BaseType/SimpleFunc.h"
 #include "BuiltinType/Integer.h"
 #include "BuiltinType/String.h"
 #include "BuiltinType/Double.h"
@@ -110,6 +111,10 @@ namespace Runtime {
             case STC::STC::PushGlobal:
                 PushObject(TopContext().Global);
                 break;
+            case STC::STC::PushNull:
+                PushObject(0);
+                //TODO:Add an Null.
+                break;
             case STC::STC::CopyTop:
                 PushObject(TopObject());
                 break;
@@ -133,6 +138,19 @@ namespace Runtime {
             case STC::STC::FalseGoto:
                 if (!ToolKit::GetInner<BuiltinType::Bool::Inner>(PopObject()))
                     TopContext().code = stc->code;
+                break;
+            case STC::STC::FuncArg:
+                FuncArgs.push_back(stc->str);
+                break;
+            case STC::STC::DefFunc:
+                {
+                    BaseType::SimpleFunc * ret = new BaseType::SimpleFunc(TopContext().Global, stc->code);
+                    ret->argsName.swap(FuncArgs);
+                    PushObject(ret);
+                }
+                break;
+            case STC::STC::Return:
+                PopContext();
                 break;
             default:
                 std::cout << "Unhandled!" << std::endl;
