@@ -11,6 +11,7 @@ namespace BuiltinType {
         DEF_BUILTIN_FUNC(__add__);
         DEF_BUILTIN_FUNC(__mul__);
         DEF_BUILTIN_FUNC(__str__);
+        DEF_BUILTIN_FUNC(__get_element__);
         DEF_BUILTIN_FUNC(__iter__);
         DEF_BUILTIN_FUNC(Iter__next__);
         DEF_BUILTIN_FUNC(Iter__is_end__);

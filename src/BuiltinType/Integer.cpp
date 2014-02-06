@@ -24,8 +24,7 @@ namespace BuiltinType {
         }
 
         BaseType::Object* Create(Inner num) {
-            BaseType::Object* ret = new BaseType::PtrObject<Inner>(new Inner(num), STATE);
-            return ret;
+            return ToolKit::CreateObj(STATE, num);
         }
 
         void InitState() {

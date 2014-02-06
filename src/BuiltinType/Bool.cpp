@@ -24,8 +24,8 @@ namespace BuiltinType {
             STATE->setAttr("__or__", new BaseType::BuiltinFunc(__or__));
             STATE->setAttr("__not__", new BaseType::BuiltinFunc(__not__));
             STATE->setAttr("__str__", new BaseType::BuiltinFunc(__str__));
-            TRUE = new BaseType::PtrObject<Inner>(new bool(true), STATE);
-            FALSE = new BaseType::PtrObject<Inner>(new bool(false), STATE);
+            TRUE = ToolKit::CreateObj(STATE, true);
+            FALSE = ToolKit::CreateObj(STATE, false);
         }
 
 #define DEF_OPER(NAME, OPER) DEF_BUILTIN_FUNC(NAME) {\

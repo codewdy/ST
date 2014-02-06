@@ -129,6 +129,7 @@ expr(A) ::= NOT(LOC) expr(B) . {A = new AST::SingleOperExpr(LOC->loc, B, AST::Si
 %destructor lValue {delete $$;}
 lValue(A) ::= IDENTIFIER(B) . {A = new AST::VarLValue(B->loc, B->str); delete B;}
 lValue(A) ::= expr(B) DOT(LOC) IDENTIFIER(C) . {A = new AST::VarLValue(LOC->loc, B, C->str); delete LOC;}
+lValue(A) ::= expr(B) LMC(LOC) expr(C) RMC. {A = new AST::ArrayAtLValue(LOC->loc, B, C); delete LOC;}
 
 %type exprList {AST::ExprList*}
 %destructor exprList {delete $$;}

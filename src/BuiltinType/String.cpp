@@ -11,9 +11,8 @@ namespace BuiltinType {
         BaseType::ObjPtr STATE;
 
         BaseType::Object* Create(Inner num) {
-            BaseType::Object* ret = new BaseType::PtrObject<Inner>(new Inner(num), STATE);
             std::cout << num << std::endl;
-            return ret;
+            return ToolKit::CreateObj(STATE, num);
         }
 
         void InitState() {
@@ -55,7 +54,7 @@ namespace BuiltinType {
 
         DEF_BUILTIN_FUNC(__str__) {
             CHECK_ARG_SIZE(==1);
-            return GET_ARG(0, BaseType::PtrObject<Inner>);
+            return args[0];
         }
     }
 }

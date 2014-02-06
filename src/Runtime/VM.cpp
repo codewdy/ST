@@ -60,7 +60,6 @@ namespace Runtime {
     void VM::Run() {
         while (!Contexts.empty()) {
             RunASTC();
-            BaseType::ObjPtr::GC();
         }
     }
 
@@ -159,8 +158,6 @@ namespace Runtime {
             case STC::STC::Return:
                 PopContext();
                 break;
-            default:
-                std::cout << "Unhandled!" << std::endl;
             }
         } catch(int) {
             //TODO: Add handle Exception.

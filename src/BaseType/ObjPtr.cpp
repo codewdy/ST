@@ -1,5 +1,6 @@
 #include "BaseType/ObjPtr.h"
 #include <cmath>
+#include <iostream>
 
 namespace BaseType {
     //Define the static Varibles

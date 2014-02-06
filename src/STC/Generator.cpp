@@ -242,5 +242,6 @@ namespace STC {
             ret.Append(STC::CreateGetAttr("__get_element__"));
             ret.Append(STC::CreateCall(1));
         }
+        RETURN(ret);
     }
 }

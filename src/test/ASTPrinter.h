@@ -26,6 +26,7 @@ public:
     DefVisitASTClass(NullExpr)
     DefVisitASTClass(DoubleOperExpr)
     DefVisitASTClass(SingleOperExpr)
+    DefVisitASTClass(ArrayAtLValue)
     DefVisitASTClass(VarLValue)
     DefVisitASTClass(Double)
     DefVisitASTClass(Integer)
