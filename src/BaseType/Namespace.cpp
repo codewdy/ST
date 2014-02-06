@@ -15,12 +15,12 @@ namespace BaseType {
 
     void Namespace::_setAttr(std::string attr, Object* obj) {
         if (!this->setAttrIfHas(attr, obj))
-            this->dict[attr] = ObjPtr(obj, this);
+            Object::_setAttr(attr, obj);
     }
 
     bool Namespace::setAttrIfHas(std::string attr, Object* obj) {
         if (dict.find(attr) != dict.end()) {
-            this->dict[attr] = ObjPtr(obj, this);
+            Object::_setAttr(attr, obj);
             return true;
         } else if ((Object*)dict["__parent__"]) {
             Namespace* parent = ToolKit::SafeConvert<Namespace>(dict["__parent__"]);

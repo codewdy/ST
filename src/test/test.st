@@ -1,11 +1,16 @@
-b = func() {
+X = state {
     x = 0;
-    return func () {
-        x.__str__();
-        x = x + 1;
+    setX = func(self, xxy) {
+        self.x = xxy;
+        xxy = 12;
+    };
+    setY = setX;
+    print = func(self) {
+        self.x.__str__();
     };
 };
- a = b();
- a();
- a();
- a();
+
+xx = X();
+xx.print();
+xx.setY(10);
+xx.print();

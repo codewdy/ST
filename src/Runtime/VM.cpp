@@ -149,6 +149,13 @@ namespace Runtime {
                     PushObject(ret);
                 }
                 break;
+            case STC::STC::DefState:
+                {
+                    BaseType::State* ret = new BaseType::State;
+                    PushContext(Context(TopContext().Global, new BaseType::ObjectNamespace(TopContext().Locale, ret), stc->code));
+                    PushObject(ret);
+                }
+                break;
             case STC::STC::Return:
                 PopContext();
                 break;

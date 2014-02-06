@@ -1,4 +1,5 @@
 #include "BaseType/State.h"
+#include <iostream>
 
 namespace BaseType {
     Object* State::_getAttr(std::string attr) {
@@ -9,7 +10,7 @@ namespace BaseType {
         while (true) {
             if (base->dict.find(attr) != base->dict.end())
                 return base->dict[attr];
-            if (base == State::STATE)
+            if (base == Object::STATE)
                 break;
             base = base->dict["__base__"];
         }

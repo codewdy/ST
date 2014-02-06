@@ -1,5 +1,8 @@
 #include "BaseType/Object.h"
 #include "BaseType/ObjectFunc.h"
+#include "BaseType/SimpleFunc.h"
+#include "BaseType/BuiltinFunc.h"
+#include "ToolKit.h"
 #include <iostream>
 
 namespace BaseType {
@@ -11,22 +14,19 @@ namespace BaseType {
         Object* ret = 0;
         auto tmp = dict.find(attr);
         if (tmp == dict.end()) {
-            for (Object* st = dict["__state__"]; ; st = st->dict["__base__"]) {
+            for (Object* st = dict["__state__"]; st; st = st->dict["__base__"]) {
                 auto t = st->dict.find(attr);
                 if (t != st->dict.end()) {
                     ret = t->second;
                     break;
                 }
-                if (st == Object::STATE)
-                    break;
             }
         } else
             return tmp->second;
         if (!ret)
             return 0;
-        if (attr == "__exec__")
-            return ret;
-        if (ret->_getAttr("__exec__"))
+        Object* state = ret->dict["__state__"];
+        if (state == BuiltinFunc::STATE || state == SimpleFunc::STATE)
             return new ObjectFunc(this, ret);
         else
             return ret;
