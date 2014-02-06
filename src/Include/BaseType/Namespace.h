@@ -8,15 +8,18 @@ namespace BaseType {
     public:
         static ObjPtr STATE;
         virtual Object* _getAttr(std::string attr);
-        Namespace(Object* Parent = 0) : Object(STATE) {setAttr("__parent__", Parent);}
+        virtual void _setAttr(std::string attr, Object* obj);
+        virtual bool setAttrIfHas(std::string attr, Object* obj);
+        Namespace(Object* Parent = 0) : Object(STATE) {dict["__parent__"] = Parent;}
     };
 
-    class ObjectNamespace : public Object {
+    class ObjectNamespace : public Namespace {
     public:
         static ObjPtr STATE;
         virtual Object* _getAttr(std::string attr);
         virtual void _setAttr(std::string attr, Object* obj);
-        ObjectNamespace(Object* Parent, Object* Inner) : Object(STATE) {Object::_setAttr("__parent__", Parent); Object::_setAttr("__inner__", Inner);}
+        virtual bool setAttrIfHas(std::string attr, Object* obj);
+        ObjectNamespace(Object* Parent, Object* Inner) : Namespace(Parent) {dict["__inner__"] = Inner;}
     };
 }
 #endif

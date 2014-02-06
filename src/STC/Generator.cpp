@@ -42,12 +42,12 @@ namespace STC {
         //TestNotEND
         STC* loopBeg = STC::CreateCopyTop();
         ret.Append(loopBeg);
-        ret.Append(STC::CreateGetAttr("__isEnd__"));
+        ret.Append(STC::CreateGetAttr("__is_end__"));
         ret.Append(STC::CreateCall(0));
         ret.Append(STC::CreateTrueGoto(end));
         //Assign to loop
         ret.Append(STC::CreateCopyTop());
-        ret.Append(STC::CreateGetAttr("__getElement__"));
+        ret.Append(STC::CreateGetAttr("__get__"));
         ret.Append(STC::CreateCall(0));
         ret.Append(visitX(that->var, LValue));
         ret.Append(visitX(that->loop));

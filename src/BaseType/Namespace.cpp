@@ -1,4 +1,6 @@
 #include "BaseType/Namespace.h"
+#include "ToolKit.h"
+#include <iostream>
 
 namespace BaseType {
     Object* Namespace::_getAttr(std::string attr) {
@@ -6,8 +8,25 @@ namespace BaseType {
         while (that) {
             if (that->dict.find(attr) != that->dict.end())
                 return that->dict[attr];
+            that = that->dict["__parent__"];
         }
         return 0;
+    }
+
+    void Namespace::_setAttr(std::string attr, Object* obj) {
+        if (!this->setAttrIfHas(attr, obj))
+            this->dict[attr] = ObjPtr(obj, this);
+    }
+
+    bool Namespace::setAttrIfHas(std::string attr, Object* obj) {
+        if (dict.find(attr) != dict.end()) {
+            this->dict[attr] = ObjPtr(obj, this);
+            return true;
+        } else if ((Object*)dict["__parent__"]) {
+            Namespace* parent = ToolKit::SafeConvert<Namespace>(dict["__parent__"]);
+            return parent->setAttrIfHas(attr, obj);
+        } else
+            return false;
     }
 
     Object* ObjectNamespace::_getAttr(std::string attr) {
@@ -23,6 +42,18 @@ namespace BaseType {
     }
 
     void ObjectNamespace::_setAttr(std::string attr, Object* obj) {
-        dict["__inner__"]->_setAttr(attr, obj);
+        if (!this->setAttrIfHas(attr, obj))
+            dict["__inner__"]->_setAttr(attr, obj);
+    }
+
+    bool ObjectNamespace::setAttrIfHas(std::string attr, Object* obj) {
+        if (dict["__inner__"]->dict.find(attr) != dict.end()) {
+            dict[attr]->setAttr(attr, obj);
+            return true;
+        } else if ((Object*)dict["__parent__"]) {
+            Namespace* parent = ToolKit::SafeConvert<Namespace>(dict["__parent__"]);
+            return parent->setAttrIfHas(attr, obj);
+        } else
+            return false;
     }
 }

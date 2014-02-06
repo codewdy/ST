@@ -72,7 +72,7 @@ namespace BaseType {
         BuiltinFunc::STATE = new State(Func::STATE);
         PtrObjectSTATE = new State();
         Namespace::STATE = new State();
-        ObjectNamespace::STATE = new State();
+        ObjectNamespace::STATE = new State(Namespace::STATE);
         Object::STATE->setAttr("__str__", new BuiltinFunc(obj_str));
         Object::STATE->setAttr("__equal__", new BuiltinFunc(obj_eq));
         Object::STATE->setAttr("__not_equal__", new BuiltinFunc(obj_ne));

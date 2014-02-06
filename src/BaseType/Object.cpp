@@ -4,7 +4,7 @@
 
 namespace BaseType {
     Object::Object(Object* state) {
-       setAttr("__state__", state);
+        dict["__state__"] = ObjPtr(state, this);
     }
 
     Object* Object::_getAttr(std::string attr) {

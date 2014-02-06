@@ -144,7 +144,7 @@ namespace Runtime {
                 break;
             case STC::STC::DefFunc:
                 {
-                    BaseType::SimpleFunc * ret = new BaseType::SimpleFunc(TopContext().Global, stc->code);
+                    BaseType::SimpleFunc * ret = new BaseType::SimpleFunc(TopContext().Global, TopContext().Locale, stc->code);
                     ret->argsName.swap(FuncArgs);
                     PushObject(ret);
                 }

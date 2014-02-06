@@ -9,7 +9,7 @@ namespace BaseType {
         static ObjPtr STATE;
         STC::STC* stc;
         std::vector<std::string> argsName;
-        SimpleFunc(Object* Global, STC::STC* _stc) : Func(STATE), stc(_stc) {setAttr("__global__", Global);}
+        SimpleFunc(Object* Global, Object* Locale, STC::STC* _stc) : Func(STATE), stc(_stc) {setAttr("__global__", Global);setAttr("__locale__", Locale);}
         virtual void run(Runtime::VM& vm, int num);
     };
 }

@@ -1,6 +1,7 @@
 #include "BuiltinType/List.h"
 #include "BuiltinType/String.h"
 #include "BuiltinType/Integer.h"
+#include "BuiltinType/Bool.h"
 #include <sstream>
 #include <iostream>
 #include "BaseType/PtrObject.h"
@@ -8,7 +9,7 @@
 
 namespace BuiltinType {
     namespace List {
-        BaseType::ObjPtr STATE;
+        BaseType::ObjPtr STATE, IterSTATE;
 
         BaseType::Object* Create(Inner& vars) {
             BaseType::Object* ret = new BaseType::PtrObject<Inner>(new Inner(vars), STATE);
@@ -22,6 +23,11 @@ namespace BuiltinType {
             STATE->setAttr("__add__", new BaseType::BuiltinFunc(__add__));
             STATE->setAttr("__mul__", new BaseType::BuiltinFunc(__mul__));
             STATE->setAttr("__str__", new BaseType::BuiltinFunc(__str__));
+            STATE->setAttr("__iter__", new BaseType::BuiltinFunc(__iter__));
+            IterSTATE = new BaseType::State;
+            IterSTATE->setAttr("__next__", new BaseType::BuiltinFunc(Iter__next__));
+            IterSTATE->setAttr("__is_end__", new BaseType::BuiltinFunc(Iter__is_end__));
+            IterSTATE->setAttr("__get__", new BaseType::BuiltinFunc(Iter__get__));
         }
 
         DEF_BUILTIN_FUNC(__add__) {
@@ -55,6 +61,37 @@ namespace BuiltinType {
             }
             ret += "]";
             return String::Create(ret);
+        }
+
+        DEF_BUILTIN_FUNC(__iter__) {
+            CHECK_ARG_SIZE(==1);
+            BaseType::Object* ret = new BaseType::Object(IterSTATE);
+            ret->setAttr("__array__", args[0]);
+            ret->setAttr("__index__", Integer::Create(0));
+            return ret;
+        }
+
+        DEF_BUILTIN_FUNC(Iter__next__) {
+            CHECK_ARG_SIZE(==1);
+            BaseType::Object* ret = new BaseType::Object(IterSTATE);
+            ret->setAttr("__array__", args[0]->getAttr("__array__"));
+            Integer::Inner& idx = ToolKit::GetInner<Integer::Inner>(args[0]->getAttr("__index__"));
+            ret->setAttr("__index__", Integer::Create(idx + 1));
+            return ret;
+        }
+
+        DEF_BUILTIN_FUNC(Iter__is_end__) {
+            CHECK_ARG_SIZE(==1);
+            Inner arr = ToolKit::GetInner<Inner>(args[0]->getAttr("__array__"));
+            Integer::Inner& idx = ToolKit::GetInner<Integer::Inner>(args[0]->getAttr("__index__"));
+            return Bool::Create(arr.size() <= idx);
+        }
+
+        DEF_BUILTIN_FUNC(Iter__get__) {
+            CHECK_ARG_SIZE(==1);
+            Inner arr = ToolKit::GetInner<Inner>(args[0]->getAttr("__array__"));
+            Integer::Inner& idx = ToolKit::GetInner<Integer::Inner>(args[0]->getAttr("__index__"));
+            return arr[idx];
         }
     }
 }

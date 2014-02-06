@@ -11,7 +11,11 @@ namespace BuiltinType {
         DEF_BUILTIN_FUNC(__add__);
         DEF_BUILTIN_FUNC(__mul__);
         DEF_BUILTIN_FUNC(__str__);
-        extern BaseType::ObjPtr STATE;
+        DEF_BUILTIN_FUNC(__iter__);
+        DEF_BUILTIN_FUNC(Iter__next__);
+        DEF_BUILTIN_FUNC(Iter__is_end__);
+        DEF_BUILTIN_FUNC(Iter__get__);
+        extern BaseType::ObjPtr STATE, IterSTATE;
         void InitState();
         BaseType::Object* Create(Inner& vars);
     }
