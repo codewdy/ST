@@ -3,6 +3,7 @@
 #include <string>
 #include <iostream>
 #include "AST/AST.h"
+#include "BaseType/Object.h"
 namespace Exception {
     extern std::ostream* LogFile;
     class Exception {};
@@ -14,6 +15,10 @@ namespace Exception {
         LocException(AST::Location _loc) : filename(*_loc.str), lineno(_loc.lineno) {}
     };
 #define DEFLOCEXCPTION(CLASS) class CLASS##Exception : public LocException {public: CLASS##Exception(AST::Location _loc) : LocException(_loc) {}};
+    class RaiseException : public Exception {
+    public:
+        BaseType::Object* excpt;
+    };
 
     DEFEXCPTION(NotImplement)
     DEFLOCEXCPTION(Break)

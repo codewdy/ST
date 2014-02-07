@@ -11,9 +11,9 @@ namespace BuiltinType {
         DEF_BUILTIN_FUNC(__or__);
         DEF_BUILTIN_FUNC(__not__);
         DEF_BUILTIN_FUNC(__str__);
-        extern BaseType::ObjPtr STATE, TRUE, FALSE;
+        extern pObject STATE, TRUE, FALSE;
         void InitState();
-        BaseType::Object* Create(Inner num);
+        pObject Create(Inner num);
     }
 }
 #endif

@@ -15,10 +15,10 @@ namespace BuiltinType {
         DEF_BUILTIN_FUNC(__str__);
         DEF_BUILTIN_FUNC(__equal__);
         DEF_BUILTIN_FUNC(__less_than__);
-        extern BaseType::ObjPtr STATE;
+        extern pObject STATE;
         void InitState();
-        BaseType::Object* Create(std::string str);
-        BaseType::Object* Create(Inner num);
+        pObject Create(const std::string& str);
+        pObject Create(Inner num);
     }
 }
 #endif

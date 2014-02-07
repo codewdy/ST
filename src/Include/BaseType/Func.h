@@ -7,8 +7,8 @@
 namespace BaseType {
     class Func : public Object {
     public:
-        static ObjPtr STATE;
-        Func(Object* state = STATE) : Object(state) {setAttr("__exec__", this);}
+        static pObject STATE;
+        Func(const pObject& state = STATE) : Object(std::move(state)) {setAttr("__exec__", this);}
         virtual void run(Runtime::VM& vm, int num) = 0;
     };
 }

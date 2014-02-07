@@ -7,7 +7,7 @@
 
 namespace BuiltinType {
     namespace List {
-        typedef std::vector<BaseType::ObjPtr> Inner;
+        typedef std::vector<pObjectExt> Inner;
         DEF_BUILTIN_FUNC(__add__);
         DEF_BUILTIN_FUNC(__mul__);
         DEF_BUILTIN_FUNC(__str__);
@@ -16,9 +16,10 @@ namespace BuiltinType {
         DEF_BUILTIN_FUNC(Iter__next__);
         DEF_BUILTIN_FUNC(Iter__is_end__);
         DEF_BUILTIN_FUNC(Iter__get__);
-        extern BaseType::ObjPtr STATE, IterSTATE;
+        extern pObject STATE, IterSTATE;
         void InitState();
-        BaseType::Object* Create(Inner& vars);
+        pObject Create(Inner&& vars);
+        pObject Create(const Inner& vars);
     }
 }
 #endif

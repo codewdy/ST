@@ -7,7 +7,7 @@
 namespace Runtime {
     class VM {
         typedef std::stack<Context> ContextStack;
-        typedef std::stack<BaseType::ObjPtr> ObjectStack;
+        typedef std::stack<pObject> ObjectStack;
         ContextStack Contexts;
         ObjectStack Objects;
         std::vector<std::string> FuncArgs;
@@ -16,16 +16,18 @@ namespace Runtime {
         VM(){}
     public:
         VM(STC::STC* stc);
-        void PushObject(BaseType::Object* obj);
-        BaseType::ObjPtr PopObject();
-        BaseType::ObjPtr& TopObject();
+        void PushObject(const pObject& obj);
+        void PushObject(pObject&& obj);
+        pObject PopObject();
+        pObject& TopObject();
         void PushContext(const Context& ctx);
+        void PushContext(Context&& ctx);
         void PopContext();
         Context& TopContext();
         void Run();
         void Call(int num);
-        static BaseType::Object* CreateGlobal();
-        static BaseType::Object* Calc(BaseType::Object* func, std::vector<BaseType::Object*> args);
+        static pObject CreateGlobal();
+        static pObject Calc(const pObject& func, const std::vector<pObject>& args);
     };
 }
 #endif

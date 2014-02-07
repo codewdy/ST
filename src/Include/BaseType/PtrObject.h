@@ -4,12 +4,12 @@
 #include "Object.h"
 
 namespace BaseType {
-    extern ObjPtr PtrObjectSTATE;
+    extern pObject PtrObjectSTATE;
     template<class T>
     class PtrObject : public Object {
     public:
         T* ptr;
-        PtrObject(T* _ptr, Object* st = PtrObjectSTATE) : Object(st), ptr(_ptr) {}
+        PtrObject(T* _ptr, const pObject& st = PtrObjectSTATE) : Object(st), ptr(_ptr) {}
         virtual ~PtrObject() {delete ptr;}
     };
 }

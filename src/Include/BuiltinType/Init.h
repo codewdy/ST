@@ -5,6 +5,6 @@
 
 namespace BuiltinType {
     void InitState();
-    void Init(BaseType::Object* obj);
+    void Init(const pObject& obj);
 }
 #endif

@@ -5,8 +5,8 @@
 namespace BaseType {
     class ObjectFunc : public Func {
     public:
-        static ObjPtr STATE;
-        ObjectFunc(Object* obj, Object* func) : Func(STATE) {setAttr("__obj__", obj); setAttr("__func__", func);}
+        static pObject STATE;
+        ObjectFunc(const pObject& obj, const pObject& func) : Func(STATE) {setAttr("__obj__", obj); setAttr("__func__", func);}
         virtual void run(Runtime::VM& vm, int num);
     };
 }

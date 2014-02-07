@@ -3,6 +3,6 @@
 #include "Object.h"
 namespace BaseType {
     void InitState();
-    void Init(Object* obj);
+    void Init(const pObject& obj);
 }
 #endif
