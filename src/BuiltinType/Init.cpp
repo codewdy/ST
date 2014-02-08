@@ -14,7 +14,7 @@ namespace BuiltinType {
         Bool::InitState();
     }
 
-    void Init(BaseType::Object* obj) {
+    void Init(const pObject& obj) {
         obj->setAttr("Integer", Integer::STATE);
         obj->setAttr("String", String::STATE);
         obj->setAttr("Double", Double::STATE);

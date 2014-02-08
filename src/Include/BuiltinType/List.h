@@ -8,6 +8,7 @@
 namespace BuiltinType {
     namespace List {
         typedef std::vector<pObjectExt> Inner;
+        typedef std::vector<pObject> InitInner;
         DEF_BUILTIN_FUNC(__add__);
         DEF_BUILTIN_FUNC(__mul__);
         DEF_BUILTIN_FUNC(__str__);
@@ -18,8 +19,7 @@ namespace BuiltinType {
         DEF_BUILTIN_FUNC(Iter__get__);
         extern pObject STATE, IterSTATE;
         void InitState();
-        pObject Create(Inner&& vars);
-        pObject Create(const Inner& vars);
+        pObject Create(const InitInner& vars);
     }
 }
 #endif

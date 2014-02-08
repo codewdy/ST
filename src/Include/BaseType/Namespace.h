@@ -10,7 +10,7 @@ namespace BaseType {
         virtual Object* _getAttr(const std::string& attr);
         virtual void _setAttr(const std::string& attr, Object* obj);
         virtual bool setAttrIfHas(const std::string& attr, Object* obj);
-        Namespace(const pObject& Parent = 0) : Object(STATE) {
+        Namespace(const pObject& Parent = nullptr) : Object(STATE) {
             if (Parent && Parent->dict["__state__"] != Namespace::STATE)
                 Object::_setAttr("__parent__", Parent->dict["__parent__"]);
             else

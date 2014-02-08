@@ -28,6 +28,7 @@ namespace Runtime {
         void Call(int num);
         static pObject CreateGlobal();
         static pObject Calc(const pObject& func, const std::vector<pObject>& args);
+        static pObject Calc(const pObject& func, std::vector<pObject>&& args);
     };
 }
 #endif

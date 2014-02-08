@@ -8,7 +8,7 @@ namespace BaseType {
         }
         //TODO: Add a state about locale.
         vm.PushContext(Runtime::Context(getAttr("__global__"), new BaseType::Namespace(getAttr("__locale__")), stc));
-        Object* loc = vm.TopContext().Locale;
+        pObject loc = vm.TopContext().Locale;
         for (int i = 0; i < num; i++)
             loc->Object::_setAttr(argsName[i], vm.PopObject());
     }

@@ -10,20 +10,20 @@
 
 namespace BuiltinType {
     namespace Bool {
-        BaseType::ObjPtr STATE, TRUE, FALSE;
+        pObject STATE, TRUE, FALSE;
 
-        BaseType::Object* Create(Inner num) {
+        pObject Create(Inner num) {
             return num ? TRUE : FALSE;
         }
 
         void InitState() {
-            if ((BaseType::Object*)STATE)
+            if (STATE != nullptr)
                 return;
             STATE = new BaseType::State(BaseType::PtrObjectSTATE);
-            STATE->setAttr("__and__", new BaseType::BuiltinFunc(__and__));
-            STATE->setAttr("__or__", new BaseType::BuiltinFunc(__or__));
-            STATE->setAttr("__not__", new BaseType::BuiltinFunc(__not__));
-            STATE->setAttr("__str__", new BaseType::BuiltinFunc(__str__));
+            SET_FUNC(STATE, __and__);
+            SET_FUNC(STATE, __or__);
+            SET_FUNC(STATE, __not__);
+            SET_FUNC(STATE, __str__);
             TRUE = ToolKit::CreateObj(STATE, true);
             FALSE = ToolKit::CreateObj(STATE, false);
         }

@@ -8,22 +8,27 @@
 
 namespace BuiltinType {
     namespace String {
-        BaseType::ObjPtr STATE;
+        pObject STATE;
 
-        BaseType::Object* Create(Inner num) {
+        pObject Create(const Inner& num) {
             std::cout << num << std::endl;
             return ToolKit::CreateObj(STATE, num);
         }
 
+        pObject Create(Inner&& num) {
+            std::cout << num << std::endl;
+            return ToolKit::CreateObj(STATE, std::move(num));
+        }
+
         void InitState() {
-            if ((BaseType::Object*)STATE)
+            if (STATE != nullptr)
                 return;
             STATE = new BaseType::State(BaseType::PtrObjectSTATE);
-            STATE->setAttr("__add__", new BaseType::BuiltinFunc(__add__));
-            STATE->setAttr("__mul__", new BaseType::BuiltinFunc(__mul__));
-            STATE->setAttr("__str__", new BaseType::BuiltinFunc(__str__));
-            STATE->setAttr("__equal__", new BaseType::BuiltinFunc(__equal__));
-            STATE->setAttr("__less_than__", new BaseType::BuiltinFunc(__less_than__));
+            SET_FUNC(STATE, __add__);
+            SET_FUNC(STATE, __mul__);
+            SET_FUNC(STATE, __str__);
+            SET_FUNC(STATE, __equal__);
+            SET_FUNC(STATE, __less_than__);
         }
 
         DEF_BUILTIN_FUNC(__add__) {
@@ -49,7 +54,7 @@ namespace BuiltinType {
             Inner ret;
             for (int i = 0; i < rhs; i++)
                 ret += lhs;
-            return Create(ret);
+            return Create(std::move(ret));
         }
 
         DEF_BUILTIN_FUNC(__str__) {

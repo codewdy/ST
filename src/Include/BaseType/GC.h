@@ -1,8 +1,5 @@
 #ifndef ST_7872348237_BASETYPE_GC
 #define ST_7872348237_BASETYPE_GC
-#include <map>
-#include <set>
-#include <list>
 
 namespace BaseType {
     class Object;
@@ -18,7 +15,7 @@ namespace BaseType {
             /**Regist the Pointer.*/
             void Register();
         public:
-            pObjectExt(Object* _child = 0, Object* _parent = 0);
+            pObjectExt(Object* _child = nullptr, Object* _parent = nullptr);
             pObjectExt(const pObjectExt& rhs);
             pObjectExt(pObjectExt&& rhs);
             pObjectExt& operator=(const pObjectExt& rhs);
@@ -38,7 +35,7 @@ namespace BaseType {
             /**Regist the Pointer.*/
             void Register();
         public:
-            pObject(Object* _child = 0);
+            pObject(Object* _child = nullptr);
             pObject(const pObject& rhs);
             pObject(pObject&& rhs);
             pObject& operator=(const pObject& rhs);
@@ -47,6 +44,7 @@ namespace BaseType {
             operator Object*() const;
             Object& operator*() const;
             Object* operator->() const;
+            ~pObject();
         };
     }
 }

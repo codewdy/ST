@@ -15,24 +15,28 @@
 
 namespace Runtime {
     VM::VM(STC::STC* stc) {
-        BaseType::Object* glb = CreateGlobal();
+        pObject glb = CreateGlobal();
         PushContext(Context(glb, glb, stc));
     }
 
-    void VM::PushObject(BaseType::Object* obj) {
+    void VM::PushObject(const pObject& obj) {
         Objects.push(obj);
     }
 
-    BaseType::ObjPtr VM::PopObject() {
+    void VM::PushObject(pObject&& obj) {
+        Objects.push(std::move(obj));
+    }
+
+    pObject VM::PopObject() {
         if (Objects.empty()) {
             //TODO: Add an exception.
         }
-        BaseType::ObjPtr ret = Objects.top();
+        pObject ret = Objects.top();
         Objects.pop();
-        return ret;
+        return std::move(ret);
     }
 
-    BaseType::ObjPtr& VM::TopObject() {
+    pObject& VM::TopObject() {
         if (Objects.empty()) {
             //TODO: Add an exception,
         }
@@ -41,6 +45,10 @@ namespace Runtime {
 
     void VM::PushContext(const Context& ctx) {
         Contexts.push(ctx);
+    }
+
+    void VM::PushContext(Context&& ctx) {
+        Contexts.push(std::move(ctx));
     }
 
     void VM::PopContext() {
@@ -95,7 +103,7 @@ namespace Runtime {
                 break;
             case STC::STC::MakeList:
                 {
-                    BuiltinType::List::Inner ret;
+                    BuiltinType::List::InitInner ret;
                     for (int i = 0; i < stc->num; i++)
                         ret.push_back(PopObject());
                     PushObject(BuiltinType::List::Create(ret));
@@ -122,8 +130,8 @@ namespace Runtime {
                 break;
             case STC::STC::SetAttr:
                 {
-                    BaseType::ObjPtr obj1 = PopObject();
-                    BaseType::ObjPtr obj2 = PopObject();
+                    pObject obj1 = PopObject();
+                    pObject obj2 = PopObject();
                     obj1->setAttr(stc->str, obj2);
                 }
                 break;
@@ -150,7 +158,7 @@ namespace Runtime {
                 break;
             case STC::STC::DefState:
                 {
-                    BaseType::State* ret = new BaseType::State;
+                    pObject ret = new BaseType::State;
                     PushContext(Context(TopContext().Global, new BaseType::ObjectNamespace(TopContext().Locale, ret), stc->code));
                     PushObject(ret);
                 }
@@ -164,21 +172,30 @@ namespace Runtime {
         }
     }
 
-    BaseType::Object* VM::CreateGlobal() {
-        BaseType::Object* ret = new BaseType::Namespace();
+    pObject VM::CreateGlobal() {
+        pObject ret = new BaseType::Namespace();
         BaseType::Init(ret);
         BuiltinType::Init(ret);
         return ret;
     }
 
-    BaseType::Object* VM::Calc(BaseType::Object* func, std::vector<BaseType::Object*> args) {
+    pObject VM::Calc(const pObject& func, const std::vector<pObject>& args) {
         VM vm;
         for (int i = args.size() - 1; i >= 0; i--)
             vm.PushObject(args[i]);
         vm.PushObject(func);
         vm.Call(args.size());
-        while (vm.Contexts.size())
-            vm.RunASTC();
+        vm.Run();
+        return vm.PopObject();
+    }
+
+    pObject VM::Calc(const pObject& func, std::vector<pObject>&& args) {
+        VM vm;
+        for (int i = args.size() - 1; i >= 0; i--)
+            vm.PushObject(std::move(args[i]));
+        vm.PushObject(func);
+        vm.Call(args.size());
+        vm.Run();
         return vm.PopObject();
     }
 }

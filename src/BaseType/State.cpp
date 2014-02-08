@@ -2,7 +2,7 @@
 #include <iostream>
 
 namespace BaseType {
-    Object* State::_getAttr(std::string attr) {
+    Object* State::_getAttr(const std::string& attr) {
         Object* ret = Object::_getAttr(attr);
         if (ret)
             return ret;

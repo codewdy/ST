@@ -11,9 +11,9 @@
 
 namespace BuiltinType {
     namespace Double {
-        BaseType::ObjPtr STATE;
+        pObject STATE;
 
-        BaseType::Object* Create(std::string str) {
+        pObject Create(const std::string& str) {
             std::stringstream in(str);
             Inner red;
             in >> red;
@@ -23,32 +23,31 @@ namespace BuiltinType {
             return Create(red);
         }
 
-        BaseType::Object* Create(Inner num) {
+        pObject Create(Inner num) {
             return ToolKit::CreateObj(STATE, num);
         }
 
         void InitState() {
-            if ((BaseType::Object*)STATE)
+            if (STATE != nullptr)
                 return;
             STATE = new BaseType::State(BaseType::PtrObjectSTATE);
-            STATE->setAttr("__add__", new BaseType::BuiltinFunc(__add__));
-            STATE->setAttr("__minus__", new BaseType::BuiltinFunc(__minus__));
-            STATE->setAttr("__mul__", new BaseType::BuiltinFunc(__mul__));
-            STATE->setAttr("__div__", new BaseType::BuiltinFunc(__div__));
-            STATE->setAttr("__str__", new BaseType::BuiltinFunc(__str__));
-            STATE->setAttr("__equal__", new BaseType::BuiltinFunc(__equal__));
-            STATE->setAttr("__less_than__", new BaseType::BuiltinFunc(__less_than__));
+            SET_FUNC(STATE, __add__);
+            SET_FUNC(STATE, __minus__);
+            SET_FUNC(STATE, __mul__);
+            SET_FUNC(STATE, __div__);
+            SET_FUNC(STATE, __str__);
+            SET_FUNC(STATE, __equal__);
+            SET_FUNC(STATE, __less_than__);
         }
 
 #define DEF_OPER(NAME, OPER) DEF_BUILTIN_FUNC(NAME) {\
             CHECK_ARG_SIZE(==2);\
             Inner& lhs = GET_PTR_ARG(0, Inner);\
-            BaseType::Object* rhsI = GET_ARG(1, BaseType::Object);\
-            BaseType::Object* rhsT = rhsI->getAttr("__state__");\
+            pObject rhsT = GET_ARG_STATE(1);\
             if (rhsT == Double::STATE)\
-                return Create(lhs OPER ToolKit::GetInner<Inner>(rhsI));\
+                return Create(lhs OPER GET_PTR_ARG(1, Inner));\
             else\
-                return Double::Create(lhs OPER ToolKit::GetInner<Integer::Inner>(rhsI));\
+                return Create(lhs OPER GET_PTR_ARG(1, Integer::Inner));\
         }
         DEF_OPER(__add__, +)
         DEF_OPER(__minus__, -)
@@ -58,12 +57,11 @@ namespace BuiltinType {
 #define DEF_COMP_OPER(NAME, OPER) DEF_BUILTIN_FUNC(NAME) {\
             CHECK_ARG_SIZE(==2);\
             Inner& lhs = GET_PTR_ARG(0, Inner);\
-            BaseType::Object* rhsI = GET_ARG(1, BaseType::Object);\
-            BaseType::Object* rhsT = rhsI->getAttr("__state__");\
+            pObject rhsT = GET_ARG_STATE(1);\
             if (rhsT == Double::STATE)\
-                return Bool::Create(lhs OPER ToolKit::GetInner<Inner>(rhsI));\
+                return Bool::Create(lhs OPER GET_PTR_ARG(1, Inner));\
             else\
-                return Bool::Create(lhs OPER ToolKit::GetInner<Integer::Inner>(rhsI));\
+                return Bool::Create(lhs OPER GET_PTR_ARG(1, Integer::Inner));\
         }
         DEF_COMP_OPER(__equal__, ==)
         DEF_COMP_OPER(__less_than__, <)

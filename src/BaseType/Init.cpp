@@ -15,20 +15,20 @@
 #include <string>
 
 namespace BaseType {
-    ObjPtr Object::STATE;
-    ObjPtr State::STATE;
-    ObjPtr Func::STATE;
-    ObjPtr SimpleFunc::STATE;
-    ObjPtr ObjectFunc::STATE;
-    ObjPtr BuiltinFunc::STATE;
-    ObjPtr Namespace::STATE;
-    ObjPtr ObjectNamespace::STATE;
-    ObjPtr PtrObjectSTATE;
+    pObject Object::STATE;
+    pObject State::STATE;
+    pObject Func::STATE;
+    pObject SimpleFunc::STATE;
+    pObject ObjectFunc::STATE;
+    pObject BuiltinFunc::STATE;
+    pObject Namespace::STATE;
+    pObject ObjectNamespace::STATE;
+    pObject PtrObjectSTATE;
 
     DEF_BUILTIN_FUNC(obj_str) {
         CHECK_ARG_SIZE(==1);
         std::ostringstream ret;
-        ret << "[Object at "<< args[0] << "]";
+        ret << "[Object at " << args[0] << "]";
         return BuiltinType::String::Create(ret.str());
     }
 
@@ -73,15 +73,15 @@ namespace BaseType {
         PtrObjectSTATE = new State();
         Namespace::STATE = new State();
         ObjectNamespace::STATE = new State(Namespace::STATE);
-        Object::STATE->setAttr("__str__", new BuiltinFunc(obj_str));
-        Object::STATE->setAttr("__equal__", new BuiltinFunc(obj_eq));
-        Object::STATE->setAttr("__not_equal__", new BuiltinFunc(obj_ne));
-        Object::STATE->setAttr("__greater_than__", new BuiltinFunc(obj_gt));
-        Object::STATE->setAttr("__not_less__", new BuiltinFunc(obj_nl));
-        Object::STATE->setAttr("__not_greater__", new BuiltinFunc(obj_ng));
+        ToolKit::SetFunc(Object::STATE, "__str__", obj_str);
+        ToolKit::SetFunc(Object::STATE, "__equal__", obj_eq);
+        ToolKit::SetFunc(Object::STATE, "__not_equal__", obj_ne);
+        ToolKit::SetFunc(Object::STATE, "__greater_than__", obj_gt);
+        ToolKit::SetFunc(Object::STATE, "__not_less__", obj_nl);
+        ToolKit::SetFunc(Object::STATE, "__not_greater__", obj_ng);
     }
 
-    void Init(Object* ret) {
+    void Init(const pObject& ret) {
         ret->setAttr("Object", Object::STATE);
         ret->setAttr("State", State::STATE);
         ret->setAttr("Func", Func::STATE);

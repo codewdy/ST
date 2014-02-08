@@ -13,7 +13,7 @@ extern std::unordered_map<int, Lex*> lexMap;
 #include <string>
 #include <iostream>
 #include <fstream>
-#include "Exception.h"
+#include "Exception/Exception.h"
 #include "Lexer.h"
 namespace Parser {
     AST::Program* CreateAST(std::string filename) {

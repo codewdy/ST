@@ -14,6 +14,7 @@ namespace Runtime {
         /**STC For the Code Running.*/
         STC::STC* code;
         Context(const pObject& _Global, pObject&& _Locale, STC::STC* _code) : Global(_Global), Locale(std::move(_Locale)), code(_code) {}
+        Context(const pObject& _Global, const pObject& _Locale, STC::STC* _code) : Global(_Global), Locale(std::move(_Locale)), code(_code) {}
     };
 }
 #endif

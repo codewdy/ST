@@ -6,11 +6,11 @@
 #include <iostream>
 
 namespace BaseType {
-    Object::Object(Object* state) {
-        dict["__state__"] = ObjPtr(state, this);
+    Object::Object(const pObject& state) {
+        dict["__state__"] = pObjectExt(state, this);
     }
 
-    Object* Object::_getAttr(std::string attr) {
+    Object* Object::_getAttr(const std::string& attr) {
         Object* ret = 0;
         auto tmp = dict.find(attr);
         if (tmp == dict.end()) {
@@ -32,8 +32,8 @@ namespace BaseType {
             return ret;
     }
 
-    void Object::_setAttr(std::string attr, Object* obj) {
-        dict[attr] = ObjPtr(obj, this);
+    void Object::_setAttr(const std::string& attr, Object* obj) {
+        dict[attr] = pObjectExt(obj, this);
     }
 
     Object::~Object() {
