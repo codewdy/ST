@@ -15,12 +15,12 @@ namespace BuiltinType {
     }
 
     void Init(const pObject& obj) {
-        obj->setAttr("Integer", Integer::STATE);
-        obj->setAttr("String", String::STATE);
-        obj->setAttr("Double", Double::STATE);
-        obj->setAttr("List", List::STATE);
-        obj->setAttr("Bool", Bool::STATE);
-        obj->setAttr("true", Bool::TRUE);
-        obj->setAttr("false", Bool::FALSE);
+        obj["Integer"] = Integer::STATE;
+        obj["String"] = String::STATE;
+        obj["Double"] = Double::STATE;
+        obj["List"] = List::STATE;
+        obj["Bool"] = Bool::STATE;
+        obj["true"] = Bool::TRUE;
+        obj["false"] = Bool::FALSE;
     }
 }

@@ -28,7 +28,7 @@ namespace BuiltinType {
         }
 
         void InitState() {
-            if (STATE != nullptr)
+            if (STATE.ref_not_equal(nullptr))
                 return;
             STATE = new BaseType::State(BaseType::PtrObjectSTATE);
             SET_FUNC(STATE, __add__);
@@ -45,7 +45,7 @@ namespace BuiltinType {
             CHECK_ARG_SIZE(==2);\
             Inner& lhs = GET_PTR_ARG(0, Inner);\
             pObject rhsT = GET_ARG_STATE(1);\
-            if (rhsT == Integer::STATE)\
+            if (rhsT.ref_equal(Integer::STATE))\
                 return Create(lhs OPER GET_PTR_ARG(1, Inner));\
             else\
                 return Double::Create(lhs OPER GET_PTR_ARG(1, Double::Inner));\
@@ -59,7 +59,7 @@ namespace BuiltinType {
             CHECK_ARG_SIZE(==2);\
             Inner& lhs = GET_PTR_ARG(0, Inner);\
             pObject rhsT = GET_ARG_STATE(1);\
-            if (rhsT == Integer::STATE)\
+            if (rhsT.ref_equal(Integer::STATE))\
                 return Bool::Create(lhs OPER GET_PTR_ARG(1, Inner));\
             else\
                 return Bool::Create(lhs OPER GET_PTR_ARG(1, Double::Inner));\

@@ -7,8 +7,8 @@ namespace BaseType {
         Object* that = this;
         while (that) {
             if (that->dict.find(attr) != that->dict.end())
-                return that->dict[attr];
-            that = that->dict["__parent__"];
+                return that->dict[attr].GetPtr();
+            that = that->dict["__parent__"].GetPtr();
         }
         return 0;
     }
@@ -22,8 +22,8 @@ namespace BaseType {
         if (dict.find(attr) != dict.end()) {
             Object::_setAttr(attr, obj);
             return true;
-        } else if (dict["__parent__"] != nullptr) {
-            Namespace* parent = ToolKit::SafeConvert<Namespace>(dict["__parent__"]);
+        } else if (dict["__parent__"].ref_not_equal(nullptr)) {
+            Namespace* parent = ToolKit::SafeConvert<Namespace>(dict["__parent__"].GetPtr());
             return parent->setAttrIfHas(attr, obj);
         } else
             return false;
@@ -36,7 +36,7 @@ namespace BaseType {
         Object* that = this;
         while (that) {
             if (that->dict.find(attr) != that->dict.end())
-                return that->dict[attr];
+                return that->dict[attr].GetPtr();
         }
         return 0;
     }
@@ -50,8 +50,8 @@ namespace BaseType {
         if (dict["__inner__"]->dict.find(attr) != dict.end()) {
             dict[attr]->setAttr(attr, obj);
             return true;
-        } else if (dict["__parent__"] != nullptr) {
-            Namespace* parent = ToolKit::SafeConvert<Namespace>(dict["__parent__"]);
+        } else if (dict["__parent__"].ref_not_equal(nullptr)) {
+            Namespace* parent = ToolKit::SafeConvert<Namespace>(dict["__parent__"].GetPtr());
             return parent->setAttrIfHas(attr, obj);
         } else
             return false;

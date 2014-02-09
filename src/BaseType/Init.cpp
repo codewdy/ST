@@ -28,45 +28,42 @@ namespace BaseType {
     DEF_BUILTIN_FUNC(obj_str) {
         CHECK_ARG_SIZE(==1);
         std::ostringstream ret;
-        ret << "[Object at " << args[0] << "]";
+        ret << "[Object at " << args[0].GetPtr() << "]";
         return BuiltinType::String::Create(ret.str());
     }
 
     DEF_BUILTIN_FUNC(obj_eq) {
         CHECK_ARG_SIZE(==2);
-        return BuiltinType::Bool::Create(args[0] == args[1]);
+        return BuiltinType::Bool::Create(args[0].ref_equal(args[1]));
     }
 
     DEF_BUILTIN_FUNC(obj_ne) {
         CHECK_ARG_SIZE(==2);
-        Object* eq = CALC(args[0], __equal__, args[1]);
-        return CALC(eq, __not__);
+        return !(args[0] == args[1]);
     }
 
     DEF_BUILTIN_FUNC(obj_gt) {
         CHECK_ARG_SIZE(==2);
-        return CALC(args[1], __less_than__, args[0]);
+        return (args[1] < args[0]);
     }
 
     DEF_BUILTIN_FUNC(obj_nl) {
         CHECK_ARG_SIZE(==2);
-        Object* eq = CALC(args[0], __less_than__, args[1]);
-        return CALC(eq, __not__);
+        return !(args[0] < args[1]);
     }
 
     DEF_BUILTIN_FUNC(obj_ng) {
         CHECK_ARG_SIZE(==2);
-        Object* eq = CALC(args[0], __greater_than__, args[1]);
-        return CALC(eq, __not__);
+        return !(args[1] < args[0]);
     }
 
     void InitState() {
         Object::STATE = new State(0);
         Func::STATE = new State();
         State::STATE = new State(Func::STATE);
-        Object::STATE->setAttr("__state__", State::STATE);
-        Func::STATE->setAttr("__state__", State::STATE);
-        State::STATE->setAttr("__state__", State::STATE);
+        Object::STATE["__state__"] = State::STATE;
+        Func::STATE["__state__"] = State::STATE;
+        State::STATE["__state__"] = State::STATE;
         SimpleFunc::STATE = new State(Func::STATE);
         ObjectFunc::STATE = new State(Func::STATE);
         BuiltinFunc::STATE = new State(Func::STATE);
@@ -82,14 +79,13 @@ namespace BaseType {
     }
 
     void Init(const pObject& ret) {
-        ret->setAttr("Object", Object::STATE);
-        ret->setAttr("State", State::STATE);
-        ret->setAttr("Func", Func::STATE);
-        ret->setAttr("SimpleFunc", SimpleFunc::STATE);
-        ret->setAttr("ObjectFunc", ObjectFunc::STATE);
-        ret->setAttr("BuiltinFunc", BuiltinFunc::STATE);
-        ret->setAttr("Namespace", Namespace::STATE);
-        ret->setAttr("ObjectNamespace", ObjectNamespace::STATE);
+        ret["Object"] = Object::STATE;
+        ret["Func"] = Func::STATE;
+        ret["SimpleFunc"] = SimpleFunc::STATE;
+        ret["ObjectFunc"] = ObjectFunc::STATE;
+        ret["BuiltinFunc"] = BuiltinFunc::STATE;
+        ret["Namespace"] = Namespace::STATE;
+        ret["ObjectNamespace"] = ObjectNamespace::STATE;
     }
 }
 

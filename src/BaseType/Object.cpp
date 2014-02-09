@@ -7,26 +7,26 @@
 
 namespace BaseType {
     Object::Object(const pObject& state) {
-        dict["__state__"] = pObjectExt(state, this);
+        dict["__state__"] = pObjectExt(state.GetPtr(), this);
     }
 
     Object* Object::_getAttr(const std::string& attr) {
         Object* ret = 0;
         auto tmp = dict.find(attr);
         if (tmp == dict.end()) {
-            for (Object* st = dict["__state__"]; st; st = st->dict["__base__"]) {
+            for (Object* st = dict["__state__"].GetPtr(); st; st = st->dict["__base__"].GetPtr()) {
                 auto t = st->dict.find(attr);
                 if (t != st->dict.end()) {
-                    ret = t->second;
+                    ret = t->second.GetPtr();
                     break;
                 }
             }
         } else
-            return tmp->second;
+            return tmp->second.GetPtr();
         if (!ret)
             return 0;
-        Object* state = ret->dict["__state__"];
-        if (state == BuiltinFunc::STATE || state == SimpleFunc::STATE)
+        Object* state = ret->dict["__state__"].GetPtr();
+        if (BuiltinFunc::STATE.ref_equal(state) || SimpleFunc::STATE.ref_equal(state))
             return new ObjectFunc(this, ret);
         else
             return ret;

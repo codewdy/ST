@@ -11,7 +11,10 @@
 #include "BaseType/Init.h"
 #include "BuiltinType/Init.h"
 #include "ToolKit.h"
+#include "Exception.h"
+#ifdef DEBUG
 #include <iostream>
+#endif
 
 namespace Runtime {
     VM::VM(STC::STC* stc) {
@@ -43,11 +46,8 @@ namespace Runtime {
         return Objects.top();
     }
 
-    void VM::PushContext(const Context& ctx) {
-        Contexts.push(ctx);
-    }
-
     void VM::PushContext(Context&& ctx) {
+        ctx.ObjSize = Objects.size();
         Contexts.push(std::move(ctx));
     }
 
@@ -66,109 +66,148 @@ namespace Runtime {
     }
 
     void VM::Run() {
-        while (!Contexts.empty()) {
-            RunASTC();
-        }
+        while (!Contexts.empty())
+            try {
+                RunASTC();
+            } catch (Exception::VMException e) {
+                std::size_t goalCtx;
+                STC::STC* next = nullptr;
+                if (Trys.empty())
+                    goalCtx = 0;
+                else {
+                    TryElement t = Trys.top();
+                    Trys.pop();
+                    if (Contexts.size() < t.CtxSize || Objects.size() < t.ObjSize)
+                        Raise(DoubleFault);
+                    while (Objects.size() > t.ObjSize)
+                        Objects.pop();
+                    next = t.CATCH;
+                }
+                while (Contexts.size() > goalCtx) {
+                    e.trace.push_back({Contexts.top().SourceFile, Contexts.top().SourceLine});
+                    Contexts.pop();
+                }
+                if (goalCtx)
+                    TopContext().code = next;
+                else
+                    throw e;
+            }
     }
 
     void VM::Call(int num) {
-        BaseType::Object *func = PopObject(), *tmp;
-        while ((tmp = func->getAttr("__exec__")) != func)
+        pObject func = PopObject(), tmp;
+        while ((tmp = func["__exec__"]).ref_not_equal(func))
             func = tmp;
-        ((BaseType::Func*)func)->run(*this, num);
+        ToolKit::SafeConvert<BaseType::Func>(func.GetPtr())->run(*this, num);
     }
 
     void VM::RunASTC() {
-        try {
-            STC::STC* stc = TopContext().code;
-            if (!stc) {
-                PopContext();
-                return;
+        STC::STC* stc = TopContext().code;
+#ifdef DEBUG
+        std::cout << stc << std::endl;
+        if (Objects.size())
+            std::cout << "Stack:" << TopObject().GetPtr() << std::endl;
+        else
+            std::cout << "Stack:None" << std::endl;
+#endif
+        if (!stc) {
+            PopContext();
+            return;
+        }
+        TopContext().code = stc->next;
+        switch (stc->type) {
+        case STC::STC::Nop:
+            break;
+        case STC::STC::Pop:
+            PopObject();
+            break;
+        case STC::STC::PushInteger:
+            PushObject(BuiltinType::Integer::Create(stc->str));
+            break;
+        case STC::STC::PushDouble:
+            PushObject(BuiltinType::Double::Create(stc->str));
+            break;
+        case STC::STC::PushString:
+            PushObject(BuiltinType::String::Create(stc->str));
+            break;
+        case STC::STC::MakeList:
+            {
+                BuiltinType::List::InitInner ret;
+                for (int i = 0; i < stc->num; i++)
+                    ret.push_back(PopObject());
+                PushObject(BuiltinType::List::Create(ret));
             }
-            TopContext().code = stc->next;
-            switch (stc->type) {
-            case STC::STC::Nop:
-                break;
-            case STC::STC::Pop:
-                PopObject();
-                break;
-            case STC::STC::PushInteger:
-                PushObject(BuiltinType::Integer::Create(stc->str));
-                break;
-            case STC::STC::PushDouble:
-                PushObject(BuiltinType::Double::Create(stc->str));
-                break;
-            case STC::STC::PushString:
-                PushObject(BuiltinType::String::Create(stc->str));
-                break;
-            case STC::STC::MakeList:
-                {
-                    BuiltinType::List::InitInner ret;
-                    for (int i = 0; i < stc->num; i++)
-                        ret.push_back(PopObject());
-                    PushObject(BuiltinType::List::Create(ret));
-                }
-                break;
-            case STC::STC::Call:
-                Call(stc->num);
-                break;
-            case STC::STC::PushLocale:
-                PushObject(TopContext().Locale);
-                break;
-            case STC::STC::PushGlobal:
-                PushObject(TopContext().Global);
-                break;
-            case STC::STC::PushNull:
-                PushObject(0);
-                //TODO:Add an Null.
-                break;
-            case STC::STC::CopyTop:
-                PushObject(TopObject());
-                break;
-            case STC::STC::GetAttr:
-                PushObject(PopObject()->getAttr(stc->str));
-                break;
-            case STC::STC::SetAttr:
-                {
-                    pObject obj1 = PopObject();
-                    pObject obj2 = PopObject();
-                    obj1->setAttr(stc->str, obj2);
-                }
-                break;
-            case STC::STC::Goto:
+            break;
+        case STC::STC::Call:
+            Call(stc->num);
+            break;
+        case STC::STC::PushLocale:
+            PushObject(TopContext().Locale);
+            break;
+        case STC::STC::PushGlobal:
+            PushObject(TopContext().Global);
+            break;
+        case STC::STC::PushNull:
+            PushObject(0);
+            //TODO:Add an Null.
+            break;
+        case STC::STC::CopyTop:
+            PushObject(TopObject());
+            break;
+        case STC::STC::GetAttr:
+            PushObject(PopObject()[stc->str]);
+            break;
+        case STC::STC::SetAttr:
+            {
+                pObject obj1 = PopObject();
+                pObject obj2 = PopObject();
+                obj1[stc->str] = obj2;
+            }
+            break;
+        case STC::STC::Goto:
+            TopContext().code = stc->code;
+            break;
+        case STC::STC::TrueGoto:
+            if (PopObject().To<BuiltinType::Bool::Inner>())
                 TopContext().code = stc->code;
-                break;
-            case STC::STC::TrueGoto:
-                if (ToolKit::GetInner<BuiltinType::Bool::Inner>(PopObject()))
-                    TopContext().code = stc->code;
-                break;
-            case STC::STC::FalseGoto:
-                if (!ToolKit::GetInner<BuiltinType::Bool::Inner>(PopObject()))
-                    TopContext().code = stc->code;
-                break;
-            case STC::STC::FuncArg:
-                FuncArgs.push_back(stc->str);
-                break;
-            case STC::STC::DefFunc:
-                {
-                    BaseType::SimpleFunc * ret = new BaseType::SimpleFunc(TopContext().Global, TopContext().Locale, stc->code);
-                    ret->argsName.swap(FuncArgs);
-                    PushObject(ret);
-                }
-                break;
-            case STC::STC::DefState:
-                {
-                    pObject ret = new BaseType::State;
-                    PushContext(Context(TopContext().Global, new BaseType::ObjectNamespace(TopContext().Locale, ret), stc->code));
-                    PushObject(ret);
-                }
-                break;
-            case STC::STC::Return:
-                PopContext();
-                break;
+            break;
+        case STC::STC::FalseGoto:
+            if (!PopObject().To<BuiltinType::Bool::Inner>())
+                TopContext().code = stc->code;
+            break;
+        case STC::STC::FuncArg:
+            FuncArgs.push_back(stc->str);
+            break;
+        case STC::STC::DefFunc:
+            {
+                BaseType::SimpleFunc * ret = new BaseType::SimpleFunc(TopContext().Global, TopContext().Locale, stc->code);
+                ret->argsName.swap(FuncArgs);
+                PushObject(ret);
             }
-        } catch(int) {
-            //TODO: Add handle Exception.
+            break;
+        case STC::STC::DefState:
+            {
+                pObject ret = new BaseType::State;
+                PushContext(Context(TopContext().Global, new BaseType::ObjectNamespace(TopContext().Locale, ret), stc->code));
+                PushObject(ret);
+            }
+            break;
+        case STC::STC::Return:
+            PopContext();
+            break;
+        case STC::STC::SourceFile:
+            TopContext().SourceFile = stc->str;
+            break;
+        case STC::STC::SourceLine:
+            TopContext().SourceLine = stc->num;
+            break;
+        case STC::STC::Try:
+            Trys.push({Contexts.size(), Objects.size(), stc->code});
+            break;
+        case STC::STC::Catch:
+            Trys.pop();
+            TopContext().code = stc->code;
+            break;
         }
     }
 

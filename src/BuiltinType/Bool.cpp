@@ -17,7 +17,7 @@ namespace BuiltinType {
         }
 
         void InitState() {
-            if (STATE != nullptr)
+            if (STATE.ref_not_equal(nullptr))
                 return;
             STATE = new BaseType::State(BaseType::PtrObjectSTATE);
             SET_FUNC(STATE, __and__);

@@ -25,7 +25,11 @@
     BLOCKARG(DefFunc)\
     BLOCKARG(DefState)\
     NONEARG(Pop)\
-    NONEARG(Nop)
+    NONEARG(Nop)\
+    STRINGARG(SourceFile)\
+    INTARG(SourceLine)\
+    GOTOARG(Try)\
+    GOTOARG(Catch)
 
 /**STC is a stack-base code.*/
 namespace STC {

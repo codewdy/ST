@@ -1,5 +1,6 @@
 %{
 #include "ParserDef.h"
+#include "Exception.h"
 #include <vector>
 #include <string>
 #include <unordered_map>
@@ -39,7 +40,7 @@ WHITESPACE			([ \t]+)
 {WHITESPACE}					{}
 {S_COMMENT}						{}
 {MULTILINE_COMMENT}				{}
-{NEWLINE}						{}
+{NEWLINE}						{yylineno++;}
 
 "+"                             {MakeLex(PLUS);}
 "-"                             {MakeLex(MINUS);}
@@ -70,9 +71,9 @@ WHITESPACE			([ \t]+)
 {INTEGER}						{MakeLex(INTEGER);}
 {DOUBLE}						{MakeLex(DOUBLE);}
 
-<INITIAL>\"                     { sloc = lineno(); BEGIN S; sb.clear();}
-<S>{NEWLINE}                    {/* issueError(new NewlineInStrError(sloc, MiscUtils.quote(buffer.toString())));*/}
-<S><<EOF>>                      {/* issueError(new UntermStrError(sloc, MiscUtils.quote(buffer.toString()))); yybegin(YYINITIAL);*/}
+<INITIAL>\"                     {sloc = lineno(); BEGIN S; sb.clear();}
+<S>{NEWLINE}                    {Raise(Syntax, "", lineno());}
+<S><<EOF>>                      {Raise(Syntax, "", lineno());}
 <S>\"                           {BEGIN INITIAL; MakeLexStr(std::string(sb.begin(), sb.end()), STRING);}
 <S>"\\n"                        {sb.push_back('\n');}
 <S>"\\t"                        {sb.push_back('\t');}
@@ -92,7 +93,7 @@ WHITESPACE			([ \t]+)
 "null"                          {MakeLex(NULL_);}
 {IDENTIFIER}					{MakeLex(IDENTIFIER);}
 <<EOF>>                         {return 0;}
-.                               {/*TODO: Add Error Control.*/throw "Error";}
+.                               {Raise(Syntax, "", lineno());}
 %%
 
 int yyFlexLexer::yywrap() { return 1; }

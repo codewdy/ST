@@ -61,19 +61,24 @@ namespace STC {
         }
     };
 
-    static void WriteInt(std::ostream& out, int x) {
-        out.put((x >> 0) & 0xFF);
-        out.put((x >> 8) & 0xFF);
-        out.put((x >> 16) & 0xFF);
-        out.put((x >> 24) & 0xFF);
+    static void WriteInt(std::ostream& out, unsigned int x) {
+        unsigned int x1 = x >> 0 & 0xFF;
+        unsigned int x2 = x >> 8 & 0xFF;
+        unsigned int x3 = x >> 16 & 0xFF;
+        unsigned int x4 = x >> 24 & 0xFF;
+        out.put(x1);
+        out.put(x2);
+        out.put(x3);
+        out.put(x4);
     }
 
-    static int ReadInt(std::istream& in) {
-        int x1 = in.get();
-        int x2 = in.get();
-        int x3 = in.get();
-        int x4 = in.get();
-        return (x1 << 0) | (x2 << 8) | (x3 << 16) | (x4 << 24);
+    static unsigned int ReadInt(std::istream& in) {
+        unsigned int x1 = in.get() & 0xFF;
+        unsigned int x2 = in.get() & 0xFF;
+        unsigned int x3 = in.get() & 0xFF;
+        unsigned int x4 = in.get() & 0xFF;
+        unsigned int xx = (x1 + 256 * (x2 + 256 * (x3 + 256 * x4)));
+        return xx;
     }
     
     static void WriteString(std::ostream& out, const std::string& str) {
@@ -120,7 +125,7 @@ namespace STC {
     STC* Reader(std::istream& in) {
         int depth = 0;
         SerializeHelper helper;
-        bool flag;
+        bool flag = true;
         while (in && flag) {
             char type = in.get();
             if (type == EOB) {

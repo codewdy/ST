@@ -2,7 +2,8 @@
 #define ST_7832901289_BASETYPE_OBJECT
 #include <unordered_map>
 #include <string>
-#include "GC.h"
+#include "pObject.h"
+#include "Exception.h"
 
 namespace BaseType {
     /**the Base state of all state.*/
@@ -25,11 +26,11 @@ namespace BaseType {
                 return ret;
             else
                 //TODO: Add an exception.
-                throw "attr not found";
+                Raise(VM, this);
         }
         /**set a attribute, the same as _setattribute.*/
         void setAttr(const std::string& attr, const pObject& obj) {
-            _setAttr(attr, obj);
+            _setAttr(attr, obj.GetPtr());
         }
         virtual ~Object();
     };

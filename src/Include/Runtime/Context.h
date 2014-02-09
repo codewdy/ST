@@ -13,6 +13,12 @@ namespace Runtime {
         pObject Locale;
         /**STC For the Code Running.*/
         STC::STC* code;
+        /**the filename Current STC from.*/
+        std::string SourceFile;
+        /**the line Current STC from.*/
+        int SourceLine;
+        /**The Size of the ObjectStack whe enter this Context.*/
+        int ObjSize;
         Context(const pObject& _Global, pObject&& _Locale, STC::STC* _code) : Global(_Global), Locale(std::move(_Locale)), code(_code) {}
         Context(const pObject& _Global, const pObject& _Locale, STC::STC* _code) : Global(_Global), Locale(std::move(_Locale)), code(_code) {}
     };

@@ -1,6 +1,7 @@
 #include "AST/ALL.h"
 #include "STC/ALL.h"
 #include <unordered_map>
+#include "Exception.h"
 #define RETURN(VAR) do {_ret = VAR;return;} while (0)
 
 namespace STC {
@@ -18,6 +19,7 @@ namespace STC {
 
     void Generator::visitProgram(AST::Program* that) {
         STCList ret;
+        ret.Append(STC::CreateSourceFile(*that->loc.str));
         if (that->stmts.size() == 0)
             ret = STC::CreateNop();
         else
@@ -27,7 +29,11 @@ namespace STC {
     }
 
     void Generator::visitSimpleStmt(AST::SimpleStmt* that) {
-        RETURN(visitX(that->expr).Append(STC::CreatePop()));
+        STCList ret;
+        ret.Append(STC::CreateSourceLine(that->loc.lineno));
+        ret.Append(visitX(that->expr));
+        ret.Append(STC::CreatePop());
+        RETURN(ret);
     }
 
     void Generator::visitForStmt(AST::ForStmt* that) {
@@ -36,6 +42,7 @@ namespace STC {
         STC* o_break = _break;
         _break = end;
         //top=set.__iter__
+        ret.Append(STC::CreateSourceLine(that->loc.lineno));
         ret.Append(visitX(that->set));
         ret.Append(STC::CreateGetAttr("__iter__"));
         ret.Append(STC::CreateCall(0));
@@ -51,6 +58,7 @@ namespace STC {
         ret.Append(STC::CreateCall(0));
         ret.Append(visitX(that->var, LValue));
         ret.Append(visitX(that->loop));
+        ret.Append(STC::CreateSourceLine(that->loc.lineno));
         //Get Next
         ret.Append(STC::CreateGetAttr("__next__"));
         ret.Append(STC::CreateCall(0));
@@ -65,9 +73,11 @@ namespace STC {
         STC* end = STC::CreateNop();
         STC* o_break = _break;
         _break = end;
+        ret.Append(STC::CreateSourceLine(that->loc.lineno));
         ret.Append(visitX(that->condition));
         ret.Append(STC::CreateFalseGoto(end));
         ret.Append(visitX(that->loop));
+        ret.Append(STC::CreateSourceLine(that->loc.lineno));
         ret.Append(STC::CreateGoto(ret.beg));
         ret.Append(end);
         _break = o_break;
@@ -81,12 +91,14 @@ namespace STC {
         if (that->no) {
             STCList yes = visitX(that->yes);
             STCList no = visitX(that->no);
+            ret.Append(STC::CreateSourceLine(that->loc.lineno));
             ret.Append(STC::CreateFalseGoto(no.beg));
             ret.Append(yes);
             ret.Append(STC::CreateGoto(end));
             ret.Append(no);
             ret.Append(end);
         } else {
+            ret.Append(STC::CreateSourceLine(that->loc.lineno));
             ret.Append(STC::CreateFalseGoto(end));
             ret.Append(visitX(that->yes));
             ret.Append(end);
@@ -105,7 +117,7 @@ namespace STC {
     }
     void Generator::visitBreakStmt(AST::BreakStmt* that) {
         if (_break == 0) {
-            //TODO: ADD A Exception For Noncotrolled break.
+            Raise(Break, that->loc);
         } else {
             RETURN(STC::CreateGoto(_break));
         }
@@ -113,6 +125,7 @@ namespace STC {
 
     void Generator::visitReturnStmt(AST::ReturnStmt* that) {
         STCList ret;
+        ret.Append(STC::CreateSourceLine(that->loc.lineno));
         if (that->expr) {
             ret.Append(visitX(that->expr));
         } else {

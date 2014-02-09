@@ -6,13 +6,13 @@ namespace BaseType {
         Object* ret = Object::_getAttr(attr);
         if (ret)
             return ret;
-        Object* base = dict["__base__"];
+        Object* base = dict["__base__"].GetPtr();
         while (true) {
             if (base->dict.find(attr) != base->dict.end())
-                return base->dict[attr];
-            if (base == Object::STATE)
+                return base->dict[attr].GetPtr();
+            if (base == Object::STATE.GetPtr())
                 break;
-            base = base->dict["__base__"];
+            base = base->dict["__base__"].GetPtr();
         }
         return 0;
     }

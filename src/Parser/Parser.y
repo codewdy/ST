@@ -1,30 +1,32 @@
-%extra_argument {AST::Program** ret}
-
-%parse_failure {/*Raise(SyntaxError, TOKEN->loc);*/}
+%syntax_error {
+Raise(Syntax);
+}
 
 %include {
 #include <cassert>
 #include "ParserDef.h"
 #include <unordered_map>
 extern std::unordered_map<int, Lex*> lexMap;
+#include "Exception.h"
+#include <iostream>
 }
 
 %code {
 #include <string>
-#include <iostream>
 #include <fstream>
-#include "Exception/Exception.h"
 #include "Lexer.h"
 namespace Parser {
     AST::Program* CreateAST(std::string filename) {
         std::string* fn = new std::string(filename);
         void *parser = ParseAlloc(malloc);
+        int lineno = 0;
         std::ifstream stream(filename.c_str());
         try {
             yyFlexLexer lexer(&stream);
             int tokenT;
             while (tokenT = lexer.yylex()) {
                 Lex* token = lexMap[tokenT];
+                lineno = token->loc.lineno;
                 lexMap.erase(tokenT);
                 token->loc.str = fn;
                 Parse(parser, token->type, token, 0);
@@ -33,18 +35,16 @@ namespace Parser {
             Parse(parser, 0, 0, &ret);
             ret->loc.str = fn;
             return ret;
-        } catch (Exception::Exception e) {
+        } catch (Exception::SyntaxException e) {
+            if (e.lineno == -1)
+                e.lineno = lineno;
+            e.filename = filename;
             delete fn;
             ParseFree(parser, free);
             throw e;
         }
     }
 }
-}
-
-%syntax_error {
-//TODO: Add Error Control.
-throw "Error";
 }
 
 %right ASG .
@@ -58,6 +58,8 @@ throw "Error";
 %left RMC DOT .
 %nonassoc RLC .
 %nonassoc ELSE .
+
+%extra_argument {AST::Program** ret}
 
 %start_symbol program
 

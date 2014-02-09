@@ -8,8 +8,14 @@ namespace Runtime {
     class VM {
         typedef std::stack<Context> ContextStack;
         typedef std::stack<pObject> ObjectStack;
+        struct TryElement {
+            std::size_t CtxSize, ObjSize;
+            STC::STC* CATCH;
+        };
+        typedef std::stack<TryElement> TryStack;
         ContextStack Contexts;
         ObjectStack Objects;
+        TryStack Trys;
         std::vector<std::string> FuncArgs;
         void RunASTC();
         void HandleException();
@@ -20,7 +26,6 @@ namespace Runtime {
         void PushObject(pObject&& obj);
         pObject PopObject();
         pObject& TopObject();
-        void PushContext(const Context& ctx);
         void PushContext(Context&& ctx);
         void PopContext();
         Context& TopContext();

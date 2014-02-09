@@ -5,6 +5,7 @@
 #include "BaseType/Init.h"
 #include "BuiltinType/Init.h"
 #include "Runtime/VM.h"
+#include "Exception.h"
 #include <iostream>
 #include <fstream>
 
@@ -29,5 +30,10 @@ int main() {
     vm.Run();
     } catch (const char* x) {
         std::cerr << x << std::endl;
+    } catch (Exception::SyntaxException e) {
+        std::cerr << e.filename << std::endl;
+        std::cerr << e.lineno << std::endl;
+    } catch (Exception::VMException e) {
+        e.print(std::cout);
     }
 }

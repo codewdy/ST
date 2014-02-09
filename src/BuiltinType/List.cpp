@@ -13,14 +13,14 @@ namespace BuiltinType {
 
         pObject Create(const InitInner& vars) {
             pObject ret = ToolKit::CreateObj(STATE, Inner());
-            pObject in = ret->getAttr("__inner__");
+            pObject in = ret["__inner__"];
             for (pObject item : vars)
-                ToolKit::GetInner<Inner>(ret).push_back(pObjectExt(item, in));
+                ret.To<Inner>().push_back(pObjectExt(item, in));
             return std::move(ret);
         }
 
         void InitState() {
-            if (STATE != nullptr)
+            if (STATE.ref_not_equal(nullptr))
                 return;
             STATE = new BaseType::State(BaseType::PtrObjectSTATE);
             SET_FUNC(STATE, __add__);
@@ -68,8 +68,8 @@ namespace BuiltinType {
             Inner arg = GET_PTR_ARG(0, Inner);
             String::Inner ret = "[";
             for (int i = 0; i < arg.size(); i++){
-                pObject str = CALC(arg[i], __str__);
-                ret += ToolKit::GetInner<String::Inner>(str);
+                pObject str = arg[i]["__str__"]();
+                ret += str.To<String::Inner>();
                 if (i != arg.size() - 1)
                     ret += ", ";
             }
@@ -80,31 +80,31 @@ namespace BuiltinType {
         DEF_BUILTIN_FUNC(__iter__) {
             CHECK_ARG_SIZE(==1);
             pObject ret = new BaseType::Object(IterSTATE);
-            ret->setAttr("__array__", args[0]);
-            ret->setAttr("__index__", Integer::Create(0));
+            ret["__array__"] = args[0];
+            ret["__index__"] = Integer::Create(0);
             return std::move(ret);
         }
 
         DEF_BUILTIN_FUNC(Iter__next__) {
             CHECK_ARG_SIZE(==1);
             pObject ret = new BaseType::Object(IterSTATE);
-            ret->setAttr("__array__", args[0]->getAttr("__array__"));
-            Integer::Inner& idx = ToolKit::GetInner<Integer::Inner>(args[0]->getAttr("__index__"));
-            ret->setAttr("__index__", Integer::Create(idx + 1));
+            ret["__array__"] = args[0]["__array__"];
+            Integer::Inner& idx = args[0]["__index__"].To<Integer::Inner>();
+            ret["__index__"] = Integer::Create(idx + 1);
             return std::move(ret);
         }
 
         DEF_BUILTIN_FUNC(Iter__is_end__) {
             CHECK_ARG_SIZE(==1);
-            Inner arr = ToolKit::GetInner<Inner>(args[0]->getAttr("__array__"));
-            Integer::Inner& idx = ToolKit::GetInner<Integer::Inner>(args[0]->getAttr("__index__"));
+            Inner arr = args[0]["__array__"].To<Inner>();
+            Integer::Inner& idx = args[0]["__index__"].To<Integer::Inner>();
             return Bool::Create(arr.size() <= idx);
         }
 
         DEF_BUILTIN_FUNC(Iter__get__) {
             CHECK_ARG_SIZE(==1);
-            Inner arr = ToolKit::GetInner<Inner>(args[0]->getAttr("__array__"));
-            Integer::Inner& idx = ToolKit::GetInner<Integer::Inner>(args[0]->getAttr("__index__"));
+            Inner arr = args[0]["__array__"].To<Inner>();
+            Integer::Inner& idx = args[0]["__index__"].To<Integer::Inner>();
             if (arr.size() >= idx) {
                 //TODO: Add an exception.
             }

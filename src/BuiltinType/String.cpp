@@ -21,7 +21,7 @@ namespace BuiltinType {
         }
 
         void InitState() {
-            if (STATE != nullptr)
+            if (STATE.ref_not_equal(nullptr))
                 return;
             STATE = new BaseType::State(BaseType::PtrObjectSTATE);
             SET_FUNC(STATE, __add__);
@@ -34,14 +34,14 @@ namespace BuiltinType {
         DEF_BUILTIN_FUNC(__add__) {
             CHECK_ARG_SIZE(==2);
             Inner& lhs = GET_PTR_ARG(0, Inner);
-            Inner& rhs = ToolKit::GetInner<Inner>(CALC(args[1], __str__));
+            Inner& rhs = args[1]["__str__"].To<Inner>();
             return Create(lhs + rhs);
         }
 
 #define DEF_COMP_OPER(NAME, OPER) DEF_BUILTIN_FUNC(NAME) {\
             CHECK_ARG_SIZE(==2);\
             Inner& lhs = GET_PTR_ARG(0, Inner);\
-            Inner& rhs = ToolKit::GetInner<Inner>(CALC(args[1], __str__));\
+            Inner& rhs = args[1]["__str__"]().To<Inner>();\
             return Bool::Create(lhs OPER rhs);\
         }
         DEF_COMP_OPER(__equal__, ==)
