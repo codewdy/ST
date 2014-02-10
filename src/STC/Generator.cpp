@@ -2,19 +2,19 @@
 #include "STC/ALL.h"
 #include <unordered_map>
 #include "Exception.h"
-#define RETURN(VAR) do {_ret = VAR;return;} while (0)
+#define ST_RETURN(VAR) do {_ret = VAR;return;} while (0)
 
 namespace STC {
     void Generator::visitInteger(AST::Integer* that) {
-        RETURN(STC::CreatePushInteger(that->str));
+        ST_RETURN(STC::CreatePushInteger(that->str));
     }
 
     void Generator::visitDouble(AST::Double* that) {
-        RETURN(STC::CreatePushDouble(that->str));
+        ST_RETURN(STC::CreatePushDouble(that->str));
     }
 
     void Generator::visitString(AST::String* that) {
-        RETURN(STC::CreatePushString(that->str));
+        ST_RETURN(STC::CreatePushString(that->str));
     }
 
     void Generator::visitProgram(AST::Program* that) {
@@ -25,7 +25,7 @@ namespace STC {
         else
             for (auto stmt : that->stmts)
                 ret.Append(visitX(stmt));
-        RETURN(ret);
+        ST_RETURN(ret);
     }
 
     void Generator::visitSimpleStmt(AST::SimpleStmt* that) {
@@ -33,7 +33,7 @@ namespace STC {
         ret.Append(STC::CreateSourceLine(that->loc.lineno));
         ret.Append(visitX(that->expr));
         ret.Append(STC::CreatePop());
-        RETURN(ret);
+        ST_RETURN(ret);
     }
 
     void Generator::visitForStmt(AST::ForStmt* that) {
@@ -65,7 +65,7 @@ namespace STC {
         ret.Append(STC::CreateGoto(loopBeg));
         ret.Append(end);
         _break = o_break;
-        RETURN(ret);
+        ST_RETURN(ret);
     }
 
     void Generator::visitWhileStmt(AST::WhileStmt* that) {
@@ -81,7 +81,7 @@ namespace STC {
         ret.Append(STC::CreateGoto(ret.beg));
         ret.Append(end);
         _break = o_break;
-        RETURN(ret);
+        ST_RETURN(ret);
     }
 
     void Generator::visitIfStmt(AST::IfStmt* that) {
@@ -103,7 +103,7 @@ namespace STC {
             ret.Append(visitX(that->yes));
             ret.Append(end);
         }
-        RETURN(ret);
+        ST_RETURN(ret);
     }
 
     void Generator::visitStmtBlock(AST::StmtBlock* that) {
@@ -113,13 +113,13 @@ namespace STC {
         else
             for (auto stmt : that->stmts)
                 ret.Append(visitX(stmt));
-        RETURN(ret);
+        ST_RETURN(ret);
     }
     void Generator::visitBreakStmt(AST::BreakStmt* that) {
         if (_break == nullptr) {
-            Raise(Break, that->loc);
+            ST_RAISE(Break, that->loc);
         } else {
-            RETURN(STC::CreateGoto(_break));
+            ST_RETURN(STC::CreateGoto(_break));
         }
     }
 
@@ -132,7 +132,7 @@ namespace STC {
             ret.Append(STC::CreatePushNull());
         }
         ret.Append(STC::CreateReturn());
-        RETURN(ret);
+        ST_RETURN(ret);
     }
 
     void Generator::visitListExpr(AST::ListExpr* that) {
@@ -140,7 +140,7 @@ namespace STC {
         for (int i = that->exprs.size() - 1; i >= 0; i--)
             ret.Append(visitX(that->exprs[i]));
         ret.Append(STC::CreateMakeList(that->exprs.size()));
-        RETURN(ret);
+        ST_RETURN(ret);
     }
 
     void Generator::visitCallExpr(AST::CallExpr* that) {
@@ -149,7 +149,7 @@ namespace STC {
             ret.Append(visitX(that->parms[i]));
         ret.Append(visitX(that->func));
         ret.Append(STC::CreateCall(that->parms.size()));
-        RETURN(ret);
+        ST_RETURN(ret);
     }
 
     void Generator::visitFuncDef(AST::FuncDef* that) {
@@ -163,7 +163,7 @@ namespace STC {
             ret.Append(STC::STC::CreateFuncArg(arg));
         ret.Append(STC::CreateDefFunc(func.beg));
         _break = o_break;
-        RETURN(ret);
+        ST_RETURN(ret);
     }
 
     void Generator::visitStateDef(AST::StateDef* that) {
@@ -172,19 +172,19 @@ namespace STC {
         _break = nullptr;
         ret.Append(STC::CreateDefState(visitX(that->stmts).beg));
         _break = o_break;
-        RETURN(ret);
+        ST_RETURN(ret);
     }
 
     void Generator::visitGlobalExpr(AST::GlobalExpr* that) {
-        RETURN(STC::CreatePushGlobal());
+        ST_RETURN(STC::CreatePushGlobal());
     }
 
     void Generator::visitLocaleExpr(AST::LocaleExpr* that) {
-        RETURN(STC::CreatePushLocale());
+        ST_RETURN(STC::CreatePushLocale());
     }
 
     void Generator::visitNullExpr(AST::NullExpr* that) {
-        RETURN(STC::CreatePushNull());
+        ST_RETURN(STC::CreatePushNull());
     }
 
     static std::unordered_map<int, std::string> DBOperTrans = {
@@ -214,7 +214,7 @@ namespace STC {
             ret.Append(STC::CreateGetAttr("__" + DBOperTrans[that->oper] + "__"));
             ret.Append(STC::CreateCall(1));
         }
-        RETURN(ret);
+        ST_RETURN(ret);
     }
 
     static std::unordered_map<int, std::string> SGOperTrans = {
@@ -227,7 +227,7 @@ namespace STC {
         ret.Append(visitX(that->expr1));
         ret.Append(STC::CreateGetAttr("__" + SGOperTrans[that->oper] + "__"));
         ret.Append(STC::CreateCall(0));
-        RETURN(ret);
+        ST_RETURN(ret);
     }
 
     void Generator::visitVarLValue(AST::VarLValue* that) {
@@ -239,7 +239,7 @@ namespace STC {
             ret.Append(visitX(that->obj));
             ret.Append(STC::CreateGetAttr(that->attr));
         }
-        RETURN(ret);
+        ST_RETURN(ret);
     }
 
     void Generator::visitArrayAtLValue(AST::ArrayAtLValue* that) {
@@ -255,6 +255,6 @@ namespace STC {
             ret.Append(STC::CreateGetAttr("__get_element__"));
             ret.Append(STC::CreateCall(1));
         }
-        RETURN(ret);
+        ST_RETURN(ret);
     }
 }

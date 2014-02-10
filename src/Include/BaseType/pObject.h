@@ -69,6 +69,7 @@ namespace BaseType {
             void Register();
         public:
             pObject(Object* _child = nullptr);
+            pObject(std::nullptr_t arg);
             pObject(const pObject& rhs);
             pObject(pObject&& rhs);
             pObject(bool arg);
@@ -76,6 +77,7 @@ namespace BaseType {
             pObject(double arg);
             pObject(const std::string& arg);
             pObject(std::string&& arg);
+            pObject(const char* arg);
             pObject(const std::vector<pObject>& arg);
             pObject(std::vector<pObject>&& arg);
             /**Create A object by list. \warn State is not a normal Object so you should not init state bu this.*/

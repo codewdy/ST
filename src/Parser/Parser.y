@@ -1,5 +1,5 @@
 %syntax_error {
-Raise(Syntax);
+ST_RAISE(Syntax);
 }
 
 %include {

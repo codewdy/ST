@@ -7,7 +7,7 @@
 #include "Parser.h"
 std::vector<char> sb;
 std::unordered_map<int, Lex*> lexMap;
-#define MakeLexStr(str, type) do {\
+#define ST_MAKE_LEX_STR(str, type) do {\
     Lex* tmp = new Lex(str, type, AST::Location(nullptr, lineno()));\
     int ret = long(tmp) % 98765431;\
     while (ret++)\
@@ -15,7 +15,7 @@ std::unordered_map<int, Lex*> lexMap;
             return ret;\
 } while (0)
 
-#define MakeLex(type) MakeLexStr(YYText(), type)
+#define ST_MAKE_LEX(type) ST_MAKE_LEX_STR(YYText(), type)
 int sloc;
 %}
 
@@ -42,58 +42,58 @@ WHITESPACE			([ \t]+)
 {MULTILINE_COMMENT}				{}
 {NEWLINE}						{yylineno++;}
 
-"+"                             {MakeLex(PLUS);}
-"-"                             {MakeLex(MINUS);}
-"*"                             {MakeLex(MUL);}
-"/"                             {MakeLex(DIV);}
-"%"                             {MakeLex(MOD);}
-"="                             {MakeLex(ASG);}
-"."                             {MakeLex(DOT);}
-","                             {MakeLex(CMA);}
-":"                             {MakeLex(COL);}
-";"                             {MakeLex(SEM);}
-"("                             {MakeLex(LLC);}
-")"                             {MakeLex(RLC);}
-"["                             {MakeLex(LMC);}
-"]"                             {MakeLex(RMC);}
-"{"                             {MakeLex(LGC);}
-"}"                             {MakeLex(RGC);}
-">"                             {MakeLex(GT);}
-"<"                             {MakeLex(LT);}
-">="                            {MakeLex(GE);}
-"<="                            {MakeLex(LE);}
-"=="                            {MakeLex(EQ);}
-"!="                            {MakeLex(NE);}
-"!"                             {MakeLex(NOT);}
-"&&"                            {MakeLex(AND);}
-"||"                            {MakeLex(OR);}
+"+"                             {ST_MAKE_LEX(PLUS);}
+"-"                             {ST_MAKE_LEX(MINUS);}
+"*"                             {ST_MAKE_LEX(MUL);}
+"/"                             {ST_MAKE_LEX(DIV);}
+"%"                             {ST_MAKE_LEX(MOD);}
+"="                             {ST_MAKE_LEX(ASG);}
+"."                             {ST_MAKE_LEX(DOT);}
+","                             {ST_MAKE_LEX(CMA);}
+":"                             {ST_MAKE_LEX(COL);}
+";"                             {ST_MAKE_LEX(SEM);}
+"("                             {ST_MAKE_LEX(LLC);}
+")"                             {ST_MAKE_LEX(RLC);}
+"["                             {ST_MAKE_LEX(LMC);}
+"]"                             {ST_MAKE_LEX(RMC);}
+"{"                             {ST_MAKE_LEX(LGC);}
+"}"                             {ST_MAKE_LEX(RGC);}
+">"                             {ST_MAKE_LEX(GT);}
+"<"                             {ST_MAKE_LEX(LT);}
+">="                            {ST_MAKE_LEX(GE);}
+"<="                            {ST_MAKE_LEX(LE);}
+"=="                            {ST_MAKE_LEX(EQ);}
+"!="                            {ST_MAKE_LEX(NE);}
+"!"                             {ST_MAKE_LEX(NOT);}
+"&&"                            {ST_MAKE_LEX(AND);}
+"||"                            {ST_MAKE_LEX(OR);}
 
-{INTEGER}						{MakeLex(INTEGER);}
-{DOUBLE}						{MakeLex(DOUBLE);}
+{INTEGER}						{ST_MAKE_LEX(INTEGER);}
+{DOUBLE}						{ST_MAKE_LEX(DOUBLE);}
 
 <INITIAL>\"                     {sloc = lineno(); BEGIN S; sb.clear();}
-<S>{NEWLINE}                    {Raise(Syntax, "", lineno());}
-<S><<EOF>>                      {Raise(Syntax, "", lineno());}
-<S>\"                           {BEGIN INITIAL; MakeLexStr(std::string(sb.begin(), sb.end()), STRING);}
+<S>{NEWLINE}                    {ST_RAISE(Syntax, "", lineno());}
+<S><<EOF>>                      {ST_RAISE(Syntax, "", lineno());}
+<S>\"                           {BEGIN INITIAL; ST_MAKE_LEX_STR(std::string(sb.begin(), sb.end()), STRING);}
 <S>"\\n"                        {sb.push_back('\n');}
 <S>"\\t"                        {sb.push_back('\t');}
 <S>"\\\""                       {sb.push_back('\"');}
 <S>"\\\\"                       {sb.push_back('\\');}
 <S>.                            {sb.push_back(YYText()[0]);}
 
-"if"                            {MakeLex(IF);}
-"else"                          {MakeLex(ELSE);}
-"func"                          {MakeLex(FUNC);}
-"state"                         {MakeLex(STATE);}
-"for"                           {MakeLex(FOR);}
-"while"                         {MakeLex(WHILE);}
-"break"                         {MakeLex(BREAK);}
-"return"                        {MakeLex(RETURN);}
-"global"                        {MakeLex(GLOBAL);}
-"null"                          {MakeLex(NULL_);}
-{IDENTIFIER}					{MakeLex(IDENTIFIER);}
+"if"                            {ST_MAKE_LEX(IF);}
+"else"                          {ST_MAKE_LEX(ELSE);}
+"func"                          {ST_MAKE_LEX(FUNC);}
+"state"                         {ST_MAKE_LEX(STATE);}
+"for"                           {ST_MAKE_LEX(FOR);}
+"while"                         {ST_MAKE_LEX(WHILE);}
+"break"                         {ST_MAKE_LEX(BREAK);}
+"return"                        {ST_MAKE_LEX(RETURN);}
+"global"                        {ST_MAKE_LEX(GLOBAL);}
+"null"                          {ST_MAKE_LEX(NULL_);}
+{IDENTIFIER}					{ST_MAKE_LEX(IDENTIFIER);}
 <<EOF>>                         {return 0;}
-.                               {Raise(Syntax, "", lineno());}
+.                               {ST_RAISE(Syntax, "", lineno());}
 %%
 
 int yyFlexLexer::yywrap() { return 1; }

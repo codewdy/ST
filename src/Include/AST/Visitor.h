@@ -1,9 +1,9 @@
 #ifndef ST_9348212392_AST_VISITOR
 #define ST_9348212392_AST_VISITOR
 /**Define visitClass In Namespace AST.*/
-#define DefVisitClass(CLASS) virtual void visit##CLASS(CLASS* that);
+#define ST_DEF_VISIT_CLASS(CLASS) virtual void visit##CLASS(CLASS* that);
 /**Define visitClass Out Of Namespace AST.*/
-#define DefVisitASTClass(CLASS) virtual void visit##CLASS(AST::CLASS* that);
+#define ST_DEF_VISIT_AST_CLASS(CLASS) virtual void visit##CLASS(AST::CLASS* that);
 namespace AST {
     class AST;
     class Integer;
@@ -33,28 +33,28 @@ namespace AST {
     class Visitor {
     public:
         void visit(AST* that);
-        DefVisitClass(Integer)
-        DefVisitClass(Double)
-        DefVisitClass(String)
-        DefVisitClass(Program)
-        DefVisitClass(SimpleStmt)
-        DefVisitClass(ForStmt)
-        DefVisitClass(WhileStmt)
-        DefVisitClass(IfStmt)
-        DefVisitClass(StmtBlock)
-        DefVisitClass(BreakStmt)
-        DefVisitClass(ReturnStmt)
-        DefVisitClass(ListExpr)
-        DefVisitClass(CallExpr)
-        DefVisitClass(FuncDef)
-        DefVisitClass(StateDef)
-        DefVisitClass(GlobalExpr)
-        DefVisitClass(LocaleExpr)
-        DefVisitClass(NullExpr)
-        DefVisitClass(DoubleOperExpr)
-        DefVisitClass(SingleOperExpr)
-        DefVisitClass(VarLValue)
-        DefVisitClass(ArrayAtLValue)
+        ST_DEF_VISIT_CLASS(Integer)
+        ST_DEF_VISIT_CLASS(Double)
+        ST_DEF_VISIT_CLASS(String)
+        ST_DEF_VISIT_CLASS(Program)
+        ST_DEF_VISIT_CLASS(SimpleStmt)
+        ST_DEF_VISIT_CLASS(ForStmt)
+        ST_DEF_VISIT_CLASS(WhileStmt)
+        ST_DEF_VISIT_CLASS(IfStmt)
+        ST_DEF_VISIT_CLASS(StmtBlock)
+        ST_DEF_VISIT_CLASS(BreakStmt)
+        ST_DEF_VISIT_CLASS(ReturnStmt)
+        ST_DEF_VISIT_CLASS(ListExpr)
+        ST_DEF_VISIT_CLASS(CallExpr)
+        ST_DEF_VISIT_CLASS(FuncDef)
+        ST_DEF_VISIT_CLASS(StateDef)
+        ST_DEF_VISIT_CLASS(GlobalExpr)
+        ST_DEF_VISIT_CLASS(LocaleExpr)
+        ST_DEF_VISIT_CLASS(NullExpr)
+        ST_DEF_VISIT_CLASS(DoubleOperExpr)
+        ST_DEF_VISIT_CLASS(SingleOperExpr)
+        ST_DEF_VISIT_CLASS(VarLValue)
+        ST_DEF_VISIT_CLASS(ArrayAtLValue)
         virtual ~Visitor();
     };
 }

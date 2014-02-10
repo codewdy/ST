@@ -2,13 +2,14 @@
 #define ST_9834721029_TOOLKIT
 #include "BaseType/BuiltinFunc.h"
 #include "BaseType/PtrObject.h"
-#define CHECK_ARG_SIZE(CONDITION) do {if (!(args.size() CONDITION)) {/*TODO:Add Exception.*/}} while(0)
+#include "BaseType/Excpt.h"
+#include "Exception.h"
 namespace ToolKit {
     template <class T>
     inline T* SafeConvert(BaseType::Object* t) {
         T* ret = dynamic_cast<T*>(t);
         if (!ret) {
-            /*TODO:Add Exception.*/
+            ST_RAISE(VM, {{"__state__", BaseType::Excpt::ConvertError}});
         }
         return ret;
     }
@@ -40,12 +41,13 @@ template <class T>
 inline T& BaseType::pObjects::pObjectBase::To() const {
     return *ToolKit::SafeConvert<BaseType::PtrObject<T>>(GetPtr()->getAttr("__inner__").GetPtr())->ptr;
 }
-#define GET_ARG(num) args[num]
-#define GET_PTR_ARG(num, type) (args[num].To<type>())
-#define GET_ARG_STATE(num) (args[num]->getAttr("__state__"))
-#define BUILTIN_FUNC_LAMBDA(Block, ...) (new BaseType::BuiltinFunc([__VA_ARGS__](const std::vector<pObject>& args) Block))
-#define BUILTIN_FUNC_LAMBDA_ARG(ARG_SIZE, Block, ...)\
-    (new BaseType::BuiltinFunc([__VA_ARGS__](const std::vector<pObject>& args) -> pObject {CHECK_ARG_SIZE(ARG_SIZE); Block}))
+#define ST_CHECK_ARG_SIZE(CONDITION) do {if (!(args.size() CONDITION)) {ST_RAISE(VM, {{"__state__", BaseType::Excpt::ArgCountError}});}} while(0)
+#define ST_GET_ARG(num) args[num]
+#define ST_GET_PTR_ARG(num, type) (args[num].To<type>())
+#define ST_GET_ARG_STATE(num) (args[num]->getAttr("__state__"))
+#define ST_FUNC(Block, ...) (new BaseType::BuiltinFunc([__VA_ARGS__](const std::vector<pObject>& args) Block))
+#define ST_FUNC_ARG(ARG_SIZE, Block, ...)\
+    (new BaseType::BuiltinFunc([__VA_ARGS__](const std::vector<pObject>& args) -> pObject {ST_CHECK_ARG_SIZE(ARG_SIZE); Block}))
 
 #endif
 

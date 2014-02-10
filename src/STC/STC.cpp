@@ -2,16 +2,16 @@
 
 namespace STC {
     std::unordered_map<int, STC::Arg> STC::ArgMap = {
-#define NONEARG(CLASS) {STC::CLASS, STC::NoneArg},
+#define ST_NONEARG(CLASS) {STC::CLASS, STC::NoneArg},
 #define STRINGARG(CLASS) {STC::CLASS, STC::StringArg},
-#define INTARG(CLASS) {STC::CLASS, STC::IntArg},
-#define GOTOARG(CLASS) {STC::CLASS, STC::GotoArg},
-#define BLOCKARG(CLASS) {STC::CLASS, STC::BlockArg},
-        ALL_STC_DEF
-#undef NONEARG
+#define ST_INTARG(CLASS) {STC::CLASS, STC::IntArg},
+#define ST_GOTOARG(CLASS) {STC::CLASS, STC::GotoArg},
+#define ST_BLOCKARG(CLASS) {STC::CLASS, STC::BlockArg},
+        ST_ALL_STC_DEF
+#undef ST_NONEARG
 #undef STRINGARG
-#undef INTARG
-#undef GOTOARG
-#undef BLOCKARG
+#undef ST_INTARG
+#undef ST_GOTOARG
+#undef ST_BLOCKARG
     };
 }

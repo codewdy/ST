@@ -1,6 +1,8 @@
 #include "STC/ALL.h"
 #include <unordered_map>
 #include <unordered_set>
+#include "Exception.h"
+#include "BaseType/Excpt.h"
 
 namespace STC {
     struct SerializeHelper {
@@ -42,7 +44,7 @@ namespace STC {
                             break;
                         case STC::GotoArg:
                             if (j >= gotos.size() || gotos[j] >= codes.size()) {
-                                //TODO: Throw A Exception.
+                                ST_RAISE(VM, {{"__state__", BaseType::Excpt::STCDecodeError}});
                             }
                             cur->code = codes[gotos[j++]];
                             cur->next = codes[i + 1];
@@ -157,7 +159,7 @@ namespace STC {
         for (int i = 0; i < sz && in; i++)
             helper.gotos[i] = ReadInt(in);
         if (!in) {
-            //TODO: Add An Exception.
+            ST_RAISE(VM, {{"__state__", BaseType::Excpt::STCDecodeError}});
         }
         return helper.Decode();
     }

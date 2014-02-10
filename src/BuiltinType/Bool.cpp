@@ -20,18 +20,18 @@ namespace BuiltinType {
             if (STATE.ref_not_equal(nullptr))
                 return;
             STATE = new BaseType::State(BaseType::PtrObjectSTATE);
-#define DEF_OPER(OPER) BUILTIN_FUNC_LAMBDA_ARG(==2, {\
-                Inner& lhs = GET_PTR_ARG(0, Inner);\
-                Inner& rhs = GET_PTR_ARG(1, Inner);\
+#define ST_DEF_OPER(OPER) ST_FUNC_ARG(==2, {\
+                Inner& lhs = ST_GET_PTR_ARG(0, Inner);\
+                Inner& rhs = ST_GET_PTR_ARG(1, Inner);\
                 return lhs OPER rhs;\
             })
-            STATE["__and__"] = DEF_OPER(&&);
-            STATE["__or__"] = DEF_OPER(||);
-            STATE["__not__"] = BUILTIN_FUNC_LAMBDA_ARG(==1, {
-                return !GET_PTR_ARG(0, Inner);
+            STATE["__and__"] = ST_DEF_OPER(&&);
+            STATE["__or__"] = ST_DEF_OPER(||);
+            STATE["__not__"] = ST_FUNC_ARG(==1, {
+                return !ST_GET_PTR_ARG(0, Inner);
             });
-            STATE["__str__"] = BUILTIN_FUNC_LAMBDA_ARG(==1, {
-                return GET_PTR_ARG(0, Inner) ? "true" : "false";
+            STATE["__str__"] = ST_FUNC_ARG(==1, {
+                return ST_GET_PTR_ARG(0, Inner) ? "true" : "false";
             });
             TRUE = ToolKit::CreateObj(STATE, true);
             FALSE = ToolKit::CreateObj(STATE, false);

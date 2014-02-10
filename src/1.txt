@@ -1,0 +1,48 @@
+STC/Generator.cpp:#define RETURN(VAR) do {_ret = VAR;return;} while (0)
+STC/STC.cpp:#define NONEARG(CLASS) {STC::CLASS, STC::NoneArg},
+STC/STC.cpp:#define INTARG(CLASS) {STC::CLASS, STC::IntArg},
+STC/STC.cpp:#define GOTOARG(CLASS) {STC::CLASS, STC::GotoArg},
+STC/STC.cpp:#define BLOCKARG(CLASS) {STC::CLASS, STC::BlockArg},
+BuiltinType/String.cpp:#define DEF_OPER(OPER) BUILTIN_FUNC_LAMBDA_ARG(==2, {\
+BuiltinType/Integer.cpp:#define DEF_OPER(OPER) BUILTIN_FUNC_LAMBDA_ARG(==2, {\
+BuiltinType/Bool.cpp:#define DEF_OPER(OPER) BUILTIN_FUNC_LAMBDA_ARG(==2, {\
+BuiltinType/Double.cpp:#define DEF_OPER(OPER) BUILTIN_FUNC_LAMBDA_ARG(==2, {\
+test/STCPrinter.cpp:#define NONEARG(CLASS) case STC::STC::CLASS: out << #CLASS << std::endl;break;
+test/STCPrinter.cpp:#define INTARG(CLASS) case STC::STC::CLASS: out << #CLASS << "["<< lst->num << "]" << std::endl;break;
+test/STCPrinter.cpp:#define GOTOARG(CLASS) case STC::STC::CLASS: out << #CLASS << "["<< lst->code << "]" << std::endl;break;
+test/STCPrinter.cpp:#define BLOCKARG(CLASS) case STC::STC::CLASS: out << #CLASS << "["<< lst->code << "]" << std::endl;STCPrinter(lst->code, out, prefix + "    ");break;
+test/ASTPrinter.cpp:#define DefPrintFunc(CLASS, MSG) \
+test/ASTPrinter.cpp:#define SimpleDefPrintFunc(CLASS) DefPrintFunc(CLASS, #CLASS << ":")
+BaseType/Init.cpp:#define DEF_EXCPT(CLASS)\
+BaseType/pObject.cpp:#define ARGS(...) std::vector<pObject>({__VA_ARGS__})
+BaseType/pObject.cpp:#define CALC(OBJECT, NAME, ...) Runtime::VM::Calc((OBJECT)->getAttr(#NAME), ARGS(__VA_ARGS__))
+BaseType/pObject.cpp:#define DEF_OPER(OPER, FUNC) \
+BaseType/pObject.cpp:#define DEF_SG_OPER(OPER, FUNC) \
+Include/STC/STC.h:#define ALL_STC_DEF\
+Include/STC/STC.h:#define NONEARG(CLASS) CLASS,
+Include/STC/STC.h:#define INTARG(CLASS) CLASS,
+Include/STC/STC.h:#define GOTOARG(CLASS) CLASS,
+Include/STC/STC.h:#define BLOCKARG(CLASS) CLASS,
+Include/STC/STC.h:#define NONEARG(CLASS) static STC* Create##CLASS() {return new STC(CLASS);}
+Include/STC/STC.h:#define INTARG(CLASS) static STC* Create##CLASS(int _num) {return new STC(CLASS, _num);}
+Include/STC/STC.h:#define GOTOARG(CLASS) static STC* Create##CLASS(STC* _code = nullptr) {return new STC(CLASS, _code);}
+Include/STC/STC.h:#define BLOCKARG(CLASS) static STC* Create##CLASS(STC* _code = nullptr) {return new STC(CLASS, _code);}
+Include/ToolKit.h:#define CHECK_ARG_SIZE(CONDITION) do {if (!(args.size() CONDITION)) {Raise(VM, {{"__state__", BaseType::Excpt::ArgCountError}});}} while(0)
+Include/ToolKit.h:#define GET_ARG(num) args[num]
+Include/ToolKit.h:#define GET_PTR_ARG(num, type) (args[num].To<type>())
+Include/ToolKit.h:#define GET_ARG_STATE(num) (args[num]->getAttr("__state__"))
+Include/ToolKit.h:#define BUILTIN_FUNC_LAMBDA(Block, ...) (new BaseType::BuiltinFunc([__VA_ARGS__](const std::vector<pObject>& args) Block))
+Include/ToolKit.h:#define BUILTIN_FUNC_LAMBDA_ARG(ARG_SIZE, Block, ...)\
+Include/Exception.h:#define DEFEXCPTION(CLASS) class CLASS##Exception : public Exception {};
+Include/Exception.h:#define DEFLOCEXCPTION(CLASS) class CLASS##Exception : public LocException {public: using LocException::LocException;};
+Include/Exception.h:#define Raise(TYPE, ...) do{\
+Include/Exception.h:#define Raise(TYPE, ...) do{\
+Include/Exception.h:#define Warn(Warning) do{\
+Include/Exception.h:#define Warn(Warning) do{}while(0)
+Include/BaseType/BuiltinFunc.h:#define DEF_BUILTIN_FUNC(FUNC_NAME) pObject FUNC_NAME(const std::vector<pObject>& args)
+Include/AST/Visitor.h:#define DefVisitClass(CLASS) virtual void visit##CLASS(CLASS* that);
+Include/AST/Visitor.h:#define DefVisitASTClass(CLASS) virtual void visit##CLASS(AST::CLASS* that);
+AST/DefVisit.cpp:#define DefClassVisit(CLASS) void CLASS::visit(Visitor* that) {that->visit##CLASS(this);}
+Parser/Lexer.l:#define MakeLexStr(str, type) do {\
+Parser/Lexer.l:#define MakeLex(type) MakeLexStr(YYText(), type)
+Parser/ParserDef.h:#define FRONTEND_PARSERDEF

@@ -14,7 +14,7 @@ namespace BaseType {
         virtual void run(Runtime::VM& vm, int num);
         BuiltinFunc(pFunc _func) : Func(STATE), func(_func) {}
     };
-#define DEF_BUILTIN_FUNC(FUNC_NAME) pObject FUNC_NAME(const std::vector<pObject>& args)
+#define ST_DEF_FUNC(FUNC_NAME) pObject FUNC_NAME(const std::vector<pObject>& args)
 }
 
 #endif

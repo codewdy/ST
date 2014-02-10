@@ -12,7 +12,6 @@ namespace BaseType {
         Object& operator==(const Object&) = delete;
     public:
         static pObject STATE;
-        static pObject ExcptAttrNotFound;
         /**the dict of this object.*/
         std::unordered_map<std::string, pObjectExt> dict;
         Object(const pObject& state = STATE);

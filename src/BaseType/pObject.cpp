@@ -17,31 +17,31 @@ namespace BaseType {
         }
         pObjectBase::~pObjectBase() {
         }
-#define ARGS(...) std::vector<pObject>({__VA_ARGS__})
-#define CALC(OBJECT, NAME, ...) Runtime::VM::Calc((OBJECT)->getAttr(#NAME), ARGS(__VA_ARGS__))
-#define DEF_OPER(OPER, FUNC) \
+#define ST_ARGS(...) std::vector<pObject>({__VA_ARGS__})
+#define ST_CALC(OBJECT, NAME, ...) Runtime::VM::Calc((OBJECT)->getAttr(#NAME), ST_ARGS(__VA_ARGS__))
+#define ST_DEF_OPER(OPER, FUNC) \
         pObject pObjectBase::operator OPER(const pObject& rhs) const {\
-            return CALC(GetPtr(), __##FUNC##__, rhs);\
+            return ST_CALC(GetPtr(), __##FUNC##__, rhs);\
         }
-        DEF_OPER(+, add)
-        DEF_OPER(-, minus)
-        DEF_OPER(*, mul)
-        DEF_OPER(/, div)
-        DEF_OPER(%, mod)
-        DEF_OPER(<, less_than)
-        DEF_OPER(>, greater_than)
-        DEF_OPER(<=, not_greater)
-        DEF_OPER(>=, not_less)
-        DEF_OPER(==, equal)
-        DEF_OPER(!=, not_equal)
-        DEF_OPER(&&, and)
-        DEF_OPER(||, or)
-#define DEF_SG_OPER(OPER, FUNC) \
+        ST_DEF_OPER(+, add)
+        ST_DEF_OPER(-, minus)
+        ST_DEF_OPER(*, mul)
+        ST_DEF_OPER(/, div)
+        ST_DEF_OPER(%, mod)
+        ST_DEF_OPER(<, less_than)
+        ST_DEF_OPER(>, greater_than)
+        ST_DEF_OPER(<=, not_greater)
+        ST_DEF_OPER(>=, not_less)
+        ST_DEF_OPER(==, equal)
+        ST_DEF_OPER(!=, not_equal)
+        ST_DEF_OPER(&&, and)
+        ST_DEF_OPER(||, or)
+#define ST_DEF_SG_OPER(OPER, FUNC) \
         pObject pObjectBase::operator OPER() const {\
-            return CALC(GetPtr(), __##FUNC##__);\
+            return ST_CALC(GetPtr(), __##FUNC##__);\
         }
-        DEF_SG_OPER(!, not)
-        DEF_SG_OPER(-, neg)
+        ST_DEF_SG_OPER(!, not)
+        ST_DEF_SG_OPER(-, neg)
 
         pObjectAttr pObjectBase::operator[](const std::string& attr) const {
             return {GetPtr(), attr};
@@ -87,11 +87,13 @@ namespace BaseType {
             for (auto x : lst)
                 child->setAttr(x.first, x.second);
         }
+        pObject::pObject(std::nullptr_t arg) : pObject() {}
         pObject::pObject(bool arg) : pObject(BuiltinType::Bool::Create(arg)) {}
         pObject::pObject(int arg) : pObject(BuiltinType::Integer::Create(arg)) {}
         pObject::pObject(double arg) : pObject(BuiltinType::Double::Create(arg)) {}
         pObject::pObject(const std::string& arg) : pObject(BuiltinType::String::Create(arg)) {}
         pObject::pObject(std::string&& arg) : pObject(BuiltinType::String::Create(std::move(arg))) {}
+        pObject::pObject(const char* arg) : pObject(BuiltinType::String::Create(arg)) {}
         pObject::pObject(const std::vector<pObject>& arg) : pObject(BuiltinType::List::Create(arg)) {}
         pObject::pObject(std::vector<pObject>&& arg) : pObject(BuiltinType::List::Create(std::move(arg))) {}
 
@@ -196,6 +198,10 @@ namespace BaseType {
         }
         const pObjectAttr& pObjectAttr::operator=(Object* rhs) const {
             base->setAttr(attr, rhs);
+            return *this;
+        }
+        const pObjectAttr& pObjectAttr::operator=(const pObject& rhs) const {
+            base->setAttr(attr, rhs.GetPtr());
             return *this;
         }
         const pObjectAttr& pObjectAttr::operator=(const pObjectBase& rhs) const {

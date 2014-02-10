@@ -1,5 +1,5 @@
-#ifndef ST_7182369121_AST_RETURNSTMT
-#define ST_7182369121_AST_RETURNSTMT
+#ifndef ST_7182369121_AST_ST_RETURNSTMT
+#define ST_7182369121_AST_ST_RETURNSTMT
 #include "Stmt.h"
 namespace AST {
     class Expr;

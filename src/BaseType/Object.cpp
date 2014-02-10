@@ -3,6 +3,7 @@
 #include "BaseType/SimpleFunc.h"
 #include "BaseType/BuiltinFunc.h"
 #include "BuiltinType/String.h"
+#include "BaseType/Excpt.h"
 #include "ToolKit.h"
 #include <iostream>
 
@@ -42,8 +43,8 @@ namespace BaseType {
         if (ret)
             return ret;
         else {
-            Raise(VM, {
-                {"__state__", Object::ExcptAttrNotFound},
+            ST_RAISE(VM, {
+                {"__state__", Excpt::AttrNotFound},
                 {"obj", this},
                 {"attr", BuiltinType::String::Create(attr)},
             });

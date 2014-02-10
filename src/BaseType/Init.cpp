@@ -10,6 +10,7 @@
 #include "ToolKit.h"
 #include "BuiltinType/String.h"
 #include "BuiltinType/Bool.h"
+#include "BaseType/Excpt.h"
 #include <iostream>
 #include <sstream>
 #include <string>
@@ -24,7 +25,12 @@ namespace BaseType {
     pObject Namespace::STATE;
     pObject ObjectNamespace::STATE;
     pObject PtrObjectSTATE;
-    pObject Object::ExcptAttrNotFound;
+    pObject Excpt::AttrNotFound;
+    pObject Excpt::ArgCountError;
+    pObject Excpt::STCDecodeError;
+    pObject Excpt::STCRuntimeStackError;
+    pObject Excpt::ConvertError;
+    pObject Excpt::IndexError;
 
     void InitState() {
         Object::STATE = new State(nullptr);
@@ -39,30 +45,40 @@ namespace BaseType {
         PtrObjectSTATE = new State();
         Namespace::STATE = new State();
         ObjectNamespace::STATE = new State(Namespace::STATE);
-        Object::STATE["__str__"] = BUILTIN_FUNC_LAMBDA_ARG(==1, {
+        Object::STATE["__str__"] = ST_FUNC_ARG(==1, {
             std::ostringstream ret;
             ret << "[Object at " << args[0].GetPtr() << "]";
             return BuiltinType::String::Create(ret.str());
         });
-        Object::STATE["__equal__"] = BUILTIN_FUNC_LAMBDA_ARG(==2, {
+        Object::STATE["__equal__"] = ST_FUNC_ARG(==2, {
             return BuiltinType::Bool::Create(args[0].ref_equal(args[1]));
         });
-        Object::STATE["__not_equal__"] = BUILTIN_FUNC_LAMBDA_ARG(==2, {
+        Object::STATE["__not_equal__"] = ST_FUNC_ARG(==2, {
             return !(args[0] == args[1]);
         });
-        Object::STATE["__greater_than__"] = BUILTIN_FUNC_LAMBDA_ARG(==2, {
+        Object::STATE["__greater_than__"] = ST_FUNC_ARG(==2, {
             return args[1] < args[0];
         });
-        Object::STATE["__not_less__"] = BUILTIN_FUNC_LAMBDA_ARG(==2, {
+        Object::STATE["__not_less__"] = ST_FUNC_ARG(==2, {
             return !(args[0] < args[1]);
         });
-        Object::STATE["__not_greater__"] = BUILTIN_FUNC_LAMBDA_ARG(==2, {
+        Object::STATE["__not_greater__"] = ST_FUNC_ARG(==2, {
             return !(args[1] < args[0]);
         });
-        Object::ExcptAttrNotFound = new State;
-        Object::ExcptAttrNotFound["__str__"] = BUILTIN_FUNC_LAMBDA_ARG(==1, {
+        Excpt::AttrNotFound = new State;
+        Excpt::AttrNotFound["__str__"] = ST_FUNC_ARG(==1, {
                 return args[0]["obj"]["__str__"]() + args[0]["attr"];
         });
+#define ST_DEF_EXCPT(CLASS)\
+        Excpt::CLASS = new State;\
+        Excpt::CLASS["__str__"] = ST_FUNC_ARG(==1, {\
+            return #CLASS;\
+        });
+        ST_DEF_EXCPT(ArgCountError)
+        ST_DEF_EXCPT(STCDecodeError)
+        ST_DEF_EXCPT(STCRuntimeStackError)
+        ST_DEF_EXCPT(ConvertError)
+        ST_DEF_EXCPT(IndexError)
     }
 
     void Init(const pObject& ret) {
@@ -73,6 +89,12 @@ namespace BaseType {
         ret["BuiltinFunc"] = BuiltinFunc::STATE;
         ret["Namespace"] = Namespace::STATE;
         ret["ObjectNamespace"] = ObjectNamespace::STATE;
+        ret["AttrNotFound"] = Excpt::AttrNotFound;
+        ret["ArgCountError"] = Excpt::ArgCountError;
+        ret["STCDecodeError"] = Excpt::STCDecodeError;
+        ret["STCRuntimeError"] = Excpt::STCRuntimeStackError;
+        ret["ConvertError"] = Excpt::ConvertError;
+        ret["IndexError"] = Excpt::IndexError;
     }
 }
 

@@ -7,7 +7,7 @@
 namespace Exception {
     extern std::ostream* LogFile;
     class Exception {};
-#define DEFEXCPTION(CLASS) class CLASS##Exception : public Exception {};
+#define ST_DEF_EXCPTION(CLASS) class CLASS##Exception : public Exception {};
     class LocException : public Exception {
     public:
         std::string filename;
@@ -16,7 +16,7 @@ namespace Exception {
         LocException(const std::string& _filename, int _lineno) : filename(_filename), lineno(_lineno) {}
         LocException(std::string&& _filename = "", int _lineno = -1) : filename(std::move(_filename)), lineno(_lineno) {}
     };
-#define DEFLOCEXCPTION(CLASS) class CLASS##Exception : public LocException {public: using LocException::LocException;};
+#define ST_DEF_LOC_EXCPTION(CLASS) class CLASS##Exception : public LocException {public: using LocException::LocException;};
     class VMException : public Exception {
     public:
         pObject excpt;
@@ -30,35 +30,35 @@ namespace Exception {
         void print(std::ostream& out);
     };
 
-    DEFEXCPTION(NotImplement)
-    DEFEXCPTION(DoubleFault)
-    DEFLOCEXCPTION(Break)
-    DEFLOCEXCPTION(Syntax)
+    ST_DEF_EXCPTION(NotImplement)
+    ST_DEF_EXCPTION(DoubleFault)
+    ST_DEF_LOC_EXCPTION(Break)
+    ST_DEF_LOC_EXCPTION(Syntax)
 
-#undef DEFEXCPTION
-#undef DEFLOCEXCPTION
+#undef ST_DEF_EXCPTION
+#undef ST_DEF_LOC_EXCPTION
 }
 
 #ifdef DEBUG
-#define Raise(TYPE, ...) do{\
+#define ST_RAISE(TYPE, ...) do{\
     Exception::TYPE##Exception ex = Exception::TYPE##Exception(__VA_ARGS__);\
-    *(Exception::LogFile) << "Exception[" << #TYPE << "Exception] Raise At " << __FILE__ << ":" << __LINE__ << std::endl;\
+    *(Exception::LogFile) << "Exception[" << #TYPE << "Exception] ST_RAISE At " << __FILE__ << ":" << __LINE__ << std::endl;\
     throw ex;\
 }while(0)
 #else
-#define Raise(TYPE, ...) do{\
+#define ST_RAISE(TYPE, ...) do{\
     Exception::TYPE##Exception ex = Exception::TYPE##Exception(__VA_ARGS__);\
     throw ex;\
 }while(0)
 #endif
 
 #ifdef DEBUG
-#define Warn(Warning) do{\
+#define ST_WARN(ST_WARNing) do{\
     Exception::LogFile << "Waring at " << __FILE__ << "." << __LINE__ \
-        << ":" << Warning << std::endl;\
+        << ":" << ST_WARNing << std::endl;\
 }while(0)
 #else
-#define Warn(Warning) do{}while(0)
+#define ST_WARN(ST_WARNing) do{}while(0)
 #endif
 
 #endif

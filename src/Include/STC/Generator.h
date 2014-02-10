@@ -30,51 +30,51 @@ namespace STC {
         }
 
         /**sp = sp + 1.*/
-        DefVisitASTClass(Integer)
+        ST_DEF_VISIT_AST_CLASS(Integer)
         /**sp = sp + 1.*/
-        DefVisitASTClass(Double)
+        ST_DEF_VISIT_AST_CLASS(Double)
         /**sp = sp + 1.*/
-        DefVisitASTClass(String)
+        ST_DEF_VISIT_AST_CLASS(String)
         /**sp = sp.*/
-        DefVisitASTClass(Program)
+        ST_DEF_VISIT_AST_CLASS(Program)
         /**sp = sp.*/
-        DefVisitASTClass(SimpleStmt)
+        ST_DEF_VISIT_AST_CLASS(SimpleStmt)
         /**sp = sp.*/
-        DefVisitASTClass(ForStmt)
+        ST_DEF_VISIT_AST_CLASS(ForStmt)
         /**sp = sp.*/
-        DefVisitASTClass(WhileStmt)
+        ST_DEF_VISIT_AST_CLASS(WhileStmt)
         /**sp = sp.*/
-        DefVisitASTClass(IfStmt)
+        ST_DEF_VISIT_AST_CLASS(IfStmt)
         /**sp = sp.*/
-        DefVisitASTClass(StmtBlock)
+        ST_DEF_VISIT_AST_CLASS(StmtBlock)
         /**sp = sp.*/
-        DefVisitASTClass(BreakStmt)
+        ST_DEF_VISIT_AST_CLASS(BreakStmt)
         /**sp = sp.*/
-        DefVisitASTClass(ReturnStmt)
+        ST_DEF_VISIT_AST_CLASS(ReturnStmt)
         /**sp = sp + 1.*/
-        DefVisitASTClass(ListExpr)
+        ST_DEF_VISIT_AST_CLASS(ListExpr)
         /**sp = sp + 1.*/
-        DefVisitASTClass(CallExpr)
+        ST_DEF_VISIT_AST_CLASS(CallExpr)
         /**sp = sp + 1.*/
-        DefVisitASTClass(FuncDef)
+        ST_DEF_VISIT_AST_CLASS(FuncDef)
         /**sp = sp + 1.*/
-        DefVisitASTClass(StateDef)
+        ST_DEF_VISIT_AST_CLASS(StateDef)
         /**sp = sp + 1.*/
-        DefVisitASTClass(GlobalExpr)
+        ST_DEF_VISIT_AST_CLASS(GlobalExpr)
         /**sp = sp + 1.*/
-        DefVisitASTClass(LocaleExpr)
+        ST_DEF_VISIT_AST_CLASS(LocaleExpr)
         /**sp = sp + 1.*/
-        DefVisitASTClass(NullExpr)
+        ST_DEF_VISIT_AST_CLASS(NullExpr)
         /**sp = sp + 1.*/
-        DefVisitASTClass(DoubleOperExpr)
+        ST_DEF_VISIT_AST_CLASS(DoubleOperExpr)
         /**sp = sp + 1.*/
-        DefVisitASTClass(SingleOperExpr)
+        ST_DEF_VISIT_AST_CLASS(SingleOperExpr)
         /**-RValue : sp = sp + 1
          * -LValue : sp = sp - 1.*/
-        DefVisitASTClass(VarLValue)
+        ST_DEF_VISIT_AST_CLASS(VarLValue)
         /**-RValue : sp = sp + 1
          * -LValue : sp = sp - 1.*/
-        DefVisitASTClass(ArrayAtLValue)
+        ST_DEF_VISIT_AST_CLASS(ArrayAtLValue)
     };
 }
 #endif

@@ -19,7 +19,7 @@ namespace AST {
     protected:
         AST(Location _loc) : loc(_loc) {}
     public:
-        Location loc;///<Location Reported When Raise Error.
+        Location loc;///<Location Reported When ST_RAISE Error.
         /**Visitor Pattern Interface.
          * Visitor would call this method to decide which the visitor should do.*/
         virtual void visit(Visitor* that) = 0;

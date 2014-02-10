@@ -12,6 +12,7 @@
 #include "BuiltinType/Init.h"
 #include "ToolKit.h"
 #include "Exception.h"
+#include "BaseType/Excpt.h"
 #ifdef DEBUG
 #include <iostream>
 #endif
@@ -32,7 +33,7 @@ namespace Runtime {
 
     pObject VM::PopObject() {
         if (Objects.empty()) {
-            //TODO: Add an exception.
+            ST_RAISE(VM, {{"__state__", BaseType::Excpt::STCRuntimeStackError}});
         }
         pObject ret = Objects.top();
         Objects.pop();
@@ -41,7 +42,7 @@ namespace Runtime {
 
     pObject& VM::TopObject() {
         if (Objects.empty()) {
-            //TODO: Add an exception,
+            ST_RAISE(VM, {{"__state__", BaseType::Excpt::STCRuntimeStackError}});
         }
         return Objects.top();
     }
@@ -53,14 +54,14 @@ namespace Runtime {
 
     void VM::PopContext() {
         if (Contexts.empty()) {
-            //TODO: Add an excetion.
+            ST_RAISE(VM, {{"__state__", BaseType::Excpt::STCRuntimeStackError}});
         }
         Contexts.pop();
     }
 
     Context& VM::TopContext() {
         if (Contexts.empty()) {
-            //TODO: Add an excetion.
+            ST_RAISE(VM, {{"__state__", BaseType::Excpt::STCRuntimeStackError}});
         }
         return Contexts.top();
     }
@@ -78,7 +79,7 @@ namespace Runtime {
                     TryElement t = Trys.top();
                     Trys.pop();
                     if (Contexts.size() < t.CtxSize || Objects.size() < t.ObjSize)
-                        Raise(DoubleFault);
+                        ST_RAISE(DoubleFault);
                     while (Objects.size() > t.ObjSize)
                         Objects.pop();
                     next = t.CATCH;

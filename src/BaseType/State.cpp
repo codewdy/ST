@@ -1,4 +1,5 @@
 #include "BaseType/State.h"
+#include "BaseType/Excpt.h"
 #include <iostream>
 
 namespace BaseType {
@@ -24,7 +25,7 @@ namespace BaseType {
             vm.Call(num + 1);
         } else {
             if (num) {
-                //TODO: Add an Exception.
+                ST_RAISE(VM, {{"__state__", Excpt::ArgCountError}});
             }
         }
     }
