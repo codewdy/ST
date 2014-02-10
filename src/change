@@ -1,5 +1,0 @@
-#!/bin/zsh
-for x (`find -name "*.cpp"` `find -name "*.h"` Parser/Lexer.l) do
-    sed -i "s/$1/$2/g" $x
-done
-
