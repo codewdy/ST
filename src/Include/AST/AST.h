@@ -10,7 +10,7 @@ namespace AST {
     struct Location {
         std::string* str;///<Source File Name.
         int lineno;///<Source Line Number.
-        Location(std::string* _str = 0, int _lineno = 0) : str(_str), lineno(_lineno) {}
+        Location(std::string* _str = nullptr, int _lineno = 0) : str(_str), lineno(_lineno) {}
     };
     /**Base class for AST.*/
     class AST {

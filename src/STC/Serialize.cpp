@@ -18,7 +18,7 @@ namespace STC {
                 if (lst->arg == STC::BlockArg)
                     EncodeCore(lst->code);
             }
-            Append(0);
+            Append(nullptr);
         }
         void Encode(STC* lst) {
             EncodeCore(lst);
@@ -32,7 +32,7 @@ namespace STC {
             STC* ret = codes[i];
             for (; i < codes.size(); i++) {
                 STC* cur = codes[i];
-                if (cur == 0)
+                if (cur == nullptr)
                     return ret;
                 else
                     switch (cur->arg) {
@@ -100,7 +100,7 @@ namespace STC {
         SerializeHelper helper;
         helper.Encode(lst);
         for (auto code : helper.codes) {
-            if (code == 0) {
+            if (code == nullptr) {
                 out.put(EOB);
             } else {
                 out.put((char)code->type);
@@ -129,7 +129,7 @@ namespace STC {
         while (in && flag) {
             char type = in.get();
             if (type == EOB) {
-                helper.Append(0);
+                helper.Append(nullptr);
                 if (depth-- == 0)
                     flag = false;
             } else
@@ -144,10 +144,10 @@ namespace STC {
                         helper.Append(new STC((STC::Type)type, ReadInt(in)));
                         break;
                     case STC::GotoArg:
-                        helper.Append(new STC((STC::Type)type, (STC*)0));
+                        helper.Append(new STC((STC::Type)type, nullptr));
                         break;
                     case STC::BlockArg:
-                        helper.Append(new STC((STC::Type)type, (STC*)0));
+                        helper.Append(new STC((STC::Type)type, nullptr));
                         depth++;
                         break;
                 }

@@ -14,7 +14,7 @@ namespace BaseType {
                 break;
             base = base->dict["__base__"].GetPtr();
         }
-        return 0;
+        return nullptr;
     }
     void State::run(Runtime::VM& vm, int num) {
         vm.PushObject(new Object(this));

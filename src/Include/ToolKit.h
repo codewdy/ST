@@ -43,7 +43,9 @@ inline T& BaseType::pObjects::pObjectBase::To() const {
 #define GET_ARG(num) args[num]
 #define GET_PTR_ARG(num, type) (args[num].To<type>())
 #define GET_ARG_STATE(num) (args[num]->getAttr("__state__"))
-#define SET_FUNC(CLASS, FUNC) ToolKit::SetFunc(CLASS, #FUNC, FUNC)
+#define BUILTIN_FUNC_LAMBDA(Block, ...) (new BaseType::BuiltinFunc([__VA_ARGS__](const std::vector<pObject>& args) Block))
+#define BUILTIN_FUNC_LAMBDA_ARG(ARG_SIZE, Block, ...)\
+    (new BaseType::BuiltinFunc([__VA_ARGS__](const std::vector<pObject>& args) -> pObject {CHECK_ARG_SIZE(ARG_SIZE); Block}))
 
 #endif
 

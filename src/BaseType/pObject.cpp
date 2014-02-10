@@ -1,5 +1,10 @@
 #include "BaseType/pObject.h"
 #include "Runtime/VM.h"
+#include "BuiltinType/String.h"
+#include "BuiltinType/Integer.h"
+#include "BuiltinType/Double.h"
+#include "BuiltinType/List.h"
+#include "BuiltinType/Bool.h"
 
 namespace BaseType {
     namespace pObjects {
@@ -76,6 +81,20 @@ namespace BaseType {
         pObject::pObject(pObject&& rhs) : child(rhs.child) {
             rhs.child = nullptr;
         }
+        pObject::pObject(std::initializer_list<std::pair<std::string, pObject>> lst) {
+            child = new Object;
+            Register();
+            for (auto x : lst)
+                child->setAttr(x.first, x.second);
+        }
+        pObject::pObject(bool arg) : pObject(BuiltinType::Bool::Create(arg)) {}
+        pObject::pObject(int arg) : pObject(BuiltinType::Integer::Create(arg)) {}
+        pObject::pObject(double arg) : pObject(BuiltinType::Double::Create(arg)) {}
+        pObject::pObject(const std::string& arg) : pObject(BuiltinType::String::Create(arg)) {}
+        pObject::pObject(std::string&& arg) : pObject(BuiltinType::String::Create(std::move(arg))) {}
+        pObject::pObject(const std::vector<pObject>& arg) : pObject(BuiltinType::List::Create(arg)) {}
+        pObject::pObject(std::vector<pObject>&& arg) : pObject(BuiltinType::List::Create(std::move(arg))) {}
+
         pObject& pObject::operator=(const pObject &rhs) {
             Reduce();
             child = rhs.child;

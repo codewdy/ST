@@ -25,7 +25,7 @@ namespace STC {
 
         /**Generate A Program.*/
         STC* Gen(AST::Program* that) {
-            _break = 0;
+            _break = nullptr;
             return visitX(that).beg;
         }
 

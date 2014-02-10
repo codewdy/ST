@@ -7,7 +7,7 @@ namespace AST {
     class ReturnStmt : public Stmt {
     public:
         Expr* expr;//<expr for return.
-        ReturnStmt(Location _loc, Expr* _expr = 0) : Stmt(_loc), expr(_expr) {}
+        ReturnStmt(Location _loc, Expr* _expr = nullptr) : Stmt(_loc), expr(_expr) {}
         void visit(Visitor* that);
         ~ReturnStmt();
     };

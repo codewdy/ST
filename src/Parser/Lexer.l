@@ -8,7 +8,7 @@
 std::vector<char> sb;
 std::unordered_map<int, Lex*> lexMap;
 #define MakeLexStr(str, type) do {\
-    Lex* tmp = new Lex(str, type, AST::Location(0, lineno()));\
+    Lex* tmp = new Lex(str, type, AST::Location(nullptr, lineno()));\
     int ret = long(tmp) % 98765431;\
     while (ret++)\
         if (lexMap.insert(std::make_pair(ret, tmp)).second)\

@@ -8,11 +8,6 @@
 namespace BuiltinType {
     namespace String {
         typedef std::string Inner;
-        DEF_BUILTIN_FUNC(__add__);
-        DEF_BUILTIN_FUNC(__mul__);
-        DEF_BUILTIN_FUNC(__str__);
-        DEF_BUILTIN_FUNC(__equal__);
-        DEF_BUILTIN_FUNC(__less_than__);
         extern pObject STATE;
         void InitState();
         pObject Create(const Inner& str);

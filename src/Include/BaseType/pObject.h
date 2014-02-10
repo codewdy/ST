@@ -10,11 +10,6 @@ namespace BaseType {
         class pObjectAttr;
         class pObject;
         class pObjectBase {
-        protected:
-            /**Reduce the referrence.*/
-            virtual void Reduce() = 0;
-            /**Regist the Pointer.*/
-            virtual void Register() = 0;
         public:
             Object& operator*() const;
             Object* operator->() const;
@@ -63,19 +58,28 @@ namespace BaseType {
             template <class T>
             T& To() const;
         };
-        /**A Pointer to Object on GC Map's Top (like an pObjectExt with 0 parent but more quicker).*/
+        /**A Pointer to Object on GC Map's Top (like an pObjectExt with null parent but more quicker).*/
         class pObject : public pObjectBase {
         protected:
             /**the Pointer point to.*/
             Object* child;
             /**Reduce the referrence.*/
-            virtual void Reduce();
+            void Reduce();
             /**Regist the Pointer.*/
-            virtual void Register();
+            void Register();
         public:
             pObject(Object* _child = nullptr);
             pObject(const pObject& rhs);
             pObject(pObject&& rhs);
+            pObject(bool arg);
+            pObject(int arg);
+            pObject(double arg);
+            pObject(const std::string& arg);
+            pObject(std::string&& arg);
+            pObject(const std::vector<pObject>& arg);
+            pObject(std::vector<pObject>&& arg);
+            /**Create A object by list. \warn State is not a normal Object so you should not init state bu this.*/
+            pObject(std::initializer_list<std::pair<std::string, pObject>> lst);
             pObject& operator=(const pObject& rhs);
             pObject& operator=(pObject&& rhs);
             pObject& operator=(Object* rhs);
@@ -90,9 +94,9 @@ namespace BaseType {
             /**the Pointer's Owner.*/
             Object *parent;
             /**Reduce the referrence.*/
-            virtual void Reduce();
+            void Reduce();
             /**Regist the Pointer.*/
-            virtual void Register();
+            void Register();
         public:
             pObjectExt(Object* _child = nullptr, Object* _parent = nullptr);
             pObjectExt(const pObject& _child, const pObject& _parent) : pObjectExt(_child.GetPtr(), _parent.GetPtr()) {}
@@ -112,9 +116,9 @@ namespace BaseType {
             /**the attribute for child.*/
             std::string attr;
             /**Reduce the referrence.*/
-            virtual void Reduce();
+            void Reduce();
             /**Regist the Pointer.*/
-            virtual void Register();
+            void Register();
         public:
             pObjectAttr(Object* _base, const std::string& _attr);
             pObjectAttr(Object* _base, std::string&& _attr);
@@ -122,6 +126,7 @@ namespace BaseType {
             pObjectAttr(pObjectAttr&& rhs);
             const pObjectAttr& operator=(Object* rhs) const;
             const pObjectAttr& operator=(const pObjectBase& rhs) const;
+            const pObjectAttr& operator=(const pObject& rhs) const;
             const pObjectAttr& operator=(const pObjectAttr& rhs) const;
             virtual Object* GetPtr() const;
             virtual ~pObjectAttr();

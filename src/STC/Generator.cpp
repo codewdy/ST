@@ -116,7 +116,7 @@ namespace STC {
         RETURN(ret);
     }
     void Generator::visitBreakStmt(AST::BreakStmt* that) {
-        if (_break == 0) {
+        if (_break == nullptr) {
             Raise(Break, that->loc);
         } else {
             RETURN(STC::CreateGoto(_break));
@@ -155,7 +155,7 @@ namespace STC {
     void Generator::visitFuncDef(AST::FuncDef* that) {
         STCList ret;
         STC* o_break = _break;
-        _break = 0;
+        _break = nullptr;
         STCList func = visitX(that->stmts);
         func.Append(STC::CreatePushNull());
         func.Append(STC::CreateReturn());
@@ -169,7 +169,7 @@ namespace STC {
     void Generator::visitStateDef(AST::StateDef* that) {
         STCList ret;
         STC* o_break = _break;
-        _break = 0;
+        _break = nullptr;
         ret.Append(STC::CreateDefState(visitX(that->stmts).beg));
         _break = o_break;
         RETURN(ret);

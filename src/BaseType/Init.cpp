@@ -24,41 +24,10 @@ namespace BaseType {
     pObject Namespace::STATE;
     pObject ObjectNamespace::STATE;
     pObject PtrObjectSTATE;
-
-    DEF_BUILTIN_FUNC(obj_str) {
-        CHECK_ARG_SIZE(==1);
-        std::ostringstream ret;
-        ret << "[Object at " << args[0].GetPtr() << "]";
-        return BuiltinType::String::Create(ret.str());
-    }
-
-    DEF_BUILTIN_FUNC(obj_eq) {
-        CHECK_ARG_SIZE(==2);
-        return BuiltinType::Bool::Create(args[0].ref_equal(args[1]));
-    }
-
-    DEF_BUILTIN_FUNC(obj_ne) {
-        CHECK_ARG_SIZE(==2);
-        return !(args[0] == args[1]);
-    }
-
-    DEF_BUILTIN_FUNC(obj_gt) {
-        CHECK_ARG_SIZE(==2);
-        return (args[1] < args[0]);
-    }
-
-    DEF_BUILTIN_FUNC(obj_nl) {
-        CHECK_ARG_SIZE(==2);
-        return !(args[0] < args[1]);
-    }
-
-    DEF_BUILTIN_FUNC(obj_ng) {
-        CHECK_ARG_SIZE(==2);
-        return !(args[1] < args[0]);
-    }
+    pObject Object::ExcptAttrNotFound;
 
     void InitState() {
-        Object::STATE = new State(0);
+        Object::STATE = new State(nullptr);
         Func::STATE = new State();
         State::STATE = new State(Func::STATE);
         Object::STATE["__state__"] = State::STATE;
@@ -70,12 +39,30 @@ namespace BaseType {
         PtrObjectSTATE = new State();
         Namespace::STATE = new State();
         ObjectNamespace::STATE = new State(Namespace::STATE);
-        ToolKit::SetFunc(Object::STATE, "__str__", obj_str);
-        ToolKit::SetFunc(Object::STATE, "__equal__", obj_eq);
-        ToolKit::SetFunc(Object::STATE, "__not_equal__", obj_ne);
-        ToolKit::SetFunc(Object::STATE, "__greater_than__", obj_gt);
-        ToolKit::SetFunc(Object::STATE, "__not_less__", obj_nl);
-        ToolKit::SetFunc(Object::STATE, "__not_greater__", obj_ng);
+        Object::STATE["__str__"] = BUILTIN_FUNC_LAMBDA_ARG(==1, {
+            std::ostringstream ret;
+            ret << "[Object at " << args[0].GetPtr() << "]";
+            return BuiltinType::String::Create(ret.str());
+        });
+        Object::STATE["__equal__"] = BUILTIN_FUNC_LAMBDA_ARG(==2, {
+            return BuiltinType::Bool::Create(args[0].ref_equal(args[1]));
+        });
+        Object::STATE["__not_equal__"] = BUILTIN_FUNC_LAMBDA_ARG(==2, {
+            return !(args[0] == args[1]);
+        });
+        Object::STATE["__greater_than__"] = BUILTIN_FUNC_LAMBDA_ARG(==2, {
+            return args[1] < args[0];
+        });
+        Object::STATE["__not_less__"] = BUILTIN_FUNC_LAMBDA_ARG(==2, {
+            return !(args[0] < args[1]);
+        });
+        Object::STATE["__not_greater__"] = BUILTIN_FUNC_LAMBDA_ARG(==2, {
+            return !(args[1] < args[0]);
+        });
+        Object::ExcptAttrNotFound = new State;
+        Object::ExcptAttrNotFound["__str__"] = BUILTIN_FUNC_LAMBDA_ARG(==1, {
+                return args[0]["obj"]["__str__"]() + args[0]["attr"];
+        });
     }
 
     void Init(const pObject& ret) {

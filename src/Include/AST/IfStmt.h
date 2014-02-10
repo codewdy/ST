@@ -9,7 +9,7 @@ namespace AST {
         Expr* condition;///<the condition
         Stmt *yes;///<Statement when condition is true.
         Stmt *no;///<Statement when condition is false.
-        IfStmt(Location _loc, Expr* _condition, Stmt* _yes, Stmt* _no = 0) : Stmt(_loc), condition(_condition), yes(_yes), no(_no) {}
+        IfStmt(Location _loc, Expr* _condition, Stmt* _yes, Stmt* _no = nullptr) : Stmt(_loc), condition(_condition), yes(_yes), no(_no) {}
         void visit(Visitor* that);
         ~IfStmt();
     };

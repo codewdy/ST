@@ -10,7 +10,7 @@ namespace BaseType {
                 return that->dict[attr].GetPtr();
             that = that->dict["__parent__"].GetPtr();
         }
-        return 0;
+        return nullptr;
     }
 
     void Namespace::_setAttr(const std::string& attr, Object* obj) {
@@ -38,7 +38,7 @@ namespace BaseType {
             if (that->dict.find(attr) != that->dict.end())
                 return that->dict[attr].GetPtr();
         }
-        return 0;
+        return nullptr;
     }
 
     void ObjectNamespace::_setAttr(const std::string& attr, Object* obj) {
