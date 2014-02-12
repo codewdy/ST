@@ -1,4 +1,5 @@
 #include "BaseType/pObject.h"
+#include "BaseType/BuiltinFunc.h"
 #include "Runtime/VM.h"
 #include "BuiltinType/String.h"
 #include "BuiltinType/Integer.h"
@@ -96,6 +97,7 @@ namespace BaseType {
         pObject::pObject(const char* arg) : pObject(BuiltinType::String::Create(arg)) {}
         pObject::pObject(const std::vector<pObject>& arg) : pObject(BuiltinType::List::Create(arg)) {}
         pObject::pObject(std::vector<pObject>&& arg) : pObject(BuiltinType::List::Create(std::move(arg))) {}
+        pObject::pObject(pObject (*arg)(const std::vector<pObject>&)) : pObject(new BuiltinFunc(arg)) {}
 
         pObject& pObject::operator=(const pObject &rhs) {
             Reduce();

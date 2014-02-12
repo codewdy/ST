@@ -1,7 +1,7 @@
 #ifndef ST_8917231287_BASETYPE_SIMPLEFUNC
 #define ST_8917231287_BASETYPE_SIMPLEFUNC
 #include "Func.h"
-#include "STC/STC.h"
+#include "../STC/STC.h"
 
 namespace BaseType {
     class SimpleFunc : public Func {

@@ -80,6 +80,7 @@ namespace BaseType {
             pObject(const char* arg);
             pObject(const std::vector<pObject>& arg);
             pObject(std::vector<pObject>&& arg);
+            pObject(pObject (*arg)(const std::vector<pObject>&));
             /**Create A object by list. \warn State is not a normal Object so you should not init state bu this.*/
             pObject(std::initializer_list<std::pair<std::string, pObject>> lst);
             pObject& operator=(const pObject& rhs);

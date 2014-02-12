@@ -1,8 +1,8 @@
 #ifndef ST_1982738912_RUNTIME_CONTEXT
 #define ST_1982738912_RUNTIME_CONTEXT
 
-#include "BaseType/Object.h"
-#include "STC/STC.h"
+#include "../BaseType/Object.h"
+#include "../STC/STC.h"
 namespace Runtime {
     /**A class for the function runtime context.*/
     class Context {

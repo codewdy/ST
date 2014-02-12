@@ -1,7 +1,7 @@
 #ifndef ST_8329102910_BASETYPE_FUNC
 #define ST_8329102910_BASETYPE_FUNC
 #include "Object.h"
-#include "Runtime/VM.h"
+#include "../Runtime/VM.h"
 #include <vector>
 
 namespace BaseType {

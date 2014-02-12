@@ -1,8 +1,8 @@
 #ifndef ST_9374215834_STC_GENERATOR
 #define ST_9374215834_STC_GENERATOR
 #include "STC.h"
-#include "AST/Visitor.h"
-#include "AST/Program.h"
+#include "../AST/Visitor.h"
+#include "../AST/Program.h"
 
 namespace STC {
     /**Generate STC From AST.*/
