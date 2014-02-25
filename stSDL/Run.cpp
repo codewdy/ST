@@ -24,24 +24,26 @@ namespace stSDL {
         while (SDL_PollEvent(&event)) {
             switch (event.type) {
                 case SDL_MOUSEBUTTONDOWN:
-                    if (MOUSE_BUTTON_EVENT.which == SDL_BUTTON_LEFT) {
-                        args[0]["onLeftClick"](MOUSE_BUTTON_EVENT.x, MOUSE_BUTTON_EVENT.y);
+                    if (event.button.which == SDL_BUTTON_LEFT) {
+                        args[0]["onLeftClick"](event.button.x, event.button.y);
                         break;
                     }
-                    if (MOUSE_BUTTON_EVENT.which == SDL_BUTTON_RIGHT) {
-                        args[0]["onRightClick"](MOUSE_BUTTON_EVENT.x, MOUSE_BUTTON_EVENT.y);
+                    if (event.button.which == SDL_BUTTON_RIGHT) {
+                        args[0]["onRightClick"](event.button.x, event.button.y);
                         break;
                     }
                     break;
                 case SDL_KEYDOWN:
-                    args[0]["onKeyDown"](SDL_GetKeyName(KEYBOARD_EVENT.keysym.sym) + 5);
+                    args[0]["onKeyDown"](SDL_GetKeyName(event.key.keysym.sym) + 5);
                     break;
                 case SDL_KEYUP:
-                    args[0]["onKeyUp"](SDL_GetKeyName(KEYBOARD_EVENT.keysym.sym) + 5);
+                    args[0]["onKeyUp"](SDL_GetKeyName(event.key.keysym.sym) + 5);
                     break;
-                case RedrawEvent:
-                    args[0]["onRedraw"](Drawer);
-                    break;
+                default:
+                    if (event.type == RedrawEvent) {
+                        args[0]["onRedraw"](Drawer);
+                        break;
+                    }
             }
         }
         stSDL_Release();

@@ -9,9 +9,9 @@ namespace stSDL {
     ST_DEF_FUNC(SDL_RUN);
     extern "C"
     void Init(const pObject& nmspace);
-    SDL_Window* gWindow;
-    SDL_Surface* gSurface;
-    Uint32 RedrawEvent;
+    extern SDL_Window* gWindow;
+    extern SDL_Surface* gSurface;
+    extern Uint32 RedrawEvent;
 }
 #endif
 

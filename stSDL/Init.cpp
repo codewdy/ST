@@ -2,6 +2,10 @@
 #include "stSDL.h"
 
 namespace stSDL {
+    SDL_Window* gWindow;
+    SDL_Surface* gSurface;
+    Uint32 RedrawEvent;
+
     void InitState() {
         if (Base.ref_equal(nullptr))
             return;

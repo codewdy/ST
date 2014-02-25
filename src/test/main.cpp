@@ -9,18 +9,18 @@
 #include <iostream>
 #include <fstream>
 
-int main() {
+int main(int argc, char* argv[]) {
     try {
-    AST::Program* ast = Parser::CreateAST("test.st");
+    AST::Program* ast = Parser::CreateAST(argv[1]);
     ASTPrinter astprinter(std::cout);
     astprinter.visitProgram(ast);
     STC::Generator gen;
     STC::STC* stc = gen.Gen(ast);
     STCPrinter(stc);
-    std::ofstream of("test.stc");
+    std::ofstream of("result.stc");
     STC::Writer(of, stc);
     of.close();
-    std::ifstream iif("test.stc");
+    std::ifstream iif("result.stc");
     STC::STC* stc2 = STC::Reader(iif);
     std::cout << std::endl;
     STCPrinter(stc2);
