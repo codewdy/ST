@@ -149,8 +149,7 @@ namespace Runtime {
             PushObject(TopContext().Global);
             break;
         case STC::STC::PushNull:
-            PushObject(0);
-            //TODO:Add an Null.
+            PushObject(ToolKit::null);
             break;
         case STC::STC::CopyTop:
             PushObject(TopObject());
@@ -195,6 +194,10 @@ namespace Runtime {
             break;
         case STC::STC::Return:
             PopContext();
+            if (Contexts.size() == 0 || Objects.size() < TopContext().ObjSize)
+                ST_RAISE(VM, {{"__state__", BaseType::Excpt::STCRuntimeStackError}});
+            while (Objects.size() - 1 > TopContext().ObjSize)
+                PopObject();
             break;
         case STC::STC::SourceFile:
             TopContext().SourceFile = stc->str;

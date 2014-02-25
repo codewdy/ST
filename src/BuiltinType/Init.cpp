@@ -4,6 +4,7 @@
 #include "BuiltinType/Double.h"
 #include "BuiltinType/List.h"
 #include "BuiltinType/Bool.h"
+#include "BuiltinType/Null.h"
 
 namespace BuiltinType {
     void InitState() {
@@ -12,6 +13,7 @@ namespace BuiltinType {
         String::InitState();
         List::InitState();
         Bool::InitState();
+        Null::InitState();
     }
 
     void Init(const pObject& obj) {
@@ -22,5 +24,7 @@ namespace BuiltinType {
         obj["Bool"] = Bool::STATE;
         obj["true"] = Bool::TRUE;
         obj["false"] = Bool::FALSE;
+        obj["null"] = Null::Obj;
+        obj["Null"] = Null::STATE;
     }
 }

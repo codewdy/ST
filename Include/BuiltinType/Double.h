@@ -1,8 +1,8 @@
 #ifndef ST_1782936781_BUILTINTYPE_DOUBLE
 #define ST_1782936781_BUILTINTYPE_DOUBLE
-#include "BaseType/Object.h"
-#include "BaseType/State.h"
-#include "BaseType/BuiltinFunc.h"
+#include "../BaseType/Object.h"
+#include "../BaseType/State.h"
+#include "../BaseType/BuiltinFunc.h"
 
 namespace BuiltinType {
     namespace Double {

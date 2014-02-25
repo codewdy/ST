@@ -1,8 +1,8 @@
 #ifndef ST_1826387964_BUILTINTYPE_STRING
 #define ST_1826387964_BUILTINTYPE_STRING
-#include "BaseType/Object.h"
-#include "BaseType/State.h"
-#include "BaseType/BuiltinFunc.h"
+#include "../BaseType/Object.h"
+#include "../BaseType/State.h"
+#include "../BaseType/BuiltinFunc.h"
 #include <string>
 
 namespace BuiltinType {

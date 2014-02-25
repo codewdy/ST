@@ -1,8 +1,8 @@
 #ifndef ST_2131256523_BUILTINTYPE_LIST
 #define ST_2131256523_BUILTINTYPE_LIST
-#include "BaseType/Object.h"
-#include "BaseType/State.h"
-#include "BaseType/BuiltinFunc.h"
+#include "../BaseType/Object.h"
+#include "../BaseType/State.h"
+#include "../BaseType/BuiltinFunc.h"
 #include <vector>
 
 namespace BuiltinType {

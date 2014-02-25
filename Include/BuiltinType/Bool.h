@@ -1,8 +1,8 @@
 #ifndef ST_1237615237_BUILTINTYPE_BOOL
 #define ST_1237615237_BUILTINTYPE_BOOL
-#include "BaseType/Object.h"
-#include "BaseType/State.h"
-#include "BaseType/BuiltinFunc.h"
+#include "../BaseType/Object.h"
+#include "../BaseType/State.h"
+#include "../BaseType/BuiltinFunc.h"
 
 namespace BuiltinType {
     namespace Bool {

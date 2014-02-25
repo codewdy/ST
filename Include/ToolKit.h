@@ -3,6 +3,8 @@
 #include "BaseType/BuiltinFunc.h"
 #include "BaseType/PtrObject.h"
 #include "BaseType/Excpt.h"
+#include "BaseType/State.h"
+#include "BuiltinType/Null.h"
 #include "Exception.h"
 namespace ToolKit {
     template <class T>
@@ -36,6 +38,7 @@ namespace ToolKit {
     inline BaseType::Object* GetOrigin(const pObjectExt& p) {
         return p.GetPtr();
     }
+    static pObject& null = BuiltinType::Null::Obj;
 }
 template <class T>
 inline T& BaseType::pObjects::pObjectBase::To() const {

@@ -7,6 +7,7 @@
 #include "BaseType/ObjectFunc.h"
 #include "BaseType/PtrObject.h"
 #include "BaseType/Namespace.h"
+#include "BaseType/Import.h"
 #include "ToolKit.h"
 #include "BuiltinType/String.h"
 #include "BuiltinType/Bool.h"
@@ -31,6 +32,7 @@ namespace BaseType {
     pObject Excpt::STCRuntimeStackError;
     pObject Excpt::ConvertError;
     pObject Excpt::IndexError;
+    pObject FuncImport;
 
     void InitState() {
         Object::STATE = new State(nullptr);
@@ -48,10 +50,10 @@ namespace BaseType {
         Object::STATE["__str__"] = ST_FUNC_ARG(==1, {
             std::ostringstream ret;
             ret << "[Object at " << args[0].GetPtr() << "]";
-            return BuiltinType::String::Create(ret.str());
+            return ret.str();
         });
         Object::STATE["__equal__"] = ST_FUNC_ARG(==2, {
-            return BuiltinType::Bool::Create(args[0].ref_equal(args[1]));
+            return args[0].ref_equal(args[1]);
         });
         Object::STATE["__not_equal__"] = ST_FUNC_ARG(==2, {
             return !(args[0] == args[1]);
@@ -79,6 +81,7 @@ namespace BaseType {
         ST_DEF_EXCPT(STCRuntimeStackError)
         ST_DEF_EXCPT(ConvertError)
         ST_DEF_EXCPT(IndexError)
+        FuncImport = Import;
     }
 
     void Init(const pObject& ret) {
@@ -95,6 +98,7 @@ namespace BaseType {
         ret["STCRuntimeError"] = Excpt::STCRuntimeStackError;
         ret["ConvertError"] = Excpt::ConvertError;
         ret["IndexError"] = Excpt::IndexError;
+        ret["import"] = FuncImport;
     }
 }
 
