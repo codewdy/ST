@@ -105,6 +105,7 @@ expr(A) ::= expr(B) LLC(LOC) exprList(C) RLC . {A = new AST::CallExpr(LOC->loc, 
 //Func Def Expr
 expr(A) ::= FUNC(LOC) LLC iDList(B) RLC stmtBlock(C) . {A = new AST::FuncDef(LOC->loc, B, C); delete LOC;}
 //State Def Expr
+expr(A) ::= STATE(LOC) LLC expr(C) RLC stmtBlock(B) . {A = new AST::StateDef(LOC->loc, B, C); delete LOC;}
 expr(A) ::= STATE(LOC) stmtBlock(B) . {A = new AST::StateDef(LOC->loc, B); delete LOC;}
 //List Expr
 expr(A) ::= LMC(LOC) exprList(B) RMC . {A = new AST::ListExpr(LOC->loc, B); delete LOC;}

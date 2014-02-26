@@ -170,6 +170,11 @@ namespace STC {
         STCList ret;
         STC* o_break = _break;
         _break = nullptr;
+        if (that->base == nullptr) {
+            ret.Append(STC::CreatePushObject());
+        } else {
+            ret.Append(visitX(that->base));
+        }
         ret.Append(STC::CreateDefState(visitX(that->stmts).beg));
         _break = o_break;
         ST_RETURN(ret);

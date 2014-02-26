@@ -56,6 +56,7 @@ namespace AST {
 
     StateDef::~StateDef() {
         delete stmts;
+        delete base;
     }
 
     DoubleOperExpr::~DoubleOperExpr() {

@@ -10,23 +10,24 @@
     ST_NONEARG(PushLocale)\
     ST_NONEARG(PushGlobal)\
     ST_NONEARG(PushNull)\
-    STRINGARG(PushString)\
-    STRINGARG(PushInteger)\
-    STRINGARG(PushDouble)\
-    STRINGARG(GetAttr)\
-    STRINGARG(SetAttr)\
+    ST_STRINGARG(PushString)\
+    ST_STRINGARG(PushInteger)\
+    ST_STRINGARG(PushDouble)\
+    ST_NONEARG(PushObject)\
+    ST_STRINGARG(GetAttr)\
+    ST_STRINGARG(SetAttr)\
     ST_GOTOARG(Goto)\
     ST_GOTOARG(TrueGoto)\
     ST_GOTOARG(FalseGoto)\
     ST_INTARG(Call)\
     ST_NONEARG(Return)\
     ST_INTARG(MakeList)\
-    STRINGARG(FuncArg)\
+    ST_STRINGARG(FuncArg)\
     ST_BLOCKARG(DefFunc)\
     ST_BLOCKARG(DefState)\
     ST_NONEARG(Pop)\
     ST_NONEARG(Nop)\
-    STRINGARG(SourceFile)\
+    ST_STRINGARG(SourceFile)\
     ST_INTARG(SourceLine)\
     ST_GOTOARG(Try)\
     ST_GOTOARG(Catch)
@@ -44,13 +45,13 @@ namespace STC {
         } arg;
         enum Type {
 #define ST_NONEARG(CLASS) CLASS,
-#define STRINGARG(CLASS) CLASS,
+#define ST_STRINGARG(CLASS) CLASS,
 #define ST_INTARG(CLASS) CLASS,
 #define ST_GOTOARG(CLASS) CLASS,
 #define ST_BLOCKARG(CLASS) CLASS,
         ST_ALL_STC_DEF
 #undef ST_NONEARG
-#undef STRINGARG
+#undef ST_STRINGARG
 #undef ST_INTARG
 #undef ST_GOTOARG
 #undef ST_BLOCKARG
@@ -65,13 +66,13 @@ namespace STC {
         STC(Type _type, std::string _str) : next(nullptr), arg(ArgMap[_type]), type(_type), str(_str) {}
 
 #define ST_NONEARG(CLASS) static STC* Create##CLASS() {return new STC(CLASS);}
-#define STRINGARG(CLASS) static STC* Create##CLASS(std::string _str) {return new STC(CLASS, _str);}
+#define ST_STRINGARG(CLASS) static STC* Create##CLASS(std::string _str) {return new STC(CLASS, _str);}
 #define ST_INTARG(CLASS) static STC* Create##CLASS(int _num) {return new STC(CLASS, _num);}
 #define ST_GOTOARG(CLASS) static STC* Create##CLASS(STC* _code = nullptr) {return new STC(CLASS, _code);}
 #define ST_BLOCKARG(CLASS) static STC* Create##CLASS(STC* _code = nullptr) {return new STC(CLASS, _code);}
         ST_ALL_STC_DEF
 #undef ST_NONEARG
-#undef STRINGARG
+#undef ST_STRINGARG
 #undef ST_INTARG
 #undef ST_GOTOARG
 #undef ST_BLOCKARG

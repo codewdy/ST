@@ -1,3 +1,6 @@
-x = [1,2,3];
-x[2].__str__();
-x[3];
+a = state {};
+b = state (a) {};
+object.__str__();
+a.__state__.__str__();
+a.__str__();
+b.__state__.__str__();

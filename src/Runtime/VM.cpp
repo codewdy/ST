@@ -151,6 +151,9 @@ namespace Runtime {
         case STC::STC::PushNull:
             PushObject(ToolKit::null);
             break;
+        case STC::STC::PushObject:
+            PushObject(BaseType::Object::STATE);
+            break;
         case STC::STC::CopyTop:
             PushObject(TopObject());
             break;
@@ -187,7 +190,7 @@ namespace Runtime {
             break;
         case STC::STC::DefState:
             {
-                pObject ret = new BaseType::State;
+                pObject ret = new BaseType::State(PopObject());
                 PushContext(Context(TopContext().Global, new BaseType::ObjectNamespace(TopContext().Locale, ret), stc->code));
                 PushObject(ret);
             }

@@ -12,7 +12,8 @@ namespace AST
         StateDef(const StateDef&);
     public:
         StmtBlock* stmts;///<State Def Statement.
-        StateDef(Location _loc, StmtBlock* _stmts) : Expr(_loc), stmts(_stmts) {}
+        Expr* base;///<Base Of the State.
+        StateDef(Location _loc, StmtBlock* _stmts, Expr* _base = nullptr) : Expr(_loc), stmts(_stmts), base(_base) {}
         void visit(Visitor* that);
         ~StateDef();
     };
