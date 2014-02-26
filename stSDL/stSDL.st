@@ -1,4 +1,5 @@
 SDL = import("libstSDL.so");
+/*
 GalRun = state extend SDL.Base {
     onLeftClick = func (x, y) {
         //TODO
@@ -56,3 +57,4 @@ GalBegin = state extend SDL.Base {
 x = GalBegin();
 
 SDL.run(x);
+*/

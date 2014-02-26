@@ -16,6 +16,7 @@ int main(int argc, char* argv[]) {
     astprinter.visitProgram(ast);
     STC::Generator gen;
     STC::STC* stc = gen.Gen(ast);
+    std::cout << "asdh" << std::endl;
     STCPrinter(stc);
     std::ofstream of("result.stc");
     STC::Writer(of, stc);

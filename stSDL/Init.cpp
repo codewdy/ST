@@ -2,6 +2,9 @@
 #include "stSDL.h"
 
 namespace stSDL {
+    pObject Base;
+    pObject Drawer;
+    pObject Run;
     SDL_Window* gWindow;
     SDL_Surface* gSurface;
     Uint32 RedrawEvent;
@@ -29,7 +32,7 @@ namespace stSDL {
         Drawer["DrawLine"] = ST_FUNC_ARG(==4, {
             //TODO
         });
-        Run = SDL_RUN;
+        Run = SDL_Run;
     }
     extern "C"
     void Init(const pObject& nmspace) {
