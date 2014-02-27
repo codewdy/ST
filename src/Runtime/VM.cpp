@@ -106,10 +106,12 @@ namespace Runtime {
         STC::STC* stc = TopContext().code;
 #ifdef DEBUG
         std::cout << stc << std::endl;
-        if (Objects.size())
+        std::cout << "StackSize:" << Objects.size() << std::endl;
+        if (Objects.size()) {
             std::cout << "Stack:" << TopObject().GetPtr() << std::endl;
-        else
+        } else {
             std::cout << "Stack:None" << std::endl;
+        }
 #endif
         if (!stc) {
             PopContext();

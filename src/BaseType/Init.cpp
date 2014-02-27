@@ -86,6 +86,7 @@ namespace BaseType {
 
     void Init(const pObject& ret) {
         ret["Object"] = Object::STATE;
+        ret["State"] = State::STATE;
         ret["Func"] = Func::STATE;
         ret["SimpleFunc"] = SimpleFunc::STATE;
         ret["ObjectFunc"] = ObjectFunc::STATE;

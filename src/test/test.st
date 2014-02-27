@@ -1,6 +1,7 @@
 a = state {};
 b = state (a) {};
-object.__str__();
-a.__state__.__str__();
-a.__str__();
-b.__state__.__str__();
+Object.__str__(Object);
+Object.__str__(a.__base__);
+Object.__str__(a);
+Object.__str__(b.__base__);
+

@@ -43,6 +43,7 @@ namespace BaseType {
         if (ret)
             return ret;
         else {
+            std::cout << "Attr Not Found" << this << std::endl;
             ST_RAISE(VM, {
                 {"__state__", Excpt::AttrNotFound},
                 {"obj", this},

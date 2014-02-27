@@ -10,7 +10,7 @@ namespace stSDL {
     Uint32 RedrawEvent;
 
     void InitState() {
-        if (Base.ref_equal(nullptr))
+        if (!Base.ref_equal(nullptr))
             return;
         Base = new BaseType::State();
         Base["onLeftClick"] = ST_FUNC_ARG(==2, {
@@ -40,6 +40,7 @@ namespace stSDL {
         nmspace["Base"] = Base;
         nmspace["Drawer"] = Drawer;
         nmspace["Run"] = Run;
+        std::cout << "It Works!" << nmspace.GetPtr() << std::endl;
     }
 }
 

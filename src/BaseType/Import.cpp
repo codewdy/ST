@@ -17,10 +17,9 @@ namespace BaseType {
         } else {
             void* op = dlopen(filename.c_str(), RTLD_NOW);
             if (op == nullptr) {
+                std::cout << dlerror() << std::endl;
                 //TODO
             }
-            std::cout << op << std::endl;
-            std::cout << dlerror() << std::endl;
             typedef void (*CInit)(const pObject& obj);
             CInit init = (CInit)dlsym(op, "Init");
             init(ret);
@@ -28,3 +27,4 @@ namespace BaseType {
         return ret;
     }
 }
+
