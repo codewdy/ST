@@ -1,9 +1,11 @@
 #include "stSDL.h"
 #include <iostream>
+#include <ST/BuiltinType/Integer.h>
+#include <ST/BuiltinType/String.h>
 
 namespace stSDL {
-    static bool stSDL_Init(int width, int height) {
-        gWindow = SDL_CreateWindow( "SDL Tutorial", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, width, height, SDL_WINDOW_SHOWN );
+    static bool stSDL_Init(int width, int height, std::string title) {
+        gWindow = SDL_CreateWindow( title.c_str(), SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, width, height, SDL_WINDOW_SHOWN );
         if (gWindow == nullptr)
             return false;
         gSurface = SDL_GetWindowSurface(gWindow);
@@ -13,7 +15,7 @@ namespace stSDL {
         SDL_DestroyWindow(gWindow);
     }
     ST_DEF_FUNC(SDL_Run) {
-        if (!stSDL_Init(640, 480)) {
+        if (!stSDL_Init(args[0]["width"].To<BuiltinType::Integer::Inner>(), args[0]["height"].To<BuiltinType::Integer::Inner>(), args[0]["title"].To<BuiltinType::String::Inner>())) {
             std::cout << "error" << std::endl;
             //TODO:Exception
         }
@@ -40,9 +42,10 @@ namespace stSDL {
                 case SDL_QUIT:
                     quit = args[0]["onQuit"]().To<bool>();
                     break;
-                default:
-                    if (event.type == RedrawEvent) {
+                case SDL_WINDOWEVENT:
+                    if (event.window.event = SDL_WINDOWEVENT_EXPOSED) {
                         args[0]["onRedraw"](Drawer);
+                        SDL_UpdateWindowSurface(gWindow);
                         break;
                     }
             }

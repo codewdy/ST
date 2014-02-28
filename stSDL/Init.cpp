@@ -6,11 +6,10 @@ namespace stSDL {
     pObject Base;
     pObject Drawer;
     pObject Run;
+    pObject ReDraw;
     pObject Surface;
-    pObject LoadImage;
     SDL_Window* gWindow;
     SDL_Surface* gSurface;
-    Uint32 RedrawEvent;
 
     void InitState() {
         if (!Base.ref_equal(nullptr))
@@ -41,17 +40,29 @@ namespace stSDL {
         Base["onQuit"] = ST_FUNC_ARG(==1, {
             return true;
         });
+        Base["width"] = 640;
+        Base["height"] = 480;
+        Base["title"] = "Noname";
         Drawer = new BaseType::State();
-        Drawer["DrawLine"] = ST_FUNC_ARG(==4, {
+        Drawer["Draw"] = ST_FUNC_ARG(==1, {
             //TODO
+            SDL_Surface* xx = args[0].To<Surface_t>();
+            SDL_BlitSurface(args[0].To<Surface_t>(), NULL, gSurface, NULL);
         });
         Run = SDL_Run;
         Surface = new BaseType::State();
         Surface["__init__"] = ST_FUNC_ARG(==2, {
-            args[0].SetObj<Surface_t>(IMG_Load(args[1]["__str__"]().To<std::string>().c_str()));
+            std::string fn = args[1]["__str__"]().To<std::string>();
+            args[0].SetObj<Surface_t>(IMG_Load(fn.c_str()));
+            std::cout << args[0].GetPtr() << std::endl;
+            return args[0];
         });
-        LoadImage = ST_FUNC_ARG(==1, {
-            std::string fn = args[0]["__str__"]().To<std::string>();
+        ReDraw = ST_FUNC_ARG(==0, {
+            SDL_Event e;
+            e.type = SDL_WINDOWEVENT;
+            e.window.windowID = SDL_GetWindowID(gWindow);
+            e.window.event = SDL_WINDOWEVENT_EXPOSED;
+            SDL_PushEvent(&e);
         });
     }
     extern "C"
@@ -60,6 +71,8 @@ namespace stSDL {
         nmspace["Base"] = Base;
         nmspace["Drawer"] = Drawer;
         nmspace["Run"] = Run;
+        nmspace["Surface"] = Surface;
+        nmspace["ReDraw"] = ReDraw;
     }
 }
 
