@@ -42,7 +42,7 @@ namespace Exception {
 #ifdef DEBUG
 #define ST_RAISE(TYPE, ...) do{\
     Exception::TYPE##Exception ex = Exception::TYPE##Exception(__VA_ARGS__);\
-    *(Exception::LogFile) << "Exception[" << #TYPE << "Exception] ST_RAISE At " << __FILE__ << ":" << __LINE__ << std::endl;\
+    *(Exception::LogFile) << "Exception[" << #TYPE << "Exception] Raise At " << __FILE__ << ":" << __LINE__ << std::endl;\
     throw ex;\
 }while(0)
 #else
@@ -54,7 +54,7 @@ namespace Exception {
 
 #ifdef DEBUG
 #define ST_WARN(ST_WARNing) do{\
-    Exception::LogFile << "Waring at " << __FILE__ << "." << __LINE__ \
+    *(Exception::LogFile) << "Waring at " << __FILE__ << "." << __LINE__ \
         << ":" << ST_WARNing << std::endl;\
 }while(0)
 #else

@@ -11,5 +11,6 @@ namespace BaseType {
         pObject loc = vm.TopContext().Locale;
         for (int i = 0; i < num; i++)
             loc->Object::_setAttr(argsName[i], vm.PopObject().GetPtr());
+        vm.TopContext().ObjSize -= num - 1;
     }
 }

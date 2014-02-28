@@ -1,61 +1,34 @@
 SDL = import("libstSDL.so");
 SDL.Run;
-/*
-GalRun = state extend SDL.Base {
-    onLeftClick = func (x, y) {
+Test = state (SDL.Base) {
+    onLeftClick = func (self, x, y) {
+        //TODO
+        "LeftClick";
+        x.__str__();
+        y.__str__();
+    };
+    onRightClick = func (self, x, y) {
+        //TODO
+        "RightClick";
+        x.__str__();
+        y.__str__();
+    };
+    onKeyDown = func (self, key) {
+        //TODO
+        "KeyDown";
+    };
+    onKeyUp = func (self, key) {
+        //TODO
+        "KeyUp";
+    };
+    onRedraw = func (self, drawer) {
         //TODO
     };
-    onRightClick = func (x, y) {
-        //TODO
+    onQuit = func (self) {
+        return true;
     };
-    onKeyDown = func (key) {
-        //TODO
-    };
-    onKeyUp = func (key) {
-        //TODO
-    };
-    onRedraw = func (drawer) {
-        //TODO
-    }
 };
 
-GalSetting = state extend SDL.Base {
-    onLeftClick = func (x, y) {
-        //TODO
-    };
-    onRightClick = func (x, y) {
-        //TODO
-    };
-    onKeyDown = func (key) {
-        //TODO
-    };
-    onKeyUp = func (key) {
-        //TODO
-    };
-    onRedraw = func (drawer) {
-        //TODO
-    }
-};
+x = Test();
 
-GalBegin = state extend SDL.Base {
-    onLeftClick = func (x, y) {
-        //TODO
-    };
-    onRightClick = func (x, y) {
-        //TODO
-    };
-    onKeyDown = func (key) {
-        //TODO
-    };
-    onKeyUp = func (key) {
-        //TODO
-    };
-    onRedraw = func (drawer) {
-        //TODO
-    }
-};
-
-x = GalBegin();
-
-SDL.run(x);
-*/
+SDL.Run(x);

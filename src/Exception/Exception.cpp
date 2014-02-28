@@ -4,7 +4,7 @@
 #include "Runtime/VM.h"
 
 namespace Exception {
-    std::ostream *LogFile = &std::cout;
+    std::ostream *LogFile = & std::cout;
     void VMException::print(std::ostream& out) {
         for (auto item : trace)
             out << item.filename << ":" << item.lineno << std::endl;

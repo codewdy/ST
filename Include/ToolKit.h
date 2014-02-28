@@ -29,20 +29,23 @@ namespace ToolKit {
         ret["__inner__"] = new BaseType::PtrObject<_T>(new _T(std::move(inner)));
         return std::move(ret);
     }
-    inline void SetFunc(const pObject& state, std::string&& name, BaseType::BuiltinFunc::pFunc t) {
-        state[std::move(name)] = new BaseType::BuiltinFunc(t);
-    }
-    inline BaseType::Object* GetOrigin(const pObject& p) {
-        return p.GetPtr();
-    }
-    inline BaseType::Object* GetOrigin(const pObjectExt& p) {
-        return p.GetPtr();
+    template <class T, typename... Args>
+    inline pObject CreateObj(const pObject& state, Args... args) {
+        pObject ret = new BaseType::Object(state);
+        typedef typename std::remove_reference<T>::type _T;
+        ret["__inner__"] = new BaseType::PtrObject<_T>(new _T(args...));
+        return std::move(ret);
     }
     static pObject& null = BuiltinType::Null::Obj;
 }
 template <class T>
 inline T& BaseType::pObjects::pObjectBase::To() const {
     return *ToolKit::SafeConvert<BaseType::PtrObject<T>>(GetPtr()->getAttr("__inner__").GetPtr())->ptr;
+}
+template <typename T, typename... Arg>
+void BaseType::pObjects::pObjectBase::SetObj(Arg... args) const {
+    typedef typename std::remove_reference<T>::type _T;
+    GetPtr()->setAttr("__inner__", new BaseType::PtrObject<_T>(new _T(args...)));
 }
 #define ST_CHECK_ARG_SIZE(CONDITION) do {if (!(args.size() CONDITION)) {ST_RAISE(VM, {{"__state__", BaseType::Excpt::ArgCountError}});}} while(0)
 #define ST_GET_ARG(num) args[num]

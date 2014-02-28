@@ -38,6 +38,8 @@ namespace BaseType {
             pObject Calc(const std::vector<pObject>& args) const;
             template <typename... Arg>
             pObject operator()(Arg... args) const;
+            template <typename T, typename... Arg>
+            void SetObj(Arg... args) const;
             void SetAttr(const std::string& attr, const pObject& obj) const;
             void SetAttr(const std::string& attr, pObject&& obj) const;
             virtual Object* GetPtr() const = 0;

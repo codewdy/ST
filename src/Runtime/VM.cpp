@@ -198,11 +198,11 @@ namespace Runtime {
             }
             break;
         case STC::STC::Return:
-            PopContext();
             if (Contexts.size() == 0 || Objects.size() < TopContext().ObjSize)
                 ST_RAISE(VM, {{"__state__", BaseType::Excpt::STCRuntimeStackError}});
             while (Objects.size() - 1 > TopContext().ObjSize)
                 PopObject();
+            PopContext();
             break;
         case STC::STC::SourceFile:
             TopContext().SourceFile = stc->str;
