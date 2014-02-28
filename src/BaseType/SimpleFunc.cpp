@@ -7,10 +7,9 @@ namespace BaseType {
         if (argsName.size() != num) {
             ST_RAISE(VM, {{"__state__", Excpt::ArgCountError}});
         }
-        vm.PushContext(Runtime::Context(getAttr("__global__"), new BaseType::Namespace(getAttr("__locale__")), stc));
-        pObject loc = vm.TopContext().Locale;
+        pObject locale = new BaseType::Namespace(getAttr("__locale__"));
         for (int i = 0; i < num; i++)
-            loc->Object::_setAttr(argsName[i], vm.PopObject().GetPtr());
-        vm.TopContext().ObjSize -= num - 1;
+            locale->Object::_setAttr(argsName[i], vm.PopObject().GetPtr());
+        vm.PushContext(Runtime::Context(getAttr("__global__"), locale, stc));
     }
 }

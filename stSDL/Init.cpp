@@ -34,7 +34,7 @@ namespace stSDL {
         Base["onKeyUp"] = ST_FUNC_ARG(==1, {
             return ToolKit::null;
         });
-        Base["onRedraw"] = ST_FUNC_ARG(==1, {
+        Base["onRedraw"] = ST_FUNC_ARG(==2, {
             return ToolKit::null;
         });
         Base["onQuit"] = ST_FUNC_ARG(==1, {

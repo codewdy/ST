@@ -3,6 +3,7 @@
 
 #include "../BaseType/Object.h"
 #include "../STC/STC.h"
+#include <stack>
 namespace Runtime {
     /**A class for the function runtime context.*/
     class Context {
@@ -17,8 +18,14 @@ namespace Runtime {
         std::string SourceFile;
         /**the line Current STC from.*/
         int SourceLine;
-        /**The Size of the ObjectStack whe enter this Context.*/
-        int ObjSize;
+        /**the ObjectStack of Context.*/
+        std::stack<pObject> objStack;
+        struct TryElement {
+            std::size_t ObjSize;
+            STC::STC* CATCH;
+        };
+        /**the try statement of the context.*/
+        std::stack<TryElement> tryStack;
         Context(const pObject& _Global, pObject&& _Locale, STC::STC* _code) : Global(_Global), Locale(std::move(_Locale)), code(_code) {}
         Context(const pObject& _Global, const pObject& _Locale, STC::STC* _code) : Global(_Global), Locale(std::move(_Locale)), code(_code) {}
     };

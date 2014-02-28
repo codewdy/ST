@@ -19,6 +19,7 @@ namespace BaseType {
     }
     void State::run(Runtime::VM& vm, int num) {
         vm.PushObject(new Object(this));
+        std::cout << "123" << std::endl;
         Object *init = this->_getAttr("__init__");
         if (init) {
             vm.PushObject(init);

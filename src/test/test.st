@@ -1,3 +1,8 @@
-a = func (x, y) {
+x = state (Object) {
+    __str__ = func (self) {
+        return "123";
+    };
 };
-a(1, 2);
+
+xx = x();
+xx.__str__();

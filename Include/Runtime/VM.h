@@ -6,20 +6,11 @@
 
 namespace Runtime {
     class VM {
-        typedef std::stack<Context> ContextStack;
-        typedef std::stack<pObject> ObjectStack;
-        struct TryElement {
-            std::size_t CtxSize, ObjSize;
-            STC::STC* CATCH;
-        };
-        typedef std::stack<TryElement> TryStack;
-        ContextStack Contexts;
-        ObjectStack Objects;
-        TryStack Trys;
+        std::stack<Context> Contexts;
         std::vector<std::string> FuncArgs;
         void RunASTC();
         void HandleException();
-        VM(){}
+        VM();
     public:
         VM(STC::STC* stc);
         void PushObject(const pObject& obj);

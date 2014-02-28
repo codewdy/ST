@@ -18,37 +18,41 @@
 #endif
 
 namespace Runtime {
+    VM::VM() {
+        PushContext(Context(nullptr, nullptr, nullptr));
+    }
+
     VM::VM(STC::STC* stc) {
+        PushContext(Context(nullptr, nullptr, nullptr));
         pObject glb = CreateGlobal();
         PushContext(Context(glb, glb, stc));
     }
 
     void VM::PushObject(const pObject& obj) {
-        Objects.push(obj);
+        TopContext().objStack.push(obj);
     }
 
     void VM::PushObject(pObject&& obj) {
-        Objects.push(std::move(obj));
+        TopContext().objStack.push(std::move(obj));
     }
 
     pObject VM::PopObject() {
-        if (Objects.empty()) {
+        if (TopContext().objStack.empty()) {
             ST_RAISE(VM, {{"__state__", BaseType::Excpt::STCRuntimeStackError}});
         }
-        pObject ret = Objects.top();
-        Objects.pop();
+        pObject ret = TopContext().objStack.top();
+        TopContext().objStack.pop();
         return std::move(ret);
     }
 
     pObject& VM::TopObject() {
-        if (Objects.empty()) {
+        if (TopContext().objStack.empty()) {
             ST_RAISE(VM, {{"__state__", BaseType::Excpt::STCRuntimeStackError}});
         }
-        return Objects.top();
+        return TopContext().objStack.top();
     }
 
     void VM::PushContext(Context&& ctx) {
-        ctx.ObjSize = Objects.size();
         Contexts.push(std::move(ctx));
     }
 
@@ -67,10 +71,12 @@ namespace Runtime {
     }
 
     void VM::Run() {
-        while (!Contexts.empty())
+        while (Contexts.size() > 1)
             try {
                 RunASTC();
             } catch (Exception::VMException e) {
+                //TODO
+                /*
                 std::size_t goalCtx;
                 STC::STC* next = nullptr;
                 if (Trys.empty())
@@ -78,10 +84,10 @@ namespace Runtime {
                 else {
                     TryElement t = Trys.top();
                     Trys.pop();
-                    if (Contexts.size() < t.CtxSize || Objects.size() < t.ObjSize)
+                    if (Contexts.size() < t.CtxSize || TopContext().objStack.size() < t.ObjSize)
                         ST_RAISE(DoubleFault);
-                    while (Objects.size() > t.ObjSize)
-                        Objects.pop();
+                    while (TopContext().objStack.size() > t.ObjSize)
+                        TopContext().objStack.pop();
                     next = t.CATCH;
                 }
                 while (Contexts.size() > goalCtx) {
@@ -92,6 +98,8 @@ namespace Runtime {
                     TopContext().code = next;
                 else
                     throw e;
+                */
+                throw e;
             }
     }
 
@@ -105,12 +113,13 @@ namespace Runtime {
     void VM::RunASTC() {
         STC::STC* stc = TopContext().code;
 #ifdef DEBUG
-        std::cout << stc << std::endl;
-        std::cout << "StackSize:" << Objects.size() << std::endl;
-        if (Objects.size()) {
-            std::cout << "Stack:" << TopObject().GetPtr() << std::endl;
+        *(Exception::LogFile) << stc << std::endl;
+        *(Exception::LogFile) << "CtxStackSize:" << Contexts.size() << std::endl;
+        *(Exception::LogFile) << "StackSize:" << TopContext().objStack.size() << std::endl;
+        if (TopContext().objStack.size()) {
+            *(Exception::LogFile) << "Stack:" << TopObject().GetPtr() << std::endl;
         } else {
-            std::cout << "Stack:None" << std::endl;
+            *(Exception::LogFile) << "Stack:None" << std::endl;
         }
 #endif
         if (!stc) {
@@ -193,17 +202,17 @@ namespace Runtime {
         case STC::STC::DefState:
             {
                 pObject ret = new BaseType::State(PopObject());
-                PushContext(Context(TopContext().Global, new BaseType::ObjectNamespace(TopContext().Locale, ret), stc->code));
                 PushObject(ret);
+                PushContext(Context(TopContext().Global, new BaseType::ObjectNamespace(TopContext().Locale, ret), stc->code));
             }
             break;
         case STC::STC::Return:
-            if (Contexts.size() == 0 || Objects.size() < TopContext().ObjSize)
-                ST_RAISE(VM, {{"__state__", BaseType::Excpt::STCRuntimeStackError}});
-            while (Objects.size() - 1 > TopContext().ObjSize)
-                PopObject();
-            PopContext();
-            break;
+            {
+                pObject tmp = PopObject();
+                PopContext();
+                PushObject(tmp);
+                break;
+            }
         case STC::STC::SourceFile:
             TopContext().SourceFile = stc->str;
             break;
@@ -211,11 +220,17 @@ namespace Runtime {
             TopContext().SourceLine = stc->num;
             break;
         case STC::STC::Try:
-            Trys.push({Contexts.size(), Objects.size(), stc->code});
+            //TODO
+            /*
+            Trys.push({Contexts.size(), TopContext().objStack.size(), stc->code});
+            */
             break;
         case STC::STC::Catch:
+            //TODO
+            /*
             Trys.pop();
             TopContext().code = stc->code;
+            */
             break;
         }
     }
