@@ -13,6 +13,11 @@ MACRO (new_shared_library project)
     ADD_LIBRARY(${project} SHARED ${SRC_LIST})
 ENDMACRO ()
 
+MACRO (new_module_library project)
+    AUX_SOURCE_DIRECTORY(. SRC_LIST)
+    ADD_LIBRARY(${project} MODULE ${SRC_LIST})
+ENDMACRO ()
+
 IF (${UNIX})
     SET(CMD_MV mv)
     SET(CMD_CP cp)

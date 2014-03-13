@@ -24,9 +24,10 @@ namespace stSDL {
     extern pObject Run;
     extern pObject ReDraw;
     extern pObject Surface;
+    extern pObject Rect;
     extern SDL_Window* gWindow;
     extern SDL_Surface* gSurface;
-    ST_DEF_FUNC(SDL_Run);
+    extern SDL_Renderer* gRender;
     extern "C"
     void Init(const pObject& nmspace);
 }

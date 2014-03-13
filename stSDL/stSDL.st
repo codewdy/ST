@@ -1,5 +1,6 @@
 SDL = import("libstSDL.so");
 sur = SDL.Surface("1.png");
+rect = SDL.Rect(100, 100, 200, 200);
 Test = state (SDL.Base) {
     onLeftClick = func (self, x, y) {
         //TODO
@@ -25,7 +26,7 @@ Test = state (SDL.Base) {
     };
     onRedraw = func (self, drawer) {
         //TODO
-        drawer.Draw(sur);
+        drawer.DrawSurfaceScaled(sur, rect);
     };
     onQuit = func (self) {
         return true;
